@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "295588700886",
+    "project_id": "agendamento-de-veiculos-51810",
+    "storage_bucket": "agendamento-de-veiculos-51810.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295588700886:android:3a309c41631a3a362d1f77",
+        "android_client_info": {
+          "package_name": "com.example.agendamentos_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295588700886-kht9h2an66fatts1cp36p4r93530gcvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv9lBhK7OFW8DpxYliU5bPSg3KMjzCuzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295588700886-kht9h2an66fatts1cp36p4r93530gcvt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
