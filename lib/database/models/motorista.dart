@@ -1,19 +1,21 @@
 import 'package:agendamentos_app/database/models/entity.dart';
 
-class Promotor extends Entity{
+class Motorista extends Entity {
 
   final String nome;
   final int cpf;
-  final int matricula;
+  final int? matricula;
 
-  Promotor({
+  Motorista({
     required this.nome,
     required this.cpf,
-    required this.matricula
+    this.matricula
   });
   
   @override
   Map<String, dynamic> toMap() {
     return criacao..addAll({'nome': nome, 'cpf': cpf, 'matricula': matricula});
   }
+  
+
 }
