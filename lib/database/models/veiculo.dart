@@ -14,4 +14,5 @@ class Veiculo extends Entity{
   Map<String, dynamic> toMap() {
    return criacao..addAll({'placa': placa, 'modelo': modelo});
   }
+  
 }

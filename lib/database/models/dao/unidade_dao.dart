@@ -1,27 +1,28 @@
 import 'package:agendamentos_app/database/models/dao/dao.dart';
-import 'package:agendamentos_app/database/models/motorista.dart';
+import 'package:agendamentos_app/database/models/unidade.dart';
 
-class MotoristaDao extends Dao<Motorista> {
+
+class UnidadeDao extends Dao<Unidade> {
 
   @override
-  List<Motorista> getAll() {
+  List<Unidade> getAll() {
     // TODO: implement getAll
     throw UnimplementedError();
   }
 
   @override
-  void update(Motorista entity) {
+  void update(Unidade entity) {
     // TODO: implement update
   }
   
   @override
-  Motorista? get([Motorista? entity]) {
+  Unidade? get([Unidade? entity]) {
     // TODO: implement get
     throw UnimplementedError();
   }
   
   @override
-  void delete(Motorista entity) {
+  void delete(Unidade entity) {
     // TODO: implement delete
   }
   

@@ -12,6 +12,17 @@ class VeiculoDao extends Dao<Veiculo> {
   void update(Veiculo entity) {
     // TODO: implement update
   }
-
+  
+  @override
+  Veiculo? get([Veiculo? entity]) {
+    // TODO: implement get
+    throw UnimplementedError();
+  }
+  
+  @override
+  void delete(Veiculo entity) {
+    // TODO: implement delete
+  }
+  
 
 }

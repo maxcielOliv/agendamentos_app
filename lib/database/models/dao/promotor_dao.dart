@@ -14,5 +14,17 @@ class PromotorDao extends Dao<Promotor> {
   void update(Promotor entity) {
     // TODO: implement update
   }
+  
+  @override
+  Promotor? get([Promotor? entity]) {
+    // TODO: implement get
+    throw UnimplementedError();
+  }
+  
+  @override
+  void delete(Promotor entity) {
+    // TODO: implement delete
+  }
+
 
 }

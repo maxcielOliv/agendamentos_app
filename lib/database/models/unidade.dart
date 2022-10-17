@@ -1,10 +1,10 @@
 import 'package:agendamentos_app/database/models/entity.dart';
 
-class Promotoria extends Entity{
+class Unidade extends Entity{
 
   final String nome;
 
-  Promotoria({
+  Unidade({
     required this.nome
   });
   
