@@ -1,28 +1,23 @@
-import 'package:agendamentos_app/database/models/dao/dao.dart';
-import 'package:agendamentos_app/database/models/veiculo.dart';
+import '../veiculo.dart';
+import 'dao.dart';
 
-class VeiculoDao extends Dao<Veiculo> {
+class VeiculosDao extends Dao<Veiculo> {
   @override
-  List<Veiculo> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<Veiculo?> get(String id) async {
+    final res = await db.collection('veiculo').doc(id).get();
+    return res.exists ? Veiculo.fromFirestore(res) : null;
+  }
+
+  Future<Veiculo?> getModelo(String nome) async {
+      final res = await db.collection('veiculo').where('modelo').get();
+        if (res.size > 0) {
+          return Veiculo.fromFirestore(res.docs.first);
+        }
   }
 
   @override
-  void update(Veiculo entity) {
-    // TODO: implement update
+  Future<List<Veiculo>> getAll() async {
+    final res = await db.collection('veiculo').get();
+    return res.docs.map((e) => Veiculo.fromFirestore(e)).toList();
   }
-  
-  @override
-  Veiculo? get([Veiculo? entity]) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
-  
-  @override
-  void delete(Veiculo entity) {
-    // TODO: implement delete
-  }
-  
-
 }

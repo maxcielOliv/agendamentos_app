@@ -1,3 +1,4 @@
+import 'package:agendamentos_app/screens/agendamento_screen.dart';
 import 'package:agendamentos_app/screens/home_page.dart';
 import 'package:agendamentos_app/screens/login_screen.dart';
 import 'package:agendamentos_app/screens/motoristas_screen.dart';
@@ -11,7 +12,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Agendamentos App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -19,7 +20,8 @@ class App extends StatelessWidget {
         '/': (context) => const LoginScreen(),
         'HomePage': (context) => const HomePage(),
         'Veiculos': (context) => const VeiculoScreen(),
-        'Motoristas': (context) => const MotoristaScreen()
+        'Motoristas': (context) => const MotoristaScreen(),
+        'Agendamentos':(context) => const AgendamentoScreen()
       },
     );
   }

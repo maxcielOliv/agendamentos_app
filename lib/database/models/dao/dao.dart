@@ -1,24 +1,51 @@
-import 'package:agendamentos_app/database/models/entity.dart';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../entity.dart';
 
 abstract class Dao<T extends Entity> {
-  final _db = FirebaseFirestore.instance;
-  
-  void get(T entity);
+  final db = FirebaseFirestore.instance;
 
-  List<T> getAll();
+  Future<T?> get(String id);
 
-  //inserir dados
-  void save(T entity) {
-    _db
-        .collection(entity.runtimeType.toString().toLowerCase())
-        .doc()
-        .set(entity.toMap())
-        .onError((e, _) => print("Error writing document: $e"));
+  Future<List<T>> getAll();
+
+  Future<bool> salvar(T entity) async {
+    try {
+      await db
+          .collection(entity.runtimeType.toString().toLowerCase())
+          .doc(entity.id)
+          .set(
+              {'criacao': FieldValue.serverTimestamp()}
+                ..addAll(entity.toFirestore()),
+              SetOptions(merge: entity.id != null));
+      return true;
+    } catch (error) {
+      log(
+        'Erro ao salvar',
+        error: error,
+        name: 'ATENÇÃO',
+      );
+      return false;
+    }
   }
 
-  void update(T entity);
-
-  //
-  void delete(T entity);
+  Future<bool> deletar(T entity) async {
+    if (entity.id != null) {
+      try {
+        await db
+            .collection(entity.runtimeType.toString().toLowerCase())
+            .doc(entity.id)
+            .delete();
+        return true;
+      } catch (error) {
+        log(
+          'Erro ao deletar',
+          error: error,
+          name: 'ATENÇÃO',
+        );
+        return false;
+      }
+    }
+    return false;
+  }
 }

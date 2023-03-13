@@ -2,27 +2,15 @@ import 'package:agendamentos_app/database/models/dao/dao.dart';
 import 'package:agendamentos_app/database/models/motorista.dart';
 
 class MotoristaDao extends Dao<Motorista> {
-
   @override
-  List<Motorista> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<Motorista?> get(String id) async {
+    final res = await db.collection('motorista').doc(id).get();
+    return res.exists ? Motorista.fromFirestore(res) : null;
   }
 
   @override
-  void update(Motorista entity) {
-    // TODO: implement update
+  Future<List<Motorista>> getAll() async {
+    final res = await db.collection('motorista').get();
+    return res.docs.map((e) => Motorista.fromFirestore(e)).toList();
   }
-  
-  @override
-  Motorista? get([Motorista? entity]) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
-  
-  @override
-  void delete(Motorista entity) {
-    // TODO: implement delete
-  }
-  
 }

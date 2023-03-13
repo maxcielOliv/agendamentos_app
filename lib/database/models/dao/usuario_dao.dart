@@ -1,45 +1,23 @@
-import 'dart:async';
-
-import 'package:agendamentos_app/database/models/dao/dao.dart';
-import 'package:agendamentos_app/database/models/usuario.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../usuario.dart';
+import 'dao.dart';
 
 class UsuarioDao extends Dao<Usuario> {
-  final _db = FirebaseFirestore.instance;
   @override
-  List<Usuario> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<Usuario?> get(String id) async {
+    final res = await db.collection('usuario').doc(id).get();
+    return res.exists ? Usuario.fromFirestore(res) : null;
+  }
+
+  Future<Usuario?> getNome(String nome) async {
+      final res = await db.collection('usuario').where('usuario').get();
+        if (res.size > 0) {
+          return Usuario.fromFirestore(res.docs.first);
+        }
   }
 
   @override
-  void update(Usuario entity) {
-    // TODO: implement update
+  Future<List<Usuario>> getAll() async {
+    final res = await db.collection('usuario').get();
+    return res.docs.map((e) => Usuario.fromFirestore(e)).toList();
   }
-  
-  @override
-  Usuario? get(Usuario entity) {
-    final docRef = _db
-        .collection(entity.runtimeType.toString().toLowerCase())
-        .doc("NkdM6Ew0nzU9YuabUpTm");
-    docRef.get().then(
-      (DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        print(data);
-      }
-    );
-  }
-  
-  @override
-  void delete(Usuario entity) {
-     _db
-        .collection(entity.runtimeType.toString().toLowerCase())
-        .doc('LihQhOyN6ZHv4M3D7NQx')
-        .delete()
-        .then(
-          (doc) => print("Document deleted"),
-          onError: (e) => print("Error updating document $e"),
-        );
-  }
-
 }

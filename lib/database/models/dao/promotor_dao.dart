@@ -1,30 +1,16 @@
-import 'package:agendamentos_app/database/models/dao/dao.dart';
-import 'package:agendamentos_app/database/models/promotor.dart';
+import '../promotor.dart';
+import 'dao.dart';
 
 class PromotorDao extends Dao<Promotor> {
-
-
   @override
-  List<Promotor> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<Promotor?> get(String id) async {
+    final res = await db.collection('promotor').doc(id).get();
+    return res.exists ? Promotor.fromFirestore(res) : null;
   }
 
   @override
-  void update(Promotor entity) {
-    // TODO: implement update
+  Future<List<Promotor>> getAll() async {
+    final res = await db.collection('promotor').get();
+    return res.docs.map((e) => Promotor.fromFirestore(e)).toList();
   }
-  
-  @override
-  Promotor? get([Promotor? entity]) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
-  
-  @override
-  void delete(Promotor entity) {
-    // TODO: implement delete
-  }
-
-
 }

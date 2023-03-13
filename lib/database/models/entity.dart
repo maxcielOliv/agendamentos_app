@@ -1,7 +1,8 @@
 abstract class Entity {
-  
-  Map<String, dynamic> get criacao => {'criacao': DateTime.now()};
+  final String? id;
+  final DateTime? criacao;
 
-  Map<String, dynamic> toMap();
+  Entity({this.id, this.criacao});
 
+  Map<String, dynamic> toFirestore();
 }

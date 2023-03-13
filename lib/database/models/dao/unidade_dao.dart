@@ -1,29 +1,16 @@
-import 'package:agendamentos_app/database/models/dao/dao.dart';
-import 'package:agendamentos_app/database/models/unidade.dart';
-
+import '../unidade.dart';
+import 'dao.dart';
 
 class UnidadeDao extends Dao<Unidade> {
-
   @override
-  List<Unidade> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<Unidade?> get(String id) async {
+    final res = await db.collection('unidade').doc(id).get();
+    return res.exists ? Unidade.fromFirestore(res) : null;
   }
 
   @override
-  void update(Unidade entity) {
-    // TODO: implement update
+  Future<List<Unidade>> getAll() async {
+    final res = await db.collection('unidade').get();
+    return res.docs.map((e) => Unidade.fromFirestore(e)).toList();
   }
-  
-  @override
-  Unidade? get([Unidade? entity]) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
-  
-  @override
-  void delete(Unidade entity) {
-    // TODO: implement delete
-  }
-  
 }
