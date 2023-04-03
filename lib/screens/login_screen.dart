@@ -9,69 +9,89 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  var url =
+      'https://img.elo7.com.br/product/zoom/42AF568/matriz-bordado-ministerio-publico-para-mppa-matriz-bordado-mppa.jpg';
   @override
   Widget build(BuildContext context) {
-    final _db = FirebaseFirestore.instance;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'My App',
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(
-              height: 44.0,
-            ),
-            const TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                hintText: 'User Email',
-                labelStyle: TextStyle(fontSize: 20),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Colors.black,
-                ),
+        body: SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/imagens/teste.jpg',
+                height: 250,
+                width: 250,
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Form(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Bem Vindo',
+                    style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          hintText: 'E-mail',
+                          labelStyle: const TextStyle(fontSize: 20),
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: Colors.red.shade300,
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: TextFormField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          hintText: 'Senha',
+                          labelStyle: const TextStyle(fontSize: 20),
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: Colors.red.shade300,
+                          )),
+                    ),
+                  ),
+                  const SizedBox(height: 30.0),
+                  Container(
+                    width: 100.0,
+                    child: RawMaterialButton(
+                      fillColor: const Color(0xFF0069FE),
+                      elevation: 0.0,
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0)),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('HomePage');
+                      },
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
-            const SizedBox(
-              height: 26.0,
-            ),
-            const TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: 'User Password',
-                labelStyle: TextStyle(fontSize: 20),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 88.0,
-            ),
-            Container(
-              width: double.infinity,
-              child: RawMaterialButton(
-                fillColor: const Color(0xFF0069FE),
-                elevation: 0.0,
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pushNamed('HomePage');
-                },
-                child: const Text('Login', style: TextStyle(color: Colors.white),),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
+    ));
   }
 }

@@ -10,6 +10,14 @@ class AgendamentoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agendamentos'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed('AgendamentosCadastro');
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: db.collection('agendamento').snapshots(),
@@ -23,15 +31,17 @@ class AgendamentoScreen extends StatelessWidget {
           final data = snapshot.data;
           if (data != null) {
             return ListView.separated(
-            itemCount: data.size,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(data.docs[index]['local']),
-                subtitle: const Text('data'),
-              );
-            },
-            separatorBuilder: ((context, index) => const Divider(thickness: 1,)),
-          );
+              itemCount: data.size,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(data.docs[index]['local']),
+                  subtitle: const Text('data'),
+                );
+              },
+              separatorBuilder: ((context, index) => const Divider(
+                    thickness: 1,
+                  )),
+            );
           }
           return const Text('Sem dados');
         },

@@ -1,3 +1,4 @@
+import 'package:agendamentos_app/screens/agendamento_cadastro.dart';
 import 'package:agendamentos_app/screens/agendamento_screen.dart';
 import 'package:agendamentos_app/screens/home_page.dart';
 import 'package:agendamentos_app/screens/login_screen.dart';
@@ -21,7 +22,8 @@ class App extends StatelessWidget {
         'HomePage': (context) => const HomePage(),
         'Veiculos': (context) => const VeiculoScreen(),
         'Motoristas': (context) => const MotoristaScreen(),
-        'Agendamentos':(context) => const AgendamentoScreen()
+        'Agendamentos': (context) => const AgendamentoScreen(),
+        'AgendamentosCadastro': (context) => const AgendamentoCadastro(),
       },
     );
   }

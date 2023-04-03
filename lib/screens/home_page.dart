@@ -1,11 +1,14 @@
+import 'package:agendamentos_app/screens/agendamento_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _db = FirebaseFirestore.instance;
     return Scaffold(
       appBar: AppBar(
         title: const Text('App Agendamentos'),
@@ -18,7 +21,7 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Lá eleeeee'),
+              child: Text('Agendamentos'),
             ),
             ListTile(
               leading: const Icon(Icons.home_outlined),
@@ -56,92 +59,101 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Container(
-        child: SfCalendar(
-          view: CalendarView.month,
-          dataSource: MeetingDataSource(_getDataSource()),
-          monthViewSettings: const MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-        ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _db.collection('veiculo').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Erro ao carregar!');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snapshot.data;
+          if (data != null) {
+            return ListView(
+              padding: const EdgeInsets.all(10),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Card(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('Veiculos'),
+                          subtitle: Text(data.docs[0]['motorista']),
+                        ),
+                        ListTile(
+                          title: Text(data.docs[0]['modelo']),
+                          subtitle: Text(data.docs[0]['placa']),
+                          trailing: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('Agendamentos');
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Card(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('Veiculos'),
+                          subtitle: Text(data.docs[1]['motorista']),
+                        ),
+                        ListTile(
+                          title: Text(data.docs[1]['modelo']),
+                          subtitle: Text(data.docs[1]['placa']),
+                          trailing: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('Agendamentos');
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Card(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('Veiculos'),
+                          subtitle: Text(data.docs[2]['motorista']),
+                        ),
+                        ListTile(
+                          title: Text(data.docs[2]['modelo']),
+                          subtitle: Text(data.docs[2]['placa']),
+                          trailing: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('Agendamentos');
+                            },
+                            icon: const Icon(Icons.add),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+          return const Text('Sem dados');
+        },
       ),
     );
   }
-}
-
-List<Meeting> _getDataSource() {
-  final List<Meeting> meetings = <Meeting>[];
-  final DateTime today = DateTime.now();
-  final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
-  final DateTime endTime = startTime.add(const Duration(hours: 2));
-  meetings.add(Meeting(
-      'Conference', startTime, endTime, const Color(0xFF0F8644), false));
-  return meetings;
-}
-
-/// An object to set the appointment collection data source to calendar, which
-/// used to map the custom appointment data to the calendar appointment, and
-/// allows to add, remove or reset the appointment collection.
-class MeetingDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
-  MeetingDataSource(List<Meeting> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return _getMeetingData(index).from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return _getMeetingData(index).to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return _getMeetingData(index).eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return _getMeetingData(index).background;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return _getMeetingData(index).isAllDay;
-  }
-
-  Meeting _getMeetingData(int index) {
-    final dynamic meeting = appointments![index];
-    late final Meeting meetingData;
-    if (meeting is Meeting) {
-      meetingData = meeting;
-    }
-
-    return meetingData;
-  }
-}
-
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
-class Meeting {
-  /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  /// Event name which is equivalent to subject property of [Appointment].
-  String eventName;
-
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
-
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
-
-  /// Background which is equivalent to color property of [Appointment].
-  Color background;
-
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
 }
