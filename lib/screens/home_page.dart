@@ -1,6 +1,5 @@
-import 'package:agendamentos_app/screens/agendamento_screen.dart';
+import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -53,7 +52,7 @@ class HomePage extends StatelessWidget {
               leading: const Icon(Icons.logout_rounded),
               title: const Text('Sair'),
               onTap: () {
-                Navigator.pop(context);
+                AuthService().logout(context);
               },
             )
           ],
