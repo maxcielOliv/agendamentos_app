@@ -10,14 +10,14 @@ class VeiculoScreen extends StatefulWidget {
 
 class _VeiculoScreenState extends State<VeiculoScreen> {
   final _db = FirebaseFirestore.instance;
-    final _controller = TextEditingController();
-    final _focus = FocusNode();
+  final _controller = TextEditingController();
+  final _focus = FocusNode();
 
-    @override
-    void dispose() {
-      _controller.dispose();
-      super.dispose();
-    }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +35,7 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
           ),
           onChanged: (value) {
             if (value.length >= 3) {
+              print(_controller);
               setState(() {});
             }
           },
@@ -54,7 +55,6 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        
         stream: _db.collection('veiculo').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {

@@ -1,3 +1,7 @@
+import 'package:agendamentos_app/screens/agendamento_screen.dart';
+import 'package:agendamentos_app/screens/motoristas_screen.dart';
+import 'package:agendamentos_app/screens/usuarios_screens.dart';
+import 'package:agendamentos_app/screens/veiculos_screen.dart';
 import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -31,21 +35,48 @@ class HomePage extends StatelessWidget {
               leading: const Icon(Icons.sports_motorsports_outlined),
               title: const Text('Motoristas'),
               onTap: () {
-                Navigator.of(context).pushNamed('Motoristas');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MotoristaScreen(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.drive_eta),
               title: const Text('Veiculos'),
               onTap: () {
-                Navigator.of(context).pushNamed('Veiculos');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const VeiculoScreen(),
+                  ),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.event_available_rounded),
               title: const Text('Agendamentos'),
               onTap: () {
-                Navigator.of(context).pushNamed('Agendamentos');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AgendamentoScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.man_rounded),
+              title: const Text('Usuários'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UsuarioScreen(),
+                  ),
+                );
               },
             ),
             ListTile(

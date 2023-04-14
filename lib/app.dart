@@ -1,9 +1,4 @@
-import 'package:agendamentos_app/screens/agendamento_cadastro.dart';
-import 'package:agendamentos_app/screens/agendamento_screen.dart';
-import 'package:agendamentos_app/screens/home_page.dart';
 import 'package:agendamentos_app/screens/login_page.dart';
-import 'package:agendamentos_app/screens/motoristas_screen.dart';
-import 'package:agendamentos_app/screens/veiculos_screen.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -17,14 +12,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routes: {
-        '/': (context) => const LoginPage(),
-        'HomePage': (context) => const HomePage(),
-        'Veiculos': (context) => const VeiculoScreen(),
-        'Motoristas': (context) => const MotoristaScreen(),
-        'Agendamentos': (context) => const AgendamentoScreen(),
-        'AgendamentosCadastro': (context) => const AgendamentoCadastro(),
-      },
+      home: const LoginPage(),
     );
   }
 }
