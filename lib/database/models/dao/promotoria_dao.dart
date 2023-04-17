@@ -1,7 +1,7 @@
 import '../promotoria.dart';
 import 'dao.dart';
 
-class UnidadeDao extends Dao<Promotoria> {
+class PromotoriaDao extends Dao<Promotoria> {
   @override
   Future<Promotoria?> get(String id) async {
     final res = await db.collection('promotoria').doc(id).get();

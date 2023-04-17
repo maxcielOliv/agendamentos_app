@@ -1,7 +1,10 @@
-import 'package:agendamentos_app/screens/agendamento_screen.dart';
-import 'package:agendamentos_app/screens/motoristas_screen.dart';
-import 'package:agendamentos_app/screens/usuarios_screens.dart';
-import 'package:agendamentos_app/screens/veiculos_screen.dart';
+import 'package:agendamentos_app/database/models/dao/veiculo_dao.dart';
+import 'package:agendamentos_app/database/models/veiculo.dart';
+import 'package:agendamentos_app/screens/view/agendamento_screen.dart';
+import 'package:agendamentos_app/screens/view/motoristas_screen.dart';
+import 'package:agendamentos_app/screens/view/promotoria_sreen.dart';
+import 'package:agendamentos_app/screens/cadastro/usuario_cadastro.dart';
+import 'package:agendamentos_app/screens/view/veiculos_screen.dart';
 import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _db = FirebaseFirestore.instance;
+    final dao = VeiculoDao();
     return Scaffold(
       appBar: AppBar(
         title: const Text('App Agendamentos'),
@@ -21,15 +25,24 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
+              //padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
                 color: Colors.blue,
               ),
               child: Text('Agendamentos'),
             ),
             ListTile(
               leading: const Icon(Icons.home_outlined),
-              title: const Text('Home'),
-              onTap: () {},
+              title: const Text('Promotorias'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PromotoriaScreen(),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.sports_motorsports_outlined),
@@ -89,8 +102,8 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _db.collection('veiculo').snapshots(),
+      body: FutureBuilder<List<Veiculo>>(
+        future: dao.getAll(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Erro ao carregar!');
@@ -100,26 +113,35 @@ class HomePage extends StatelessWidget {
           }
           final data = snapshot.data;
           if (data != null) {
-            return ListView(
+            return ListView.builder(
+              itemCount: data.length,
               padding: const EdgeInsets.all(10),
-              children: [
-                Padding(
+              itemBuilder: (context, index) {
+                final veiculo = data[index];
+                return Padding(
                   padding: const EdgeInsets.all(10),
                   child: Card(
-                    color: Colors.white,
+                    color: Colors.blue,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTile(
-                          title: const Text('Veiculos'),
-                          subtitle: Text(data.docs[0]['motorista']),
+                          title: Text(veiculo.modelo.toUpperCase()),
+                          subtitle: Text(veiculo.placa.toUpperCase()),
                         ),
                         ListTile(
-                          title: Text(data.docs[0]['modelo']),
-                          subtitle: Text(data.docs[0]['placa']),
+                          title: const Text('MOTORISTA'),
+                          subtitle:
+                              Text(veiculo.motorista.toString().toUpperCase()),
                           trailing: IconButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('Agendamentos');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AgendamentoScreen(),
+                                ),
+                              );
                             },
                             icon: const Icon(Icons.add),
                           ),
@@ -127,58 +149,8 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Card(
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: const Text('Veiculos'),
-                          subtitle: Text(data.docs[1]['motorista']),
-                        ),
-                        ListTile(
-                          title: Text(data.docs[1]['modelo']),
-                          subtitle: Text(data.docs[1]['placa']),
-                          trailing: IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed('Agendamentos');
-                            },
-                            icon: const Icon(Icons.add),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Card(
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: const Text('Veiculos'),
-                          subtitle: Text(data.docs[2]['motorista']),
-                        ),
-                        ListTile(
-                          title: Text(data.docs[2]['modelo']),
-                          subtitle: Text(data.docs[2]['placa']),
-                          trailing: IconButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed('Agendamentos');
-                            },
-                            icon: const Icon(Icons.add),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                );
+              },
             );
           }
           return const Text('Sem dados');

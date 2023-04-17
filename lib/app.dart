@@ -10,8 +10,11 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Agendamentos App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          //primarySwatch: Colors.blue,
+          // primaryColor: Colors.black,
+          // primaryColorDark: Colors.black,
+          // primaryColorLight: Colors.white,
+          ),
       home: const LoginPage(),
     );
   }

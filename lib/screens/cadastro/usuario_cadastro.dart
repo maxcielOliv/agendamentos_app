@@ -1,37 +1,23 @@
 import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class UsuarioScreen extends StatefulWidget {
+  const UsuarioScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<UsuarioScreen> createState() => _UsuarioScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _UsuarioScreenState extends State<UsuarioScreen> {
   final email = TextEditingController();
   final senha = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  //bool isLogin = true;
   bool carregando = false;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   setFormAction(true);
-  // }
-
-  // setFormAction(bool acao) {
-  //   setState(() {
-  //     isLogin = acao;
-  //   });
-  // }
-
-  login() async {
+  sigUp() async {
     setState(() => carregando = true);
     try {
-      await AuthService().login(email.text, senha.text, context);
+      await AuthService().sigUp(email.text, senha.text, context);
     } on AuthException catch (e) {
       setState(() => carregando = false);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -47,6 +33,9 @@ class _LoginPageState extends State<LoginPage> {
     return Form(
       key: _formKey,
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Cadastro Usuários'),
+        ),
         body: Container(
           padding: const EdgeInsets.only(
             top: 60,
@@ -56,32 +45,17 @@ class _LoginPageState extends State<LoginPage> {
           color: Colors.white,
           child: ListView(
             children: [
-              SizedBox(
-                width: 128,
-                height: 128,
-                child: Image.asset('assets/imagens/teste.jpg'),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
               Container(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: const [
-                    Text(
-                      'PROMOTORIA DE JUSTIÇA DE ALTAMIRA',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                     SizedBox(height: 10),
-                    Text(
-                      'Agendamentos de Veículos',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               TextFormField(
                 controller: email,
@@ -113,17 +87,6 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                height: 30,
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  child:
-                      const Text('Recuperar Senha', textAlign: TextAlign.right),
-                  onPressed: () {
-                    //
-                  },
-                ),
-              ),
               const SizedBox(height: 40),
               Container(
                 height: 60,
@@ -154,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                             ]
                           : [
                               const Text(
-                                'Login',
+                                'Cadastre-se',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -173,9 +136,13 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                     ),
                     onPressed: () async {
-                      //if (isLogin) {
-                      login();
-                      //}
+                      // if (_formKey.currentState!.validate()) {
+                      sigUp();
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(
+                      //         content: Text('Cadastro realizado com sucesso')),
+                      //   );
+                      // }
                     },
                   ),
                 ),

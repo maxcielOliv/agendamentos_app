@@ -2,6 +2,11 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../entity.dart';
 
+class AuthException implements Exception {
+  String mensagem;
+  AuthException(this.mensagem);
+}
+
 abstract class Dao<T extends Entity> {
   final db = FirebaseFirestore.instance;
 
@@ -19,12 +24,13 @@ abstract class Dao<T extends Entity> {
                 ..addAll(entity.toFirestore()),
               SetOptions(merge: entity.id != null));
       return true;
-    } catch (error) {
-      log(
-        'Erro ao salvar',
-        error: error,
-        name: 'ATENÇÃO',
-      );
+    } on FirebaseException catch (error) {
+      print(error.code);
+      // log(
+      //   'Erro ao salvar',
+      //   error: error,
+      //   name: 'ATENÇÃO',
+      // );
       return false;
     }
   }

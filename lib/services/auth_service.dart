@@ -32,7 +32,6 @@ class AuthService extends ChangeNotifier {
       });
       _getUser();
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       if (e.code == 'invalid-email') {
         throw AuthException('Informe E-mail e senha');
       } else if (e.code == 'user-not-found') {
@@ -48,9 +47,11 @@ class AuthService extends ChangeNotifier {
       await _auth.createUserWithEmailAndPassword(email: email, password: senha);
       _getUser();
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'invalid-email') {
-        throw AuthException('Informe E-mail e senha');
-      } else if (e.code == 'weak-password') {
+      print(e.code);
+      // if (e.code == 'invalid-email') {
+      //   print(e.code);
+      //throw AuthException('Informe E-mail e senha');
+      if (e.code == 'weak-password') {
         throw AuthException('A senha é muito fraca');
       } else if (e.code == 'email-already-in-use') {
         throw AuthException('Este e-mail já está cadastrado');

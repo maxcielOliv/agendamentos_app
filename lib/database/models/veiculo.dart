@@ -4,24 +4,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Veiculo extends Entity {
   final String placa;
   final String modelo;
-
-  Veiculo({
-    super.id,
-    super.criacao,
-    required this.placa,
-    required this.modelo,
-  });
+  final String? motorista;
+  Veiculo(
+      {super.id,
+      super.criacao,
+      required this.placa,
+      required this.modelo,
+      this.motorista});
 
   factory Veiculo.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
   ) {
     final data = snapshot.data();
     return Veiculo(
-      id: snapshot.id,
-      criacao: data?['criacao']?.toDate(),
-      placa: data?['placa'],
-      modelo: data?['modelo'],
-    );
+        id: snapshot.id,
+        criacao: data?['criacao']?.toDate(),
+        placa: data?['placa'],
+        modelo: data?['modelo'],
+        motorista: data?['motorista']);
   }
 
   @override
@@ -31,6 +31,6 @@ class Veiculo extends Entity {
 
   @override
   String toString() {
-    return 'Id: ${id ?? '?'} | Modelo: $modelo | Placa: $placa';
+    return 'Id: ${id ?? '?'} | Modelo: $modelo | Placa: $placa | Motorista $motorista';
   }
 }

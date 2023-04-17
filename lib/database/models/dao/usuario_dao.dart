@@ -9,10 +9,10 @@ class UsuarioDao extends Dao<Usuario> {
   }
 
   Future<Usuario?> getNome(String nome) async {
-      final res = await db.collection('usuario').where('usuario').get();
-        if (res.size > 0) {
-          return Usuario.fromFirestore(res.docs.first);
-        }
+    final res = await db.collection('usuario').where('usuario').get();
+    if (res.size > 0) {
+      return Usuario.fromFirestore(res.docs.first);
+    }
   }
 
   @override
