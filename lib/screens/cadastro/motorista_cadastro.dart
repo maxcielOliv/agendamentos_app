@@ -13,39 +13,53 @@ class _MotoristaCadastroState extends State<MotoristaCadastro> {
   final _nome = TextEditingController();
   late Motorista motorista = Motorista(nome: _nome.text);
   final dao = MotoristaDao();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cadastro Motorista'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: _nome,
-                // showCursor: true,
-                // readOnly: true,
-                keyboardType: TextInputType.name,
-                validator: (value) {},
-                decoration: const InputDecoration(
-                  labelText: 'Nome',
-                  icon: Icon(Icons.near_me),
+    return Form(
+      key: _formKey,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Cadastro Motorista'),
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _nome,
+                  // showCursor: true,
+                  // readOnly: true,
+                  keyboardType: TextInputType.name,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Insira Nome';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Nome',
+                    icon: Icon(Icons.near_me),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: ElevatedButton(
-        onPressed: () {
-          dao.salvar(motorista);
-        },
-        child: const Icon(Icons.save),
+        floatingActionButton: ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              dao.salvar(motorista);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Cadastro realizado com sucesso')),
+              );
+            }
+          },
+          child: const Icon(Icons.save),
+        ),
       ),
     );
   }

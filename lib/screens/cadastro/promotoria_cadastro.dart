@@ -14,6 +14,13 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
   late Promotoria promotoria = Promotoria(nome: _nome.text);
   final dao = PromotoriaDao();
   final _formKey = GlobalKey<FormState>();
+  final _focus = FocusNode();
+
+  @override
+  void dispose() {
+    _nome.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +37,9 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  focusNode: _focus,
                   controller: _nome,
-                  // showCursor: true,
-                  // readOnly: true,
+                  autofocus: true,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {

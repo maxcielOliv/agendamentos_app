@@ -1,14 +1,14 @@
 import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
-class UsuarioScreen extends StatefulWidget {
-  const UsuarioScreen({super.key});
+class UsuarioCadastro extends StatefulWidget {
+  const UsuarioCadastro({super.key});
 
   @override
-  State<UsuarioScreen> createState() => _UsuarioScreenState();
+  State<UsuarioCadastro> createState() => _UsuarioCadastroScreenState();
 }
 
-class _UsuarioScreenState extends State<UsuarioScreen> {
+class _UsuarioCadastroScreenState extends State<UsuarioCadastro> {
   final email = TextEditingController();
   final senha = TextEditingController();
   final _formKey = GlobalKey<FormState>();

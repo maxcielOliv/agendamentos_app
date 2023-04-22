@@ -25,12 +25,11 @@ abstract class Dao<T extends Entity> {
               SetOptions(merge: entity.id != null));
       return true;
     } on FirebaseException catch (error) {
-      print(error.code);
-      // log(
-      //   'Erro ao salvar',
-      //   error: error,
-      //   name: 'ATENÇÃO',
-      // );
+      log(
+        'Erro ao salvar',
+        error: error,
+        name: 'ATENÇÃO',
+      );
       return false;
     }
   }
