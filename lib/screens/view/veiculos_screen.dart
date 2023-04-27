@@ -42,29 +42,30 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
         ],
       ),
       body: FutureBuilder<List<Veiculo>>(
-          future: dao.getAll(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LinearProgressIndicator();
-            }
-            final lista = snapshot.data;
-            if (lista != null) {
-              return ListView.separated(
-                itemCount: lista.length,
-                itemBuilder: (context, index) {
-                  final veiculo = lista[index];
-                  return ListTile(
-                    title: Text(veiculo.modelo),
-                    subtitle: Text(veiculo.placa),
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(
-                  height: 0,
-                ),
-              );
-            }
-            return const Text('Sem dados');
-          }),
+        future: dao.getAll(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LinearProgressIndicator();
+          }
+          final lista = snapshot.data;
+          if (lista != null) {
+            return ListView.separated(
+              itemCount: lista.length,
+              itemBuilder: (context, index) {
+                final veiculo = lista[index];
+                return ListTile(
+                  title: Text(veiculo.modelo),
+                  subtitle: Text(veiculo.placa),
+                );
+              },
+              separatorBuilder: (context, index) => const Divider(
+                height: 0,
+              ),
+            );
+          }
+          return const Text('Sem dados');
+        },
+      ),
     );
   }
 }

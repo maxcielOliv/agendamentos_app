@@ -1,4 +1,6 @@
 import 'package:agendamentos_app/app.dart';
+import 'package:agendamentos_app/database/models/agendamento.dart';
+import 'package:agendamentos_app/database/models/dao/agendamento_dao.dart';
 
 import 'package:agendamentos_app/firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -10,4 +12,14 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const App());
+
+  // final agendamento = Agendamento(
+  //     data: DateTime.now(),
+  //     local: 'Esperançinha',
+  //     motorista: 'marcelo',
+  //     veiculo: 'gol',
+  //     horaInicio: DateTime.now(),
+  //     horaTermino: DateTime.now());
+  // final dao = AgendamentoDao();
+  // dao.salvar(agendamento);
 }
