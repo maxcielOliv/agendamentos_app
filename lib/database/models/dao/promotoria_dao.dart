@@ -13,4 +13,11 @@ class PromotoriaDao extends Dao<Promotoria> {
     final res = await db.collection('promotoria').get();
     return res.docs.map((e) => Promotoria.fromFirestore(e)).toList();
   }
+
+  // @override
+  // Stream<List<Promotoria>> getAllStream() async* {
+  //  yield*  res = await db.collection('promotoria').snapshots().listen((event) {
+  //     event.docs.map((e) => Promotoria.fromFirestore(e)).toList();
+  //   });
+  // }
 }

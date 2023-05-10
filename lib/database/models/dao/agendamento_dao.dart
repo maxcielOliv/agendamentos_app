@@ -11,7 +11,10 @@ class AgendamentoDao extends Dao<Agendamento> {
   @override
   Future<List<Agendamento>> getAll() async {
     final res = await db.collection('agendamento').get();
-    return res.docs.map((e) => Agendamento.fromFirestore(e)).toList();
+    return res.docs
+        .map((e) => Agendamento.fromFirestore(
+              e,
+            ))
+        .toList();
   }
-
 }

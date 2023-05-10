@@ -1,5 +1,6 @@
 import 'package:agendamentos_app/database/models/dao/usuario_dao.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
+import 'package:agendamentos_app/screens/cadastro/usuario_cadastro.dart';
 import 'package:agendamentos_app/screens/cadastro/veiculos_cadastro.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const VeiculosCadastro(),
+                  builder: (context) => const UsuarioCadastro(),
                 ),
               );
             },

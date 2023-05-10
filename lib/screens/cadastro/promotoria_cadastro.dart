@@ -63,6 +63,7 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Cadastro realizado com sucesso')),
               );
+              Navigator.of(context).pop();
             }
           },
           child: const Icon(Icons.save),

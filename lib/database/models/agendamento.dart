@@ -42,6 +42,7 @@ class Agendamento extends Entity {
 
   factory Agendamento.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
+    //SnapshotOptions? options,
   ) {
     final data = snapshot.data();
     return Agendamento(

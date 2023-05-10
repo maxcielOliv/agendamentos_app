@@ -12,7 +12,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const App());
-
   // final agendamento = Agendamento(
   //     data: DateTime.now(),
   //     local: 'Esperançinha',

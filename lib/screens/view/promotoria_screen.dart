@@ -22,6 +22,7 @@ class _PromotoriaScreenState extends State<PromotoriaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('tela promotoria');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Promotorias'),

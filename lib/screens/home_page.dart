@@ -1,6 +1,8 @@
 import 'package:agendamentos_app/database/models/dao/veiculo_dao.dart';
 import 'package:agendamentos_app/database/models/veiculo.dart';
 import 'package:agendamentos_app/screens/calendar/calendar.dart';
+import 'package:agendamentos_app/screens/calendar/calendar2.dart';
+import 'package:agendamentos_app/screens/calendar/teste.dart';
 import 'package:agendamentos_app/screens/view/agendamento_screen.dart';
 import 'package:agendamentos_app/screens/view/motoristas_screen.dart';
 import 'package:agendamentos_app/screens/view/promotoria_screen.dart';
@@ -76,7 +78,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const EventCalendar(),
+                    builder: (context) => const CalendarPage(),
                   ),
                 );
               },
