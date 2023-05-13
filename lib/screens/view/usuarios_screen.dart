@@ -1,7 +1,6 @@
 import 'package:agendamentos_app/database/models/dao/usuario_dao.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
 import 'package:agendamentos_app/screens/cadastro/usuario_cadastro.dart';
-import 'package:agendamentos_app/screens/cadastro/veiculos_cadastro.dart';
 import 'package:flutter/material.dart';
 
 class UsuarioScreen extends StatefulWidget {
@@ -23,6 +22,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(dao.getAllStream());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Usuários'),
@@ -42,30 +42,37 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<List<Usuario>>(
-          future: dao.getAll(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LinearProgressIndicator();
-            }
-            final lista = snapshot.data;
-            if (lista != null) {
-              return ListView.separated(
-                itemCount: lista.length,
-                itemBuilder: (context, index) {
-                  final usuario = lista[index];
-                  return ListTile(
-                    title: Text(usuario.usuario),
-                    subtitle: Text(usuario.criacao.toString()),
-                  );
-                },
-                separatorBuilder: (context, index) => const Divider(
-                  height: 0,
-                ),
-              );
-            }
-            return const Text('Sem dados');
-          }),
+      body: StreamBuilder<List<Usuario>>(
+        stream: dao.getAllStream(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LinearProgressIndicator();
+          }
+          final lista = snapshot.data;
+          if (lista != null) {
+            return ListView.separated(
+              itemCount: lista.length,
+              itemBuilder: (context, index) {
+                final usuario = lista[index];
+                return ListTile(
+                  title: Text(usuario.nome),
+                  subtitle: Text(usuario.id.toString()),
+                  trailing: IconButton(
+                    onPressed: () {
+                      dao.deletar(usuario);
+                    },
+                    icon: const Icon(Icons.delete_forever_rounded),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const Divider(
+                height: 0,
+              ),
+            );
+          }
+          return const Text('Sem dados');
+        },
+      ),
     );
   }
 }

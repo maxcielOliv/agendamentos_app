@@ -41,8 +41,8 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<List<Veiculo>>(
-        future: dao.getAll(),
+      body: StreamBuilder<List<Veiculo>>(
+        stream: dao.getAllStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LinearProgressIndicator();
@@ -56,6 +56,12 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
                 return ListTile(
                   title: Text(veiculo.modelo),
                   subtitle: Text(veiculo.placa),
+                  trailing: IconButton(
+                    onPressed: () {
+                      dao.deletar(veiculo);
+                    },
+                    icon: const Icon(Icons.delete_forever_rounded),
+                  ),
                 );
               },
               separatorBuilder: (context, index) => const Divider(

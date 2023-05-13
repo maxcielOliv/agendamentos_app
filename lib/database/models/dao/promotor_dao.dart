@@ -13,4 +13,13 @@ class PromotorDao extends Dao<Promotor> {
     final res = await db.collection('promotor').get();
     return res.docs.map((e) => Promotor.fromFirestore(e)).toList();
   }
+
+  @override
+  // ignore: override_on_non_overriding_member
+  Stream<List<Promotor>> getAllStream() async* {
+    yield* db
+        .collection('promotor')
+        .snapshots()
+        .map((e) => e.docs.map((e) => Promotor.fromFirestore(e)).toList());
+  }
 }

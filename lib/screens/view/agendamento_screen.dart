@@ -1,3 +1,5 @@
+import 'package:agendamentos_app/database/models/agendamento.dart';
+import 'package:agendamentos_app/database/models/dao/agendamento_dao.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -8,6 +10,7 @@ class AgendamentoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final db = FirebaseFirestore.instance;
+    final dao = AgendamentoDao();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agendamentos'),
@@ -18,28 +21,32 @@ class AgendamentoScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: db.collection('agendamento').snapshots(),
+      body: StreamBuilder<List<Agendamento>>(
+        stream: dao.getAllStream(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text('Erro ao carregar!');
-          }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const LinearProgressIndicator();
           }
-          final data = snapshot.data;
-          if (data != null) {
+          final lista = snapshot.data;
+          if (lista != null) {
             return ListView.separated(
-              itemCount: data.size,
+              itemCount: lista.length,
               itemBuilder: (context, index) {
+                final agendamento = lista[index];
                 return ListTile(
-                  title: Text(data.docs[index]['local']),
-                  subtitle: Text(data.docs[index]['motorista']),
+                  title: Text(agendamento.local),
+                  subtitle: Text('${agendamento.data}'),
+                  trailing: IconButton(
+                    onPressed: () {
+                      dao.deletar(agendamento);
+                    },
+                    icon: const Icon(Icons.delete_forever_rounded),
+                  ),
                 );
               },
-              separatorBuilder: ((context, index) => const Divider(
-                    thickness: 1,
-                  )),
+              separatorBuilder: (context, index) => const Divider(
+                height: 0,
+              ),
             );
           }
           return const Text('Sem dados');

@@ -41,14 +41,13 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<List<Motorista>>(
-        future: dao.getAll(),
+      body: StreamBuilder<List<Motorista>>(
+        stream: dao.getAllStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LinearProgressIndicator();
           }
           final lista = snapshot.data;
-          print(lista);
           if (lista != null) {
             return ListView.separated(
               itemCount: lista.length,
@@ -56,7 +55,13 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
                 final motorista = lista[index];
                 return ListTile(
                   title: Text(motorista.nome),
-                  subtitle: Text(motorista.matricula.toString()),
+                  subtitle: Text('${motorista.criacao}'),
+                  trailing: IconButton(
+                    onPressed: () {
+                      dao.deletar(motorista);
+                    },
+                    icon: const Icon(Icons.delete_forever_rounded),
+                  ),
                 );
               },
               separatorBuilder: (context, index) => const Divider(

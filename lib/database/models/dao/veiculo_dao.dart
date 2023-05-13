@@ -24,4 +24,13 @@ class VeiculoDao extends Dao<Veiculo> {
     final res = await db.collection('veiculo').get();
     return res.docs.map((e) => Veiculo.fromFirestore(e)).toList();
   }
+
+  @override
+  // ignore: override_on_non_overriding_member
+  Stream<List<Veiculo>> getAllStream() async* {
+    yield* db
+        .collection('veiculo')
+        .snapshots()
+        .map((e) => e.docs.map((e) => Veiculo.fromFirestore(e)).toList());
+  }
 }

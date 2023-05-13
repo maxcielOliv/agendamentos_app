@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../usuario.dart';
 import 'dao.dart';
 
@@ -19,5 +23,14 @@ class UsuarioDao extends Dao<Usuario> {
   Future<List<Usuario>> getAll() async {
     final res = await db.collection('usuario').get();
     return res.docs.map((e) => Usuario.fromFirestore(e)).toList();
+  }
+
+  @override
+  // ignore: override_on_non_overriding_member
+  Stream<List<Usuario>> getAllStream() async* {
+    yield* db
+        .collection('usuario')
+        .snapshots()
+        .map((e) => e.docs.map((e) => Usuario.fromFirestore(e)).toList());
   }
 }

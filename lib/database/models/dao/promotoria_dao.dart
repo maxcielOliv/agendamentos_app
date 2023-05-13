@@ -14,10 +14,12 @@ class PromotoriaDao extends Dao<Promotoria> {
     return res.docs.map((e) => Promotoria.fromFirestore(e)).toList();
   }
 
-  // @override
-  // Stream<List<Promotoria>> getAllStream() async* {
-  //  yield*  res = await db.collection('promotoria').snapshots().listen((event) {
-  //     event.docs.map((e) => Promotoria.fromFirestore(e)).toList();
-  //   });
-  // }
+  @override
+  // ignore: override_on_non_overriding_member
+  Stream<List<Promotoria>> getAllStream() async* {
+    yield* db
+        .collection('promotoria')
+        .snapshots()
+        .map((e) => e.docs.map((e) => Promotoria.fromFirestore(e)).toList());
+  }
 }

@@ -1,32 +1,26 @@
-import 'package:agendamentos_app/services/auth_service.dart';
+import 'package:agendamentos_app/database/models/dao/usuario_dao.dart';
+import 'package:agendamentos_app/database/models/usuario.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UsuarioCadastro extends StatefulWidget {
   const UsuarioCadastro({super.key});
 
   @override
-  State<UsuarioCadastro> createState() => _UsuarioCadastroScreenState();
+  State<UsuarioCadastro> createState() => _UsuarioCadastroState();
 }
 
-class _UsuarioCadastroScreenState extends State<UsuarioCadastro> {
+class _UsuarioCadastroState extends State<UsuarioCadastro> {
+  final nome = TextEditingController();
   final email = TextEditingController();
   final senha = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool carregando = false;
+  final _firebaseAuth = FirebaseAuth.instance;
 
-  sigUp() async {
-    setState(() => carregando = true);
-    try {
-      await AuthService().sigUp(email.text, senha.text, context);
-    } on AuthException catch (e) {
-      setState(() => carregando = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.mensagem),
-        ),
-      );
-    }
-  }
+  late Usuario usuario =
+      Usuario(nome: nome.text, email: email.text, senha: senha.text);
+  final dao = UsuarioDao();
+  bool carregando = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +47,20 @@ class _UsuarioCadastroScreenState extends State<UsuarioCadastro> {
                     SizedBox(height: 10),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                controller: nome,
+                keyboardType: TextInputType.text,
+                decoration: const InputDecoration(
+                    labelText: 'Nome',
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20)),
+                style: const TextStyle(fontSize: 20),
               ),
               const SizedBox(
                 height: 10,
@@ -137,12 +145,13 @@ class _UsuarioCadastroScreenState extends State<UsuarioCadastro> {
                     ),
                     onPressed: () async {
                       // if (_formKey.currentState!.validate()) {
-                      sigUp();
+                      cadastrar();
                       //   ScaffoldMessenger.of(context).showSnackBar(
                       //     const SnackBar(
                       //         content: Text('Cadastro realizado com sucesso')),
                       //   );
                       // }
+                      Navigator.of(context).pop();
                     },
                   ),
                 ),
@@ -152,5 +161,29 @@ class _UsuarioCadastroScreenState extends State<UsuarioCadastro> {
         ),
       ),
     );
+  }
+
+  cadastrar() async {
+    try {
+      await _firebaseAuth.createUserWithEmailAndPassword(
+          email: email.text, password: senha.text);
+      dao.salvar(usuario);
+      usuario.saveToken();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Crie uma senha mais forte'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Este e-mail já foi cadastrado'),
+          ),
+        );
+      }
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:agendamentos_app/screens/view/reset_password_page.dart';
 import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -120,7 +121,12 @@ class _LoginPageState extends State<LoginPage> {
                   child:
                       const Text('Recuperar Senha', textAlign: TextAlign.right),
                   onPressed: () {
-                    //
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ResetPasswordPage(),
+                      ),
+                    );
                   },
                 ),
               ),

@@ -22,7 +22,6 @@ class _PromotoriaScreenState extends State<PromotoriaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('tela promotoria');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Promotorias'),
@@ -42,8 +41,8 @@ class _PromotoriaScreenState extends State<PromotoriaScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<List<Promotoria>>(
-        future: dao.getAll(),
+      body: StreamBuilder<List<Promotoria>>(
+        stream: dao.getAllStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LinearProgressIndicator();
@@ -56,6 +55,7 @@ class _PromotoriaScreenState extends State<PromotoriaScreen> {
                 final promotoria = lista[index];
                 return ListTile(
                   title: Text(promotoria.nome),
+                  subtitle: Text('${promotoria.criacao}'),
                   trailing: IconButton(
                     onPressed: () {
                       dao.deletar(promotoria);

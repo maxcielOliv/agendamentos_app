@@ -57,6 +57,7 @@ class _MotoristaCadastroState extends State<MotoristaCadastro> {
                 const SnackBar(content: Text('Cadastro realizado com sucesso')),
               );
             }
+            Navigator.of(context).pop();
           },
           child: const Icon(Icons.save),
         ),

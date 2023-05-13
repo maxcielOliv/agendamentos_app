@@ -1,8 +1,6 @@
 import 'package:agendamentos_app/screens/calendar/meeting.dart';
 import 'package:agendamentos_app/screens/calendar/meeting_datasource.dart';
-import 'package:agendamentos_app/utils/formatar_data.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,11 +13,34 @@ class CalendarPage extends StatefulWidget {
 
 class CalendarPageState extends State<CalendarPage> {
   List<Meeting> _meetings = [];
-
   @override
   void initState() {
     super.initState();
     _getAppointments();
+  }
+
+  void _getAppointments() async {
+    final QuerySnapshot result = await FirebaseFirestore.instance
+        .collection('agendamento')
+        .orderBy('data')
+        .get();
+
+    final List<DocumentSnapshot> documents = result.docs;
+    setState(
+      () {
+        _meetings = documents
+            .map(
+              (doc) => Meeting(
+                  from: (doc['horaInicio']?.toDate()),
+                  to: (doc['horaTermino']?.toDate()),
+                  eventName: doc['local'],
+                  background: const Color(0xFF0F8644),
+                  description: doc['motorista'],
+                  isAllDay: false),
+            )
+            .toList();
+      },
+    );
   }
 
   @override
@@ -32,43 +53,19 @@ class CalendarPageState extends State<CalendarPage> {
         view: CalendarView.month,
         dataSource: DataSource(_meetings),
         monthViewSettings: const MonthViewSettings(
-            appointmentDisplayMode: MonthAppointmentDisplayMode.indicator),
+            appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+            showAgenda: true,
+            agendaItemHeight: 70,
+            agendaViewHeight: 100),
         onTap: calendarTapped,
+        appointmentBuilder: (context, calendarAppointmentDetails) {
+          final Meeting meeting = calendarAppointmentDetails.appointments.first;
+          return Container(
+            color: meeting.background.withOpacity(0.8),
+            child: Text(meeting.eventName),
+          );
+        },
       ),
-    );
-  }
-
-  void _getAppointments() async {
-    final QuerySnapshot result = await FirebaseFirestore.instance
-        .collection('agendamento')
-        .orderBy('data')
-        .get();
-
-    final List<DocumentSnapshot> documents = result.docs;
-    //final DateTime today = DateTime.now();
-    // final DateTime startTime = DateTime(2023, 4, 25, 9);
-    //print(startTime);
-    // final DateTime endTime = startTime.add(const Duration(hours: 2));
-    setState(
-      () {
-        _meetings = documents
-            .map(
-              (doc) => Meeting(
-                  from: (doc['horaInicio']?.toDate()),
-                  //Timestamp(doc['horaInicio'], doc['horaInicio']).toDate(),
-                  //DateTime.fromMillisecondsSinceEpoch(doc['horaInicio']),
-                  to: (doc['horaTermino']?.toDate()),
-                  //DateTime.fromMillisecondsSinceEpoch(doc['horaTermino']),
-                  eventName: doc['local'],
-                  background: const Color(0xFF0F8644),
-                  description: doc['motorista'],
-                  isAllDay: false),
-            )
-            .toList();
-        // print(documents
-        //     .map((e) => Timestamp(e['horaInicio'], e['horaInicio']).toDate()));
-        // print(documents.map((e) => (formatarData(e['horaInicio']).toDate())));
-      },
     );
   }
 
@@ -83,7 +80,7 @@ class CalendarPageState extends State<CalendarPage> {
           return AlertDialog(
             title: Container(child: const Text('Detalhes da Missão')),
             content: Text(
-                "Missão: ${meeting.eventName}\nPJ: ${meeting.description}"),
+                "Missão: ${meeting.eventName}\nMotorista: ${meeting.description}"),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
