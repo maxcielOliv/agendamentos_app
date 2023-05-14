@@ -22,7 +22,6 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(dao.getAllStream());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Usuários'),

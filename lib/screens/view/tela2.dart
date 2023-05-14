@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
+class Tela2 extends StatefulWidget {
+  const Tela2({super.key});
 
   @override
-  CalendarPageState createState() => CalendarPageState();
+  Tela2State createState() => Tela2State();
 }
 
-class CalendarPageState extends State<CalendarPage> {
+class Tela2State extends State<Tela2> {
   List<Meeting> _meetings = [];
   @override
   void initState() {
@@ -50,7 +50,7 @@ class CalendarPageState extends State<CalendarPage> {
         title: const Text('Agendamentos'),
       ),
       body: SfCalendar(
-        view: CalendarView.month,
+        view: CalendarView.schedule,
         dataSource: DataSource(_meetings),
         monthViewSettings: const MonthViewSettings(
             appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
@@ -58,15 +58,11 @@ class CalendarPageState extends State<CalendarPage> {
             agendaItemHeight: 70,
             agendaViewHeight: 100),
         onTap: calendarTapped,
-        //onViewChanged: (viewChangedDetails) => calendarTapped,
         appointmentBuilder: (context, calendarAppointmentDetails) {
           final Meeting meeting = calendarAppointmentDetails.appointments.first;
           return Container(
             color: meeting.background.withOpacity(0.8),
-            child: Text(
-              meeting.eventName,
-              style: const TextStyle(color: Colors.black),
-            ),
+            child: Text(meeting.eventName),
           );
         },
       ),
@@ -98,6 +94,4 @@ class CalendarPageState extends State<CalendarPage> {
       );
     }
   }
-
-  void getCalendar(CalendarTapCallback calendarTapCallback) {}
 }

@@ -47,7 +47,6 @@ class AuthService extends ChangeNotifier {
       await _auth.createUserWithEmailAndPassword(email: email, password: senha);
       _getUser();
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       // if (e.code == 'invalid-email') {
       //   print(e.code);
       //throw AuthException('Informe E-mail e senha');

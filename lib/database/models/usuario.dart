@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:agendamentos_app/database/models/entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Usuario extends Entity {
   final String nome;
@@ -37,22 +35,5 @@ class Usuario extends Entity {
   @override
   String toString() {
     return 'Id: ${id ?? '?'} | Nome: $nome | Senha: $senha | E-mail $email';
-  }
-
-  get firestoreRef => FirebaseFirestore.instance.collection('usuario').doc(id);
-
-  CollectionReference get tokensReference => firestoreRef.collection('token');
-
-  Future<void> saveToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    final db = FirebaseFirestore.instance;
-    // final dao = UsuarioDao();
-    await tokensReference.doc(token).set(
-      {
-        'token': token,
-        'updatedAt': FieldValue.serverTimestamp(),
-        'platform': Platform.operatingSystem,
-      },
-    );
   }
 }

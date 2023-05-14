@@ -91,6 +91,12 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                       fontSize: 20),
                 ),
                 style: const TextStyle(fontSize: 20),
+                validator: (value) {
+                  if (value != null && value.length >= 6) {
+                    return null;
+                  }
+                  return 'Sua senha deve ter no mínimo 6 caracteres!';
+                },
               ),
               const SizedBox(
                 height: 10,
@@ -144,14 +150,14 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                             ],
                     ),
                     onPressed: () async {
-                      // if (_formKey.currentState!.validate()) {
-                      cadastrar();
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(
-                      //         content: Text('Cadastro realizado com sucesso')),
-                      //   );
-                      // }
-                      Navigator.of(context).pop();
+                      if (_formKey.currentState!.validate()) {
+                        cadastrar();
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     const SnackBar(
+                        //         content: Text('Cadastro realizado com sucesso')),
+                        //   );
+                        Navigator.of(context).pop();
+                      }
                     },
                   ),
                 ),
@@ -168,8 +174,8 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email.text, password: senha.text);
       dao.salvar(usuario);
-      usuario.saveToken();
     } on FirebaseAuthException catch (e) {
+      print(e.code);
       if (e.code == 'weak-password') {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -178,6 +184,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
           ),
         );
       } else if (e.code == 'email-already-in-use') {
+        print(e.code);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Este e-mail já foi cadastrado'),
