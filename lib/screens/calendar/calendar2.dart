@@ -1,3 +1,5 @@
+import 'package:agendamentos_app/screens/calendar/appointment-editor.dart';
+import 'package:agendamentos_app/screens/calendar/formulario.dart';
 import 'package:agendamentos_app/screens/calendar/meeting.dart';
 import 'package:agendamentos_app/screens/calendar/meeting_datasource.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ class CalendarPage extends StatefulWidget {
 
 class CalendarPageState extends State<CalendarPage> {
   List<Meeting> _meetings = [];
+  CalendarController calendarController = CalendarController();
   @override
   void initState() {
     super.initState();
@@ -53,11 +56,12 @@ class CalendarPageState extends State<CalendarPage> {
         view: CalendarView.month,
         dataSource: DataSource(_meetings),
         monthViewSettings: const MonthViewSettings(
-            appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
             showAgenda: true,
             agendaItemHeight: 70,
             agendaViewHeight: 100),
         onTap: calendarTapped,
+        onLongPress: calendarLongTapped,
         //onViewChanged: (viewChangedDetails) => calendarTapped,
         appointmentBuilder: (context, calendarAppointmentDetails) {
           final Meeting meeting = calendarAppointmentDetails.appointments.first;
@@ -73,7 +77,7 @@ class CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  void calendarTapped(CalendarTapDetails details) {
+  void calendarLongTapped(CalendarLongPressDetails details) {
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
       final Meeting meeting = details.appointments![0];
@@ -99,5 +103,13 @@ class CalendarPageState extends State<CalendarPage> {
     }
   }
 
-  void getCalendar(CalendarTapCallback calendarTapCallback) {}
+  void calendarTapped(CalendarTapDetails details) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        //builder: (context) => const AppointmentForm(),
+        builder: (context) => const AppointmentEditor(),
+      ),
+    );
+  }
 }

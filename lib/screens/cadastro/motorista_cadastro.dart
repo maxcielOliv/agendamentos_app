@@ -52,7 +52,8 @@ class _MotoristaCadastroState extends State<MotoristaCadastro> {
         floatingActionButton: ElevatedButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              dao.salvar(motorista);
+              //dao.salvar(motorista);
+              dao.atualizar(motorista);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Cadastro realizado com sucesso')),
               );

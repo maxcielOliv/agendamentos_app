@@ -34,6 +34,27 @@ abstract class Dao<T extends Entity> {
     }
   }
 
+  // Future<bool> atualizar(T entity) async {
+  //   try {
+  //     await db
+  //         .collection(entity.runtimeType.toString().toLowerCase())
+  //         .doc(entity.id)
+  //         .update(
+  //           {}..addAll(entity.toFirestore()),
+  //           //SetOptions(merge: true),
+  //           //entity.id != null
+  //         );
+  //     return true;
+  //   } on FirebaseException catch (error) {
+  //     log(
+  //       'Erro ao atualizar',
+  //       error: error,
+  //       name: 'ATENÇÃO',
+  //     );
+  //     return false;
+  //   }
+  // }
+
   Future<bool> deletar(T entity) async {
     if (entity.id != null) {
       try {

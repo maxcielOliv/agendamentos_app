@@ -1,6 +1,7 @@
 import 'package:agendamentos_app/database/models/dao/usuario_dao.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
 import 'package:agendamentos_app/screens/cadastro/usuario_cadastro.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UsuarioScreen extends StatefulWidget {
@@ -13,6 +14,13 @@ class UsuarioScreen extends StatefulWidget {
 class _UsuarioScreenState extends State<UsuarioScreen> {
   final _controller = TextEditingController();
   final dao = UsuarioDao();
+  final _firebaseAuth = FirebaseAuth.instance.authStateChanges().listen(
+    (User? user) {
+      if (user != null) {
+        user.delete();
+      }
+    },
+  );
 
   @override
   void dispose() {
@@ -57,8 +65,9 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                   title: Text(usuario.nome),
                   subtitle: Text(usuario.id.toString()),
                   trailing: IconButton(
-                    onPressed: () {
-                      dao.deletar(usuario);
+                    onPressed: () async {
+                      await dao.deletar(usuario);
+                      _firebaseAuth;
                     },
                     icon: const Icon(Icons.delete_forever_rounded),
                   ),

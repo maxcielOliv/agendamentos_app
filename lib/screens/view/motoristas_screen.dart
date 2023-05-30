@@ -56,6 +56,14 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
                 return ListTile(
                   title: Text(motorista.nome),
                   subtitle: Text('${motorista.criacao}'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MotoristaCadastro(),
+                      ),
+                    );
+                  },
                   trailing: IconButton(
                     onPressed: () {
                       dao.deletar(motorista);
