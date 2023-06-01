@@ -1,5 +1,5 @@
 abstract class Entity {
-  final String? id;
+  String? id;
   final DateTime? criacao;
 
   Entity({this.id, this.criacao});

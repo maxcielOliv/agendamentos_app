@@ -1,7 +1,8 @@
-import 'package:agendamentos_app/database/models/dao/usuario_dao.dart';
+import 'package:agendamentos_app/database/models/user_manager.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:agendamentos_app/helpers/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UsuarioCadastro extends StatefulWidget {
   const UsuarioCadastro({super.key});
@@ -11,16 +12,17 @@ class UsuarioCadastro extends StatefulWidget {
 }
 
 class _UsuarioCadastroState extends State<UsuarioCadastro> {
-  final nome = TextEditingController();
-  final email = TextEditingController();
-  final senha = TextEditingController();
+  //final nome = TextEditingController();
+  //final email = TextEditingController();
+  //final senha = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final _firebaseAuth = FirebaseAuth.instance;
-
-  late Usuario usuario =
-      Usuario(nome: nome.text, email: email.text, senha: senha.text);
-  final dao = UsuarioDao();
+  //final _firebaseAuth = FirebaseAuth.instance;
+  final Usuario usuario = Usuario();
+  //Usuario(nome: nome.text, email: email.text, senha: senha.text);
+  //final dao = UsuarioDao();
   bool carregando = false;
+
+  final Usuario user = Usuario();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
       key: _formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Cadastro Usuários'),
+          title: const Text('Cadastro de Usuários'),
         ),
         body: Container(
           padding: const EdgeInsets.only(
@@ -41,9 +43,9 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
+                  children: [
                     SizedBox(height: 10),
                   ],
                 ),
@@ -52,21 +54,30 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 height: 10,
               ),
               TextFormField(
-                controller: nome,
+                //controller: nome,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
-                    labelText: 'Nome',
+                    labelText: 'Nome Completo',
                     labelStyle: TextStyle(
                         color: Colors.black38,
                         fontWeight: FontWeight.w400,
                         fontSize: 20)),
                 style: const TextStyle(fontSize: 20),
+                validator: (nome) {
+                  if (nome!.isEmpty) {
+                    return 'Campo obrigatório';
+                  } else if (nome.trim().split(' ').length <= 1) {
+                    return 'Preencha o nome completo';
+                  }
+                  return null;
+                },
+                onSaved: (nome) => user.nome = nome,
               ),
               const SizedBox(
                 height: 10,
               ),
               TextFormField(
-                controller: email,
+                //controller: email,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                     labelText: 'E-mail',
@@ -75,28 +86,65 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                         fontWeight: FontWeight.w400,
                         fontSize: 20)),
                 style: const TextStyle(fontSize: 20),
+                validator: (email) {
+                  if (email!.isEmpty) {
+                    return 'Campo obrigatório';
+                  } else if (!emailValid(email)) {
+                    return 'E-mail inválido';
+                  }
+                  return null;
+                },
+                onSaved: (email) => user.email = email,
               ),
               const SizedBox(
                 height: 10,
               ),
               TextFormField(
-                controller: senha,
+                //controller: senha,
                 keyboardType: TextInputType.text,
                 obscureText: true,
                 decoration: const InputDecoration(
-                  labelText: 'Senha',
+                  labelText: 'Digite uma Senha',
                   labelStyle: TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
                       fontSize: 20),
                 ),
                 style: const TextStyle(fontSize: 20),
-                validator: (value) {
-                  if (value != null && value.length >= 6) {
-                    return null;
+                validator: (senha) {
+                  if (senha!.isEmpty) {
+                    return 'Campo obrigatório';
+                  } else if (senha.length < 6) {
+                    return 'Sua senha deve ter no mínimo 6 caracteres';
                   }
-                  return 'Sua senha deve ter no mínimo 6 caracteres!';
+                  return null;
                 },
+                onSaved: (senha) => user.senha = senha,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                //controller: senha,
+                keyboardType: TextInputType.text,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Repita sua Senha',
+                  labelStyle: TextStyle(
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20),
+                ),
+                style: const TextStyle(fontSize: 20),
+                validator: (senha) {
+                  if (senha!.isEmpty) {
+                    return 'Campo obrigatório';
+                  } else if (senha.length < 6) {
+                    return 'Sua senha deve ter no mínimo 6 caracteres';
+                  }
+                  return null;
+                },
+                onSaved: (senha) => user.confirmaSenha = senha,
               ),
               const SizedBox(
                 height: 10,
@@ -131,7 +179,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                             ]
                           : [
                               const Text(
-                                'Cadastre-se',
+                                'Cadastrar Usuário',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -151,12 +199,31 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        cadastrar();
+                        _formKey.currentState?.save();
                         //   ScaffoldMessenger.of(context).showSnackBar(
                         //     const SnackBar(
                         //         content: Text('Cadastro realizado com sucesso')),
                         //   );
-                        Navigator.of(context).pop();
+                        //Navigator.of(context).pop();
+                        if (user.senha != user.confirmaSenha) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Senhas não coincidem'),
+                            backgroundColor: Colors.red,
+                          ));
+                        }
+                        context.read<UserManager>().signUp(
+                            user: user,
+                            onFail: (e) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(e),
+                                backgroundColor: Colors.red,
+                              ));
+                            },
+                            onSuccess: () {
+                              print('Sucesso');
+                            });
                       }
                     },
                   ),
@@ -169,7 +236,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
     );
   }
 
-  cadastrar() async {
+  /*cadastrar() async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email.text, password: senha.text);
@@ -192,5 +259,5 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
         );
       }
     }
-  }
+  }*/
 }
