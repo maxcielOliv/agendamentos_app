@@ -11,13 +11,13 @@ class DataSource extends CalendarDataSource {
   bool isAllDay(int index) => appointments![index].isAllDay;
 
   @override
-  String getSubject(int index) => appointments![index].eventName;
+  String getSubject(int index) => appointments![index].local;
 
   @override
   String getStartTimeZone(int index) => appointments![index].startTimeZone;
 
   @override
-  String getNotes(int index) => appointments![index].description;
+  String getNotes(int index) => appointments![index].motorista;
 
   @override
   String getEndTimeZone(int index) => appointments![index].endTimeZone;
@@ -26,8 +26,8 @@ class DataSource extends CalendarDataSource {
   Color getColor(int index) => appointments![index].background;
 
   @override
-  DateTime getStartTime(int index) => appointments![index].from;
+  DateTime getStartTime(int index) => appointments![index].horaInicio;
 
   @override
-  DateTime getEndTime(int index) => appointments![index].to;
+  DateTime getEndTime(int index) => appointments![index].horaTermino;
 }

@@ -1,4 +1,4 @@
-import 'package:agendamentos_app/screens/calendar/appointment-editor.dart';
+import 'package:agendamentos_app/screens/calendar/agendamento_Editor.dart';
 import 'package:agendamentos_app/screens/calendar/meeting.dart';
 import 'package:agendamentos_app/screens/calendar/meeting_datasource.dart';
 import 'package:flutter/material.dart';
@@ -33,11 +33,11 @@ class CalendarPageState extends State<CalendarPage> {
         _meetings = documents
             .map(
               (doc) => Meeting(
-                  from: (doc['horaInicio']?.toDate()),
-                  to: (doc['horaTermino']?.toDate()),
-                  eventName: doc['local'],
+                  horaInicio: (doc['horaInicio']?.toDate()),
+                  horaTermino: (doc['horaTermino']?.toDate()),
+                  local: doc['local'],
                   background: const Color(0xFF0F8644),
-                  description: doc['motorista'],
+                  motorista: doc['motorista'],
                   isAllDay: false),
             )
             .toList();
@@ -50,9 +50,28 @@ class CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agendamentos'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const DropdownPage(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.add),
+          )
+        ],
       ),
       body: SfCalendar(
         view: CalendarView.month,
+        controller: calendarController,
+        allowedViews: const [
+          CalendarView.week,
+          CalendarView.timelineWeek,
+          CalendarView.month
+        ],
         dataSource: DataSource(_meetings),
         monthViewSettings: const MonthViewSettings(
             appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
@@ -60,14 +79,14 @@ class CalendarPageState extends State<CalendarPage> {
             agendaItemHeight: 70,
             agendaViewHeight: 100),
         onTap: calendarTapped,
-        onLongPress: calendarLongTapped,
+        //onLongPress: calendarLongTapped,
         //onViewChanged: (viewChangedDetails) => calendarTapped,
         appointmentBuilder: (context, calendarAppointmentDetails) {
           final Meeting meeting = calendarAppointmentDetails.appointments.first;
           return Container(
             color: meeting.background.withOpacity(0.8),
             child: Text(
-              meeting.eventName,
+              meeting.motorista,
               style: const TextStyle(color: Colors.black),
             ),
           );
@@ -76,7 +95,7 @@ class CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  void calendarLongTapped(CalendarLongPressDetails details) {
+  void calendarTapped(CalendarTapDetails details) {
     if (details.targetElement == CalendarElement.appointment ||
         details.targetElement == CalendarElement.agenda) {
       final Meeting meeting = details.appointments![0];
@@ -87,7 +106,7 @@ class CalendarPageState extends State<CalendarPage> {
           return AlertDialog(
             title: const Text('Detalhes da Missão'),
             content: Text(
-                "Missão: ${meeting.eventName}\nMotorista: ${meeting.description}"),
+                "Missão: ${meeting.local}\nMotorista: ${meeting.motorista}"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -102,13 +121,13 @@ class CalendarPageState extends State<CalendarPage> {
     }
   }
 
-  void calendarTapped(CalendarTapDetails details) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        //builder: (context) => const AppointmentForm(),
-        builder: (context) => const AppointmentEditor(),
-      ),
-    );
-  }
+  // void calendarTapped(CalendarTapDetails details) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       //builder: (context) => const AppointmentForm(),
+  //       builder: (context) => const AppointmentEditor(),
+  //     ),
+  //   );
+  // }
 }

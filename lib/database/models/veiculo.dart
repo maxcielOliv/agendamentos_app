@@ -1,5 +1,5 @@
-import 'package:agendamentos_app/database/models/entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'entity.dart';
 
 class Veiculo extends Entity {
   final String placa;

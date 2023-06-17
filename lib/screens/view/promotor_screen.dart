@@ -1,18 +1,18 @@
-import 'package:agendamentos_app/database/models/dao/motorista_dao.dart';
-import 'package:agendamentos_app/database/models/motorista.dart';
-import 'package:agendamentos_app/screens/cadastro/motorista_cadastro.dart';
+import 'package:agendamentos_app/database/models/dao/promotor_dao.dart';
+import 'package:agendamentos_app/database/models/promotor.dart';
+import 'package:agendamentos_app/screens/cadastro/promotor_cadastro.dart';
 import 'package:flutter/material.dart';
 
-class MotoristaScreen extends StatefulWidget {
-  const MotoristaScreen({super.key});
+class PromotorScreen extends StatefulWidget {
+  const PromotorScreen({super.key});
 
   @override
-  State<MotoristaScreen> createState() => _PromotoriaScreenState();
+  State<PromotorScreen> createState() => _PromotorScreenState();
 }
 
-class _PromotoriaScreenState extends State<MotoristaScreen> {
+class _PromotorScreenState extends State<PromotorScreen> {
   final _controller = TextEditingController();
-  final dao = MotoristaDao();
+  final dao = PromotorDao();
 
   @override
   void dispose() {
@@ -24,7 +24,7 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Motorista'),
+        title: const Text('Promotor'),
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
@@ -34,14 +34,14 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MotoristaCadastro(),
+                  builder: (context) => const PromotorCadastro(),
                 ),
               );
             },
           ),
         ],
       ),
-      body: StreamBuilder<List<Motorista>>(
+      body: StreamBuilder<List<Promotor>>(
         stream: dao.getAllStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -52,21 +52,13 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
             return ListView.separated(
               itemCount: lista.length,
               itemBuilder: (context, index) {
-                final motorista = lista[index];
+                final promotor = lista[index];
                 return ListTile(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MotoristaCadastro(),
-                      ),
-                    );
-                  },
-                  title: Text(motorista.nome),
-                  subtitle: Text('${motorista.criacao}'),
+                  title: Text(promotor.nome),
+                  subtitle: Text(promotor.matricula),
                   trailing: IconButton(
                     onPressed: () {
-                      dao.deletar(motorista);
+                      dao.deletar(promotor);
                     },
                     icon: const Icon(Icons.delete_forever_rounded),
                   ),

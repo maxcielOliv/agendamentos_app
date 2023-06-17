@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:agendamentos_app/database/models/entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

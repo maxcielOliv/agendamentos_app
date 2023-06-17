@@ -15,7 +15,9 @@ abstract class Dao<T extends Entity> {
           .collection(entity.runtimeType.toString().toLowerCase())
           .doc(entity.id)
           .set(
-              {'criacao': FieldValue.serverTimestamp()}
+              entity.id != null
+                  ? {'atualizacao': FieldValue.serverTimestamp()}
+                  : {'criacao': FieldValue.serverTimestamp()}
                 ..addAll(entity.toFirestore()),
               SetOptions(merge: entity.id != null));
       return true;
@@ -28,27 +30,6 @@ abstract class Dao<T extends Entity> {
       return false;
     }
   }
-
-  // Future<bool> atualizar(T entity) async {
-  //   try {
-  //     await db
-  //         .collection(entity.runtimeType.toString().toLowerCase())
-  //         .doc(entity.id)
-  //         .update(
-  //           {}..addAll(entity.toFirestore()),
-  //           //SetOptions(merge: true),
-  //           //entity.id != null
-  //         );
-  //     return true;
-  //   } on FirebaseException catch (error) {
-  //     log(
-  //       'Erro ao atualizar',
-  //       error: error,
-  //       name: 'ATENÇÃO',
-  //     );
-  //     return false;
-  //   }
-  // }
 
   Future<bool> deletar(T entity) async {
     if (entity.id != null) {

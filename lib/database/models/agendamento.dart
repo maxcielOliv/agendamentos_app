@@ -3,13 +3,13 @@ import 'entity.dart';
 
 class Agendamento extends Entity {
   final DateTime data;
-  final String local;
-  final String motorista;
+  final String local; //
+  final String motorista; //
   final String veiculo;
-  final DateTime horaInicio;
-  final DateTime? horaTermino;
-  final String? policiamento;
-  final String? promotoria;
+  final DateTime horaInicio; //
+  final DateTime? horaTermino; //
+  final String? policiamento; //
+  final String? promotoria; //
   final String? promotor;
 
   Agendamento(

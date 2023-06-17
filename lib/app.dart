@@ -1,4 +1,4 @@
-import 'package:agendamentos_app/database/models/user_manager.dart';
+import 'package:agendamentos_app/services/user_manager.dart';
 import 'package:agendamentos_app/screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

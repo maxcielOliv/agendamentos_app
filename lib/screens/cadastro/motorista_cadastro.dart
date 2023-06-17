@@ -1,19 +1,28 @@
-import 'package:agendamentos_app/database/models/dao/motorista_dao.dart';
-import 'package:agendamentos_app/database/models/motorista.dart';
 import 'package:flutter/material.dart';
+import '../../database/models/dao/motorista_dao.dart';
+import '../../database/models/motorista.dart';
 
 class MotoristaCadastro extends StatefulWidget {
-  const MotoristaCadastro({super.key});
+  const MotoristaCadastro({super.key, this.motorista});
+
+  final Motorista? motorista;
 
   @override
   State<MotoristaCadastro> createState() => _MotoristaCadastroState();
 }
 
 class _MotoristaCadastroState extends State<MotoristaCadastro> {
-  final _nome = TextEditingController();
-  late Motorista motorista = Motorista(nome: _nome.text);
-  final dao = MotoristaDao();
+  late final TextEditingController _nome;
+  final _dao = MotoristaDao();
   final _formKey = GlobalKey<FormState>();
+  late final _nomeO;
+
+  @override
+  void initState() {
+    _nomeO = widget.motorista?.nome;
+    _nome = TextEditingController(text: widget.motorista?.nome);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,37 +36,48 @@ class _MotoristaCadastroState extends State<MotoristaCadastro> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _nome,
-                  // showCursor: true,
-                  // readOnly: true,
-                  keyboardType: TextInputType.name,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Insira Nome';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Nome',
-                    icon: Icon(Icons.near_me),
-                  ),
+              TextFormField(
+                controller: _nome,
+                keyboardType: TextInputType.name,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Insira um nome';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Nome',
+                  icon: Icon(Icons.person_rounded),
                 ),
               ),
             ],
           ),
         ),
-        floatingActionButton: ElevatedButton(
-          onPressed: () {
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
             if (_formKey.currentState!.validate()) {
-              dao.salvar(motorista);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Cadastro realizado com sucesso')),
+              final motorista = Motorista(
+                id: widget.motorista?.id,
+                criacao: widget.motorista?.criacao,
+                nome: _nome.text,
+                cpf: widget.motorista?.cpf,
+                matricula: widget.motorista?.matricula,
               );
+              if (_nomeO != _nome.text) {
+                if (await _dao.salvar(motorista)) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        duration: const Duration(seconds: 3),
+                        content: Text(
+                            'Cadastro ${motorista.id == null ? 'criado' : 'atualizado'} com sucesso'),
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  }
+                }
+              }
             }
-            Navigator.of(context).pop();
           },
           child: const Icon(Icons.save),
         ),

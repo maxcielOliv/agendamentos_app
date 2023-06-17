@@ -48,6 +48,7 @@ class _PromotoriaScreenState extends State<PromotoriaScreen> {
             return const LinearProgressIndicator();
           }
           final lista = snapshot.data;
+
           if (lista != null) {
             return ListView.separated(
               itemCount: lista.length,

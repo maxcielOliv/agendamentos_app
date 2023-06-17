@@ -1,8 +1,6 @@
-import 'package:agendamentos_app/main.dart';
 import 'package:agendamentos_app/services/custom_local_notification.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
 
 class CustomFirebaseMessaging {
   final CustomLocalNotification _customLocalNotification;
@@ -37,7 +35,5 @@ class CustomFirebaseMessaging {
 
   getTokenFirebase() async {
     final token = await FirebaseMessaging.instance.getToken();
-    print(token);
   }
-      
 }

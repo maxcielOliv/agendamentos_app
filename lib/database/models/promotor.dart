@@ -1,9 +1,9 @@
-import 'package:agendamentos_app/database/models/entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'entity.dart';
 
 class Promotor extends Entity {
   final String nome;
-  final int matricula;
+  final String matricula;
 
   Promotor(
       {super.id, super.criacao, required this.nome, required this.matricula});

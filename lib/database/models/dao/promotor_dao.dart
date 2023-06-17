@@ -1,5 +1,5 @@
-import '../promotor.dart';
-import 'dao.dart';
+import 'package:agendamentos_app/database/models/dao/dao.dart';
+import 'package:agendamentos_app/database/models/promotor.dart';
 
 class PromotorDao extends Dao<Promotor> {
   @override
@@ -14,8 +14,6 @@ class PromotorDao extends Dao<Promotor> {
     return res.docs.map((e) => Promotor.fromFirestore(e)).toList();
   }
 
-  @override
-  // ignore: override_on_non_overriding_member
   Stream<List<Promotor>> getAllStream() async* {
     yield* db
         .collection('promotor')

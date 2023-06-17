@@ -1,4 +1,4 @@
-import 'package:agendamentos_app/database/models/user_manager.dart';
+import 'package:agendamentos_app/services/user_manager.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
 import 'package:agendamentos_app/helpers/validators.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +12,8 @@ class UsuarioCadastro extends StatefulWidget {
 }
 
 class _UsuarioCadastroState extends State<UsuarioCadastro> {
-  //final nome = TextEditingController();
-  //final email = TextEditingController();
-  //final senha = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  //final _firebaseAuth = FirebaseAuth.instance;
   final Usuario usuario = Usuario();
-  //Usuario(nome: nome.text, email: email.text, senha: senha.text);
-  //final dao = UsuarioDao();
   bool carregando = false;
 
   final Usuario user = Usuario();
@@ -206,24 +200,25 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                         //   );
                         //Navigator.of(context).pop();
                         if (user.senha != user.confirmaSenha) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text('Senhas não coincidem'),
-                            backgroundColor: Colors.red,
-                          ));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Senhas não coincidem'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
                         }
                         context.read<UserManager>().signUp(
-                            user: user,
-                            onFail: (e) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(e),
-                                backgroundColor: Colors.red,
-                              ));
-                            },
-                            onSuccess: () {
-                              print('Sucesso');
-                            });
+                              user: user,
+                              onFail: (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(e),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              },
+                              onSuccess: () {},
+                            );
                       }
                     },
                   ),
