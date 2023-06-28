@@ -12,7 +12,7 @@ class UsuarioScreen extends StatefulWidget {
 
 class _UsuarioScreenState extends State<UsuarioScreen> {
   final _controller = TextEditingController();
-  final dao = UsuarioDao2();
+  final dao = UsuarioDao();
 
   @override
   void dispose() {
@@ -25,6 +25,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Usuários'),
+        centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
@@ -55,7 +56,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                 final usuario = lista[index];
                 return ListTile(
                   title: Text(usuario.nome.toString()),
-                  subtitle: Text(usuario.id.toString()),
+                  subtitle: Text(usuario.lotacao.toString()),
                   trailing: IconButton(
                     onPressed: () async {
                       await dao.deletar(usuario);

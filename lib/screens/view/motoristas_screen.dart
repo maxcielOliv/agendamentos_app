@@ -24,7 +24,8 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Motorista'),
+        title: const Text('Motoristas'),
+        centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
@@ -63,7 +64,7 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
                     );
                   },
                   title: Text(motorista.nome),
-                  subtitle: Text('${motorista.criacao}'),
+                  subtitle: Text('${motorista.fone}'),
                   trailing: IconButton(
                     onPressed: () {
                       dao.deletar(motorista);

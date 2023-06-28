@@ -25,6 +25,7 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Veículos'),
+        centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [

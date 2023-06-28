@@ -7,16 +7,13 @@ class Usuario extends Entity {
   String? nome;
   String? senha;
   String? email;
+  String? lotacao;
 
-  String? confirmaSenha;
-
-  bool admin = false;
-
-  Usuario({super.criacao, super.id, this.nome, this.senha, this.email});
+  Usuario({super.criacao, super.id, this.nome, this.senha, this.email, this.lotacao});
 
   @override
   Map<String, dynamic> toFirestore() {
-    return {'nome': nome, 'senha': senha, 'email': email};
+    return {'nome': nome, 'senha': senha, 'email': email, 'lotacao': lotacao};
   }
 
   Usuario.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
@@ -25,7 +22,9 @@ class Usuario extends Entity {
     nome = data?['nome'];
     email = data?['email'];
     senha = data?['senha'];
+    lotacao = data?['lotacao'];
   }
+
   factory Usuario.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
   ) {
@@ -36,6 +35,7 @@ class Usuario extends Entity {
       nome: data?['nome'],
       senha: data?['senha'],
       email: data?['email'],
+      lotacao: data?['lotacao']
     );
   }
   @override
@@ -55,6 +55,7 @@ class Usuario extends Entity {
       'criacao': FieldValue.serverTimestamp(),
       'nome': nome,
       'email': email,
+      'lotacao': lotacao,
     };
   }
 

@@ -9,7 +9,6 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-
   final _passController = TextEditingController();
   final _newPassController = TextEditingController();
   final _newPass2Controller = TextEditingController();
@@ -37,7 +36,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             SizedBox(
               width: 80,
               height: 80,
-              child: Image.asset('imagens/password.png'),
+              child: Image.asset('assets/imagens/password.png'),
             ),
             const SizedBox(
               height: 10,
@@ -65,6 +64,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 },
                 decoration: const InputDecoration(
                     labelText: 'Senha atual',
+                    border: OutlineInputBorder(),
                     labelStyle: TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
@@ -91,6 +91,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 },
                 decoration: const InputDecoration(
                     labelText: 'Nova senha',
+                    border: OutlineInputBorder(),
                     labelStyle: TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
@@ -109,7 +110,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                 keyboardType: TextInputType.text,
                 obscureText: true,
                 validator: (text) {
-                  if ((text!.isEmpty || text.length < 6) || _newPassController.text != _newPass2Controller.text) {
+                  if ((text!.isEmpty || text.length < 6) ||
+                      _newPassController.text != _newPass2Controller.text) {
                     return 'As senhas não coincidem';
                   } else {
                     return null;
@@ -117,6 +119,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 },
                 decoration: const InputDecoration(
                     labelText: 'Repita a nova senha',
+                    border: OutlineInputBorder(),
                     labelStyle: TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
@@ -151,7 +154,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                     textAlign: TextAlign.center,
                   ),
                   onPressed: () {
-                    if (_formKeyPass.currentState!.validate() && _formKeyNewPass.currentState!.validate() && _formKeyNewPass2.currentState!.validate()) {
+                    if (_formKeyPass.currentState!.validate() &&
+                        _formKeyNewPass.currentState!.validate() &&
+                        _formKeyNewPass2.currentState!.validate()) {
                       changePassword();
                     }
 
@@ -176,18 +181,17 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   changePassword() async {
-     User? user = FirebaseAuth.instance.currentUser;
-     AuthCredential credential = EmailAuthProvider.credential(email: user!.email.toString(), password: _passController.text);
-     user.reauthenticateWithCredential(credential).then((value) {
-       user.updatePassword(_newPassController.text).then((value) {
-         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Senha atualizada com sucesso!'))
-         );
-       }).catchError((e) => e.toString());
-     }).catchError((e) {
+    User? user = FirebaseAuth.instance.currentUser;
+    AuthCredential credential = EmailAuthProvider.credential(
+        email: user!.email.toString(), password: _passController.text);
+    user.reauthenticateWithCredential(credential).then((value) {
+      user.updatePassword(_newPassController.text).then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Senha atualizada com sucesso!')));
+      }).catchError((e) => e.toString());
+    }).catchError((e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Senha atual não confere!'))
-      );
-     });
+          const SnackBar(content: Text('Senha atual não confere!')));
+    });
   }
 }

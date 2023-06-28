@@ -4,21 +4,19 @@ import 'entity.dart';
 
 class Motorista extends Entity {
   final String nome;
-  final int? cpf;
-  final int? matricula;
+  final String? fone;
 
   Motorista({
     super.id,
     super.criacao,
     super.atualizacao,
     required this.nome,
-    this.cpf,
-    this.matricula,
+    this.fone,
   });
 
   @override
   Map<String, dynamic> toFirestore() {
-    return {'nome': nome, 'cpf': cpf, 'matricula': matricula};
+    return {'nome': nome, 'celular': fone};
   }
 
   factory Motorista.fromFirestore(
@@ -30,24 +28,21 @@ class Motorista extends Entity {
         criacao: data?['criacao']?.toDate(),
         atualizacao: data?['atualizacao']?.toDate(),
         nome: data?['nome'],
-        cpf: data?['cpf'],
-        matricula: data?['matricula']);
+        fone: data?['celular']);
   }
 
   @override
   String toString() {
-    return 'Id: ${id ?? '?'} | Nome: $nome | CPF: $cpf | Matricula: $matricula';
+    return 'Id: ${id ?? '?'} | Nome: $nome | Celular: $fone';
   }
 
   Motorista copyWith({
     String? nome,
-    int? cpf,
-    int? matricula,
+    String? fone,
   }) {
     return Motorista(
       nome: nome ?? this.nome,
-      cpf: cpf ?? this.cpf,
-      matricula: matricula ?? this.matricula,
+      fone: fone ?? this.fone,
     );
   }
 
@@ -56,10 +51,9 @@ class Motorista extends Entity {
     if (identical(this, other)) return true;
 
     return other.nome == nome &&
-        other.cpf == cpf &&
-        other.matricula == matricula;
+        other.fone == fone;
   }
 
   @override
-  int get hashCode => nome.hashCode ^ cpf.hashCode ^ matricula.hashCode;
+  int get hashCode => nome.hashCode ^ fone.hashCode;
 }

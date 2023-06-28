@@ -2,15 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'entity.dart';
 
 class Promotor extends Entity {
-  final String nome;
-  final String matricula;
+  String? nome;
+  String? matricula;
+  String? lotacao;
 
   Promotor(
-      {super.id, super.criacao, required this.nome, required this.matricula});
+      {super.id, super.criacao, this.nome, this.matricula, this.lotacao});
 
   @override
   Map<String, dynamic> toFirestore() {
-    return {'nome': nome, 'matricula': matricula};
+    return {'nome': nome, 'matricula': matricula, 'lotacao': lotacao};
   }
 
   factory Promotor.fromFirestore(
@@ -21,11 +22,12 @@ class Promotor extends Entity {
         id: snapshot.id,
         criacao: data?['criacao']?.toDate(),
         nome: data?['nome'],
-        matricula: data?['matricula']);
+        matricula: data?['matricula'],
+        lotacao: data?['lotacao']);
   }
 
   @override
   String toString() {
-    return 'Id: ${id ?? '?'} | Nome: $nome | Matricula: $matricula';
+    return 'Id: ${id ?? '?'} | Nome: $nome | Matricula: $matricula | Lotação: $lotacao';
   }
 }

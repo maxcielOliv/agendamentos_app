@@ -28,32 +28,31 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
       key: _formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Cadastro Promotoria'),
+          title: const Text('Cadastro de Promotoria'),
+          centerTitle: true,
         ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  focusNode: _focus,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(26),
+            child: Column(
+              children: [
+                TextFormField(
                   controller: _nome,
-                  autofocus: true,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Insira Nome';
+                      return 'Insira um nome';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Nome',
-                    icon: Icon(Icons.location_city_rounded),
+                    border: OutlineInputBorder(),
+                    icon: Icon(Icons.person_rounded),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         floatingActionButton: ElevatedButton(

@@ -21,24 +21,21 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text.toLowerCase());
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Link de recuperação de senha enviado! Verifique seu e-mail'),
-        )
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content:
+            Text('Link de recuperação de senha enviado! Verifique seu e-mail'),
+      ));
     } on FirebaseAuthException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('E-mail não encontrado!'),
-        )
-      );
-
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('E-mail não encontrado!'),
+      ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -85,12 +82,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                   labelText: 'E-mail',
+                  border: OutlineInputBorder(),
                   labelStyle: TextStyle(
                     color: Colors.black38,
                     fontWeight: FontWeight.w400,
-                    fontSize: 20,
                   )),
-              style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(
               height: 20,

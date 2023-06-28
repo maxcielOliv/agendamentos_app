@@ -1,8 +1,9 @@
-import 'package:agendamentos_app/services/user_manager.dart';
+import 'package:agendamentos_app/database/models/dao/promotoria_dao.dart';
+import 'package:agendamentos_app/database/models/promotoria.dart';
+import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
 import 'package:agendamentos_app/helpers/validators.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class UsuarioCadastro extends StatefulWidget {
   const UsuarioCadastro({super.key});
@@ -13,10 +14,9 @@ class UsuarioCadastro extends StatefulWidget {
 
 class _UsuarioCadastroState extends State<UsuarioCadastro> {
   final _formKey = GlobalKey<FormState>();
-  final Usuario usuario = Usuario();
-  bool carregando = false;
-
   final Usuario user = Usuario();
+  final daoPromotoria = PromotoriaDao();
+  bool carregando = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +25,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Cadastro de Usuários'),
+          centerTitle: true,
         ),
         body: Container(
           padding: const EdgeInsets.only(
@@ -52,6 +53,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                     labelText: 'Nome Completo',
+                    border: OutlineInputBorder(),
                     labelStyle: TextStyle(
                         color: Colors.black38,
                         fontWeight: FontWeight.w400,
@@ -74,11 +76,13 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 //controller: email,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
-                    labelText: 'E-mail',
-                    labelStyle: TextStyle(
-                        color: Colors.black38,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20)),
+                  labelText: 'E-mail',
+                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20),
+                ),
                 style: const TextStyle(fontSize: 20),
                 validator: (email) {
                   if (email!.isEmpty) {
@@ -93,12 +97,48 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
               const SizedBox(
                 height: 10,
               ),
+              StreamBuilder<List<Promotoria>>(
+                stream: daoPromotoria.getAllStream(),
+                builder: (context, snapshots) {
+                  List<DropdownMenuItem<String>> promotoriaItens = [];
+                  if (!snapshots.hasData) {
+                    const CircularProgressIndicator();
+                  } else {
+                    final promotorias = snapshots.data?.reversed.toList();
+                    for (var promotoria in promotorias!) {
+                      promotoriaItens.add(
+                        DropdownMenuItem(
+                          value: promotoria.nome,
+                          child: Text(promotoria.nome.toString()),
+                        ),
+                      );
+                    }
+                  }
+                  return SizedBox(
+                    width: 280,
+                    child: DropdownButtonFormField<String>(
+                      icon: const Icon(Icons.account_balance),
+                      onSaved: (lotacao) => user.lotacao = lotacao,
+                      isExpanded: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Lotação',
+                        border: OutlineInputBorder(),
+                      ),
+                      hint: const Text('Lotação'),
+                      items: promotoriaItens,
+                      onChanged: (usuarioValue) {},
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
               TextFormField(
                 //controller: senha,
                 keyboardType: TextInputType.text,
                 obscureText: true,
                 decoration: const InputDecoration(
-                  labelText: 'Digite uma Senha',
+                  labelText: 'Digite a Senha Padrão',
+                  border: OutlineInputBorder(),
                   labelStyle: TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
@@ -115,49 +155,24 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 },
                 onSaved: (senha) => user.senha = senha,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                //controller: senha,
-                keyboardType: TextInputType.text,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Repita sua Senha',
-                  labelStyle: TextStyle(
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20),
-                ),
-                style: const TextStyle(fontSize: 20),
-                validator: (senha) {
-                  if (senha!.isEmpty) {
-                    return 'Campo obrigatório';
-                  } else if (senha.length < 6) {
-                    return 'Sua senha deve ter no mínimo 6 caracteres';
-                  }
-                  return null;
-                },
-                onSaved: (senha) => user.confirmaSenha = senha,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
               Container(
                 height: 60,
                 alignment: Alignment.centerLeft,
                 decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        stops: [0.3, 1],
-                        colors: [Colors.red, Colors.blue]),
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      stops: [0.3, 1],
+                      colors: [Colors.red, Colors.blue]),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                ),
                 child: SizedBox.expand(
                   child: TextButton(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: (carregando)
                           ? [
                               const Padding(
@@ -178,47 +193,19 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                     fontSize: 20),
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.center,
                               ),
-                              const SizedBox(
-                                height: 28,
-                                width: 28,
-                                child: Icon(
-                                  Icons.login_rounded,
-                                  color: Colors.black,
-                                  size: 25,
-                                ),
-                              )
                             ],
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState?.save();
-                        //   ScaffoldMessenger.of(context).showSnackBar(
-                        //     const SnackBar(
-                        //         content: Text('Cadastro realizado com sucesso')),
-                        //   );
-                        //Navigator.of(context).pop();
-                        if (user.senha != user.confirmaSenha) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Senhas não coincidem'),
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        }
-                        context.read<UserManager>().signUp(
-                              user: user,
-                              onFail: (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(e),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              },
-                              onSuccess: () {},
-                            );
+                        AuthService().signUp(user: user);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Cadastro realizado com sucesso')),
+                        );
+                        Navigator.of(context).pop();
                       }
                     },
                   ),

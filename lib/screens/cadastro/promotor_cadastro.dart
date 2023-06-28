@@ -1,5 +1,7 @@
 import 'package:agendamentos_app/database/models/dao/promotor_dao.dart';
+import 'package:agendamentos_app/database/models/dao/promotoria_dao.dart';
 import 'package:agendamentos_app/database/models/promotor.dart';
+import 'package:agendamentos_app/database/models/promotoria.dart';
 import 'package:flutter/material.dart';
 
 class PromotorCadastro extends StatefulWidget {
@@ -10,20 +12,10 @@ class PromotorCadastro extends StatefulWidget {
 }
 
 class _PromotorCadastroState extends State<PromotorCadastro> {
-  final _nome = TextEditingController();
-  final _matricula = TextEditingController();
-  late Promotor promotor =
-      Promotor(nome: _nome.text, matricula: _matricula.text);
-  final dao = PromotorDao();
   final _formKey = GlobalKey<FormState>();
-  final _focus = FocusNode();
-
-  @override
-  void dispose() {
-    _nome.dispose();
-    _matricula.dispose();
-    super.dispose();
-  }
+  final Promotor promotor = Promotor();
+  final daoPromotor = PromotorDao();
+  final daoPromotoria = PromotoriaDao();
 
   @override
   Widget build(BuildContext context) {
@@ -31,63 +23,97 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
       key: _formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Cadastro Promotor'),
+          title: const Text('Cadastro de Promotores'),
+          centerTitle: true,
         ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  focusNode: _focus,
-                  controller: _nome,
-                  autofocus: true,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(26),
+            child: Column(
+              children: [
+                TextFormField(
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Insira Nome';
+                      return 'Insira um nome';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Nome',
-                    icon: Icon(Icons.location_city_rounded),
+                    border: OutlineInputBorder(),
                   ),
+                  onSaved: (nome) => promotor.nome = nome,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  controller: _matricula,
-                  autofocus: true,
+                const SizedBox(height: 10),
+                TextFormField(
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Insira Matricula';
+                      return 'Insira um número de matrícula';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
-                    labelText: 'Matricula',
-                    icon: Icon(Icons.location_city_rounded),
+                    labelText: 'Matrícula',
+                    border: OutlineInputBorder(),
+                    //icon: Icon(Icons.contact_phone_rounded),
                   ),
+                  onSaved: (matricula) => promotor.matricula = matricula,
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                StreamBuilder<List<Promotoria>>(
+                  stream: daoPromotoria.getAllStream(),
+                  builder: (context, snapshots) {
+                    List<DropdownMenuItem<String>> promotoriaItens = [];
+                    if (!snapshots.hasData) {
+                      const CircularProgressIndicator();
+                    } else {
+                      final promotorias = snapshots.data?.reversed.toList();
+                      for (var promotoria in promotorias!) {
+                        promotoriaItens.add(
+                          DropdownMenuItem(
+                            value: promotoria.nome,
+                            child: Text(promotoria.nome.toString()),
+                          ),
+                        );
+                      }
+                    }
+                    return SizedBox(
+                      //width: 380,
+                      child: DropdownButtonFormField<String>(
+                        icon: const Icon(Icons.account_balance),
+                        onSaved: (lotacao) => promotor.lotacao = lotacao,
+                        isExpanded: true,
+                        decoration: const InputDecoration(
+                            labelText: 'Lotação', border: OutlineInputBorder()),
+                        hint: const Text('Lotação'),
+                        items: promotoriaItens,
+                        onChanged: (usuarioValue) {},
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-        floatingActionButton: ElevatedButton(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              dao.salvar(promotor);
+              _formKey.currentState?.save();
+              daoPromotor.salvar(promotor);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Cadastro realizado com sucesso')),
               );
               Navigator.of(context).pop();
             }
           },
-          child: const Icon(Icons.save),
+          child: const Icon(
+            Icons.save,
+            color: Colors.blue,
+          ),
         ),
       ),
     );

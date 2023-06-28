@@ -1,26 +1,19 @@
-import 'package:agendamentos_app/services/user_manager.dart';
-import 'package:agendamentos_app/screens/login_page.dart';
+import 'package:agendamentos_app/utils/temas/dark_theme.dart';
+import 'package:agendamentos_app/utils/temas/light_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'screens/login_page.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => UserManager(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Agendamentos App',
-        theme: ThemeData(
-            //primarySwatch: Colors.blue,
-            // primaryColor: Colors.black,
-            // primaryColorDark: Colors.black,
-            // primaryColorLight: Colors.white,
-            ),
-        home: const LoginPage(),
-      ),
+    return MaterialApp(
+      title: 'Agendamentos App',
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      home: const LoginPage(),
     );
   }
 }

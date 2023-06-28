@@ -13,6 +13,7 @@ class AgendamentoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agendamentos'),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {},

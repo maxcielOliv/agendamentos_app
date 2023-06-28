@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'entity.dart';
 
 class Agendamento extends Entity {
-  final DateTime data;
+  final DateTime? data;
   final String local; //
-  final String motorista; //
-  final String veiculo;
-  final DateTime horaInicio; //
+  late String? motorista; //
+  late String? veiculo;
+  final DateTime? horaInicio; //
   final DateTime? horaTermino; //
   final String? policiamento; //
   final String? promotoria; //

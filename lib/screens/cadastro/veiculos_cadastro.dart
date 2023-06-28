@@ -10,93 +10,112 @@ class VeiculosCadastro extends StatefulWidget {
 }
 
 class _VeiculosCadastroState extends State<VeiculosCadastro> {
+  final _marca = TextEditingController();
   final _modelo = TextEditingController();
   final _placa = TextEditingController();
   final _motorista = TextEditingController();
   late Veiculo veiculo = Veiculo(
-      placa: _placa.text, modelo: _modelo.text, motorista: _motorista.text);
+      marca: _marca.text,
+      placa: _placa.text,
+      modelo: _modelo.text,
+      motorista: _motorista.text);
   final dao = VeiculoDao();
   final _formKey = GlobalKey<FormState>();
-  final _focus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Cadastro Veiculo'),
+          title: const Text('Cadastro de Veículo'),
+          centerTitle: true,
         ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  focusNode: _focus,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(26),
+            child: Column(
+              children: [
+                TextFormField(
+                    controller: _marca,
+                    keyboardType: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Insira a marca/fabricante do veículo';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Marca/Fabricante',
+                      border: OutlineInputBorder(),
+                      icon: Icon(
+                        Icons.car_crash_rounded,
+                      ),
+                    )),
+                const SizedBox(height: 10),
+                TextFormField(
                   controller: _modelo,
-                  autofocus: true,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Insira Modelo';
+                      return 'Insira um modelo';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Modelo',
+                    border: OutlineInputBorder(),
                     icon: Icon(Icons.today),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
+                const SizedBox(height: 10),
+                TextFormField(
                   controller: _placa,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Insira Placa';
+                      return 'Insira um número de placa';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Placa',
+                    border: OutlineInputBorder(),
                     icon: Icon(Icons.place),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
+                const SizedBox(height: 10),
+                TextFormField(
                   controller: _motorista,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Insira motorista';
+                      return 'Insira um motorista';
                     }
                     return null;
                   },
                   decoration: const InputDecoration(
                     labelText: 'Motorista',
+                    border: OutlineInputBorder(),
                     icon: Icon(Icons.airline_seat_recline_normal_rounded),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-        floatingActionButton: ElevatedButton(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               dao.salvar(veiculo);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Cadastro realizado com sucesso')),
               );
+              Navigator.of(context).pop();
             }
-            Navigator.of(context).pop();
           },
-          child: const Icon(Icons.save),
+          child: const Icon(Icons.save, color: Colors.blue,),
         ),
       ),
     );

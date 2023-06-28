@@ -24,7 +24,8 @@ class _PromotoriaScreenState extends State<PromotoriaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Promotorias'),
+        title: const Text('Promotorias de Justiça / Coordenação'),
+        centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [

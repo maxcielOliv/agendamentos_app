@@ -13,13 +13,15 @@ class LoginPage extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     final carregando = ValueNotifier<bool>(false);
     const separador = SizedBox(height: 10);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(26),
           child: ListView(
             children: [
-              Image.asset('assets/imagens/teste.jpg'),
+              Image.asset('assets/imagens/teste2.png', height: 160, width: 160),
+              const SizedBox(height: 60),
               const Column(
                 children: [
                   Text(
@@ -41,9 +43,13 @@ class LoginPage extends StatelessWidget {
                       controller: email,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
+                        fillColor: Theme.of(context).colorScheme.primary,
                         labelText: 'E-mail',
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
                       ),
                     ),
                     separador,
@@ -64,8 +70,10 @@ class LoginPage extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  child: const Text(
-                    'Recuperar Senha',
+                  child: Text(
+                    'Esqueceu sua Senha?',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
                   onPressed: () {
                     Navigator.of(context).push(

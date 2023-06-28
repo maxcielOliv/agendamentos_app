@@ -1,5 +1,5 @@
 abstract class Entity {
-  late final String? id;
+  String? id;
   final DateTime? criacao;
   final DateTime? atualizacao;
 

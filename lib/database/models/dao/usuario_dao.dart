@@ -1,7 +1,7 @@
 import 'package:agendamentos_app/database/models/dao/dao.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
 
-class UsuarioDao2 extends Dao<Usuario> {
+class UsuarioDao extends Dao<Usuario> {
   @override
   Future<Usuario?> get(String id) async {
     final res = await db.collection('usuario').doc(id).get();

@@ -13,14 +13,18 @@ class MotoristaCadastro extends StatefulWidget {
 
 class _MotoristaCadastroState extends State<MotoristaCadastro> {
   late final TextEditingController _nome;
+  late final TextEditingController _celular;
   final _dao = MotoristaDao();
   final _formKey = GlobalKey<FormState>();
   late final _nomeO;
+  late final _celularO;
 
   @override
   void initState() {
     _nomeO = widget.motorista?.nome;
     _nome = TextEditingController(text: widget.motorista?.nome);
+    _celularO = widget.motorista?.fone;
+    _celular = TextEditingController(text: widget.motorista?.fone);
     super.initState();
   }
 
@@ -30,38 +34,58 @@ class _MotoristaCadastroState extends State<MotoristaCadastro> {
       key: _formKey,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Cadastro Motorista'),
+          title: const Text('Cadastro de Motorista'),
+          centerTitle: true,
         ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nome,
-                keyboardType: TextInputType.name,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Insira um nome';
-                  }
-                  return null;
-                },
-                decoration: const InputDecoration(
-                  labelText: 'Nome',
-                  icon: Icon(Icons.person_rounded),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(26),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nome,
+                  keyboardType: TextInputType.name,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Insira um nome';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Nome',
+                    border: OutlineInputBorder(),
+                    icon: Icon(Icons.person_rounded),
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: _celular,
+                  keyboardType: TextInputType.name,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Insira um número de celular';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Celular',
+                    border: OutlineInputBorder(),
+                    icon: Icon(Icons.contact_phone_rounded),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               final motorista = Motorista(
                 id: widget.motorista?.id,
                 criacao: widget.motorista?.criacao,
                 nome: _nome.text,
-                cpf: widget.motorista?.cpf,
-                matricula: widget.motorista?.matricula,
+                fone: _celular.text,
               );
               if (_nomeO != _nome.text) {
                 if (await _dao.salvar(motorista)) {
@@ -79,7 +103,7 @@ class _MotoristaCadastroState extends State<MotoristaCadastro> {
               }
             }
           },
-          child: const Icon(Icons.save),
+          child: const Icon(Icons.save, color: Colors.blue),
         ),
       ),
     );

@@ -1,8 +1,10 @@
+import 'package:agendamentos_app/database/models/agendamento.dart';
 import 'package:agendamentos_app/database/models/dao/agendamento_dao.dart';
 import 'package:agendamentos_app/database/models/dao/motorista_dao.dart';
+import 'package:agendamentos_app/database/models/dao/veiculo_dao.dart';
+import 'package:agendamentos_app/database/models/motorista.dart';
+import 'package:agendamentos_app/database/models/veiculo.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class DropdownPage extends StatefulWidget {
@@ -14,18 +16,24 @@ class DropdownPage extends StatefulWidget {
 }
 
 class _DropdownPageState extends State<DropdownPage> {
+  final separador = const SizedBox(height: 10);
   bool policiamento = false;
-  List<dynamic> _listaVazia = [];
-  String dropdownValue = 'Sim';
   final _formKey = GlobalKey<FormState>();
   final dao = AgendamentoDao();
-  final motoristaDao = MotoristaDao();
   final _local = TextEditingController();
+  final _motorista = TextEditingController();
+  final _veiculo = TextEditingController();
+  final _policiamento = TextEditingController();
+  final motoristaDao = MotoristaDao();
+  final veiculoDao = VeiculoDao();
+  late Agendamento agendamento = Agendamento(
+      local: _local.text,
+      motorista: _motorista.text,
+      veiculo: _veiculo.text,
+      policiamento: _policiamento.text,
+      data: DateTime.now(),
+      horaInicio: DateTime.now());
   CalendarController calendarController = CalendarController();
-  // late DateTime _startDate = DateTime(1900);
-  // late DateTime _endDate = DateTime(2100);
-  // DateTime _selectedDate = DateTime.now();
-  // TimeOfDay _selectedTime = TimeOfDay.now();
   late DateTime _startDate;
   late TimeOfDay _startTime;
   late DateTime _endDate;
@@ -33,75 +41,48 @@ class _DropdownPageState extends State<DropdownPage> {
   @override
   void initState() {
     super.initState();
-    _getMotorista();
-    _getVeiculo();
     // _startDate.day;
     // _endDate.day;
     // _startTime = TimeOfDay(hour: _startDate.hour, minute: _startDate.minute);
     // _endTime = TimeOfDay(hour: _endDate.hour, minute: _endDate.minute);
   }
 
-  void _getMotorista() async {
-    final QuerySnapshot result =
-        await FirebaseFirestore.instance.collection('motorista').get();
-
-    final List<DocumentSnapshot> documents = result.docs;
-    setState(
-      () {
-        _listaVazia = documents.map((doc) => doc['nome']).toList();
-      },
-    );
-  }
-
-  void _getVeiculo() async {
-    final QuerySnapshot result =
-        await FirebaseFirestore.instance.collection('veiculo').get();
-
-    final List<DocumentSnapshot> documents = result.docs;
-    setState(
-      () {
-        _listaVazia = documents.map((doc) => doc['marca']).toList();
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    String _selecionaMotorista = _listaVazia.first;
-    //String _selecionaVeiculos = _listaVazia.first;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Novo Agendamento'),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.close,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+    return Form(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Novo Agendamento'),
+          leading: IconButton(
             icon: const Icon(
-              Icons.done,
+              Icons.close,
               color: Colors.white,
             ),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Cadastro realizado com sucesso')),
-              );
-              //dao.salvar(agendamento);
               Navigator.pop(context);
             },
           ),
-        ],
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          children: [
+          actions: <Widget>[
+            IconButton(
+              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+              icon: const Icon(
+                Icons.done,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Cadastro realizado com sucesso')),
+                );
+                dao.salvar(agendamento);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+        body: Form(
+          key: _formKey,
+          child: ListView(children: [
             ListTile(
               contentPadding: const EdgeInsets.all(5),
               leading: const Icon(
@@ -125,10 +106,7 @@ class _DropdownPageState extends State<DropdownPage> {
                 ),
               ),
             ),
-            const Divider(
-              height: 1.0,
-              thickness: 1,
-            ),
+            separador,
             /*ListTile(
               contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
               leading: const Text(''),
@@ -219,40 +197,78 @@ class _DropdownPageState extends State<DropdownPage> {
                             },
                           ),
                         ),*/
-            const Divider(
-              height: 1.0,
-              thickness: 1,
-            ),
-            const SizedBox(
-              height: 20,
-              child: Text('Selecione o motorista'),
-            ),
-            const Divider(
-              height: 1.0,
-              thickness: 1,
-            ),
-            DropdownButtonFormField(
-              value: _selecionaMotorista,
-              items: _listaVazia.map(
-                (category) {
-                  return DropdownMenuItem(
-                    value: category,
-                    child: Text(category),
-                  );
-                },
-              ).toList(),
-              onChanged: (value) {
-                setState(
-                  () {
-                    _selecionaMotorista = value.toString();
-                  },
+            StreamBuilder<List<Veiculo>>(
+              stream: veiculoDao.getAllStream(),
+              builder: (context, snapshots) {
+                List<DropdownMenuItem<String>> veiculoItens = [];
+                if (!snapshots.hasData) {
+                  const CircularProgressIndicator();
+                } else {
+                  final veiculos = snapshots.data?.reversed.toList();
+                  for (var veiculo in veiculos!) {
+                    veiculoItens.add(
+                      DropdownMenuItem(
+                        value: veiculo.modelo,
+                        child: Text(veiculo.modelo.toString()),
+                      ),
+                    );
+                  }
+                }
+                return SizedBox(
+                  width: 280,
+                  child: DropdownButtonFormField<String>(
+                    icon: const Icon(Icons.drive_eta_outlined),
+                    onSaved: (veiculo) =>
+                        agendamento.veiculo = veiculo.toString(),
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      //labelText: 'Veiculo',
+                      border: OutlineInputBorder(),
+                    ),
+                    hint: const Text('Veiculo'),
+                    items: veiculoItens,
+                    onChanged: (veiculoValue) {},
+                  ),
                 );
               },
             ),
-            const Divider(
-              height: 1.0,
-              thickness: 1,
+            separador,
+            StreamBuilder<List<Motorista>>(
+              stream: motoristaDao.getAllStream(),
+              builder: (context, snapshots) {
+                List<DropdownMenuItem<String>> motoristaItens = [];
+                if (!snapshots.hasData) {
+                  const CircularProgressIndicator();
+                } else {
+                  final motoristas = snapshots.data?.reversed.toList();
+                  for (var motorista in motoristas!) {
+                    motoristaItens.add(
+                      DropdownMenuItem(
+                        value: motorista.nome,
+                        child: Text(motorista.nome.toString()),
+                      ),
+                    );
+                  }
+                }
+                return SizedBox(
+                  width: 280,
+                  child: DropdownButtonFormField(
+                    icon: const Icon(Icons.sports_motorsports_outlined),
+                    onSaved: (motorista) =>
+                        _motorista.value = motorista! as TextEditingValue,
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      //labelText: 'Veiculo',
+                      border: OutlineInputBorder(),
+                    ),
+                    hint: const Text('Motorista'),
+                    items: motoristaItens,
+                    onChanged: (veiculoValue) {},
+                  ),
+                );
+              },
             ),
+            separador,
             FilterChip(
               label: const Text('Policiamento'),
               selected: policiamento,
@@ -292,10 +308,6 @@ class _DropdownPageState extends State<DropdownPage> {
               height: 1.0,
               thickness: 1,
             ),
-            const SizedBox(
-              height: 20,
-              child: Text('Selecione o veículo'),
-            ),
             const Divider(
               height: 1.0,
               thickness: 1,
@@ -324,15 +336,9 @@ class _DropdownPageState extends State<DropdownPage> {
               'Selecione o motorista: $_selecionaMotorista',
               style: const TextStyle(fontSize: 16.0),
             ),*/
-          ],
+          ]),
         ),
       ),
-      //],
     );
-    //),
-    // ],
-    //),
-    //),
-    //);
   }
 }

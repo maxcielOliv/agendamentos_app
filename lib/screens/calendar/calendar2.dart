@@ -50,6 +50,7 @@ class CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agendamentos'),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {

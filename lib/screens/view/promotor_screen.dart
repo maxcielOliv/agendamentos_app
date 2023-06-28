@@ -24,7 +24,8 @@ class _PromotorScreenState extends State<PromotorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Promotor'),
+        title: const Text('Promotores de Justiça'),
+        centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
@@ -54,8 +55,8 @@ class _PromotorScreenState extends State<PromotorScreen> {
               itemBuilder: (context, index) {
                 final promotor = lista[index];
                 return ListTile(
-                  title: Text(promotor.nome),
-                  subtitle: Text(promotor.matricula),
+                  title: Text(promotor.nome.toString()),
+                  subtitle: Text(promotor.lotacao.toString()),
                   trailing: IconButton(
                     onPressed: () {
                       dao.deletar(promotor);
