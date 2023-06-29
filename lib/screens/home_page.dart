@@ -1,6 +1,5 @@
 import 'package:agendamentos_app/screens/view/configura%C3%A7%C3%B5es_screen.dart';
 import 'package:agendamentos_app/screens/view/promotor_screen.dart';
-import 'package:agendamentos_app/services/change_password.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'calendar/calendar2.dart';

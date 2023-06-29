@@ -21,18 +21,19 @@ class _DropdownPageState extends State<DropdownPage> {
   final _formKey = GlobalKey<FormState>();
   final dao = AgendamentoDao();
   final _local = TextEditingController();
-  final _motorista = TextEditingController();
   final _veiculo = TextEditingController();
+  final _motorista = TextEditingController();
   final _policiamento = TextEditingController();
   final motoristaDao = MotoristaDao();
   final veiculoDao = VeiculoDao();
   late Agendamento agendamento = Agendamento(
       local: _local.text,
-      motorista: _motorista.text,
-      veiculo: _veiculo.text,
       policiamento: _policiamento.text,
+      veiculo: _veiculo.text,
+      motorista: _motorista.text,
       data: DateTime.now(),
-      horaInicio: DateTime.now());
+      horaInicio: DateTime.now(),
+      horaTermino: DateTime.now());
   CalendarController calendarController = CalendarController();
   late DateTime _startDate;
   late TimeOfDay _startTime;
@@ -49,40 +50,47 @@ class _DropdownPageState extends State<DropdownPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Novo Agendamento'),
-          leading: IconButton(
+    return
+        /*Form(
+      key: _formKey,
+      child: */
+        Scaffold(
+      appBar: AppBar(
+        title: const Text('Novo Agendamento'),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.close,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
             icon: const Icon(
-              Icons.close,
+              Icons.done,
               color: Colors.white,
             ),
-            onPressed: () {
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Cadastro realizado com sucesso'),
+                  ),
+                );
+                dao.salvar(agendamento);
+              }
               Navigator.pop(context);
             },
           ),
-          actions: <Widget>[
-            IconButton(
-              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-              icon: const Icon(
-                Icons.done,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('Cadastro realizado com sucesso')),
-                );
-                dao.salvar(agendamento);
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-        body: Form(
-          key: _formKey,
-          child: ListView(children: [
+        ],
+      ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          children: [
             ListTile(
               contentPadding: const EdgeInsets.all(5),
               leading: const Icon(
@@ -218,16 +226,17 @@ class _DropdownPageState extends State<DropdownPage> {
                   width: 280,
                   child: DropdownButtonFormField<String>(
                     icon: const Icon(Icons.drive_eta_outlined),
-                    onSaved: (veiculo) =>
-                        agendamento.veiculo = veiculo.toString(),
+                    //onSaved: (veiculo) => agendamento.veiculo = veiculo,
                     isExpanded: true,
                     decoration: const InputDecoration(
-                      //labelText: 'Veiculo',
                       border: OutlineInputBorder(),
                     ),
                     hint: const Text('Veiculo'),
                     items: veiculoItens,
-                    onChanged: (veiculoValue) {},
+                    onChanged: (String? motoristaValue) {
+                      print(motoristaValue);
+                      _veiculo.text = motoristaValue!;
+                    },
                   ),
                 );
               },
@@ -254,16 +263,17 @@ class _DropdownPageState extends State<DropdownPage> {
                   width: 280,
                   child: DropdownButtonFormField(
                     icon: const Icon(Icons.sports_motorsports_outlined),
-                    onSaved: (motorista) =>
-                        _motorista.value = motorista! as TextEditingValue,
+                    //onSaved: (motorista) => agendamento.motorista = motorista,
                     isExpanded: true,
                     decoration: const InputDecoration(
-                      //labelText: 'Veiculo',
                       border: OutlineInputBorder(),
                     ),
                     hint: const Text('Motorista'),
                     items: motoristaItens,
-                    onChanged: (veiculoValue) {},
+                    onChanged: (String? veiculoValue) {
+                      print(veiculoValue);
+                      _motorista.text = veiculoValue!;
+                    },
                   ),
                 );
               },
@@ -280,30 +290,6 @@ class _DropdownPageState extends State<DropdownPage> {
                 );
               },
             ),
-            /*DropdownButton<String>(
-              value: dropdownValue,
-              icon: const Icon(Icons.menu),
-              underline: Container(
-                height: 2,
-              ),
-              onChanged: (String? newValue) {
-                setState(
-                  () {
-                    dropdownValue = newValue!;
-                  },
-                );
-              },
-              items: const [
-                DropdownMenuItem(
-                  value: 'Sim',
-                  child: Text('Sim'),
-                ),
-                DropdownMenuItem(
-                  value: 'Não',
-                  child: Text('Não'),
-                )
-              ],
-            ),*/
             const Divider(
               height: 1.0,
               thickness: 1,
@@ -312,33 +298,10 @@ class _DropdownPageState extends State<DropdownPage> {
               height: 1.0,
               thickness: 1,
             ),
-            /*DropdownButtonFormField(
-              value: dropdownValue,
-              items: _listaVazia.map(
-                (category) {
-                  return DropdownMenuItem(
-                    value: category,
-                    child: Text(category),
-                  );
-                },
-              ).toList(),
-              onChanged: (value) {
-                setState(
-                  () {
-                    //_selecionaVeiculos = value.toString();
-                    dropdownValue;
-                  },
-                );
-              },
-            ),
-            const SizedBox(height: 16.0),
-            Text(
-              'Selecione o motorista: $_selecionaMotorista',
-              style: const TextStyle(fontSize: 16.0),
-            ),*/
-          ]),
+          ],
         ),
       ),
     );
+    //);
   }
 }

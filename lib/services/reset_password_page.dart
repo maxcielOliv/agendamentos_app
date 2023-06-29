@@ -21,6 +21,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text.toLowerCase());
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content:
             Text('Link de recuperação de senha enviado! Verifique seu e-mail'),

@@ -74,7 +74,9 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
                         promotoriaItens.add(
                           DropdownMenuItem(
                             value: promotoria.nome,
-                            child: Text(promotoria.nome.toString()),
+                            child: Text(
+                              promotoria.nome.toString(),
+                            ),
                           ),
                         );
                       }
