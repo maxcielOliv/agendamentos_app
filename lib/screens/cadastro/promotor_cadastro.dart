@@ -12,8 +12,10 @@ class PromotorCadastro extends StatefulWidget {
 }
 
 class _PromotorCadastroState extends State<PromotorCadastro> {
+  final _nome = TextEditingController();
+  final _matricula = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final Promotor promotor = Promotor();
+  late Promotor promotor = Promotor(nome: _nome.text, matricula: _matricula.text);
   final daoPromotor = PromotorDao();
   final daoPromotoria = PromotoriaDao();
 
@@ -32,6 +34,7 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
             child: Column(
               children: [
                 TextFormField(
+                  controller: _nome,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -43,10 +46,10 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
                     labelText: 'Nome',
                     border: OutlineInputBorder(),
                   ),
-                  onSaved: (nome) => promotor.nome = nome,
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
+                  controller: _matricula,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -57,9 +60,9 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
                   decoration: const InputDecoration(
                     labelText: 'Matrícula',
                     border: OutlineInputBorder(),
+                    hintText: '999.9999'
                     //icon: Icon(Icons.contact_phone_rounded),
                   ),
-                  onSaved: (matricula) => promotor.matricula = matricula,
                 ),
                 const SizedBox(height: 10),
                 StreamBuilder<List<Promotoria>>(
@@ -74,9 +77,7 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
                         promotoriaItens.add(
                           DropdownMenuItem(
                             value: promotoria.nome,
-                            child: Text(
-                              promotoria.nome.toString(),
-                            ),
+                            child: Text(promotoria.nome.toString()),
                           ),
                         );
                       }

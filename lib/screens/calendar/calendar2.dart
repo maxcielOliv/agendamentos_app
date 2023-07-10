@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
+class AgendamentoCadastro extends StatefulWidget {
+  const AgendamentoCadastro({super.key});
 
   @override
-  CalendarPageState createState() => CalendarPageState();
+  AgendamentoCadastroState createState() => AgendamentoCadastroState();
 }
 
-class CalendarPageState extends State<CalendarPage> {
+class AgendamentoCadastroState extends State<AgendamentoCadastro> {
   List<Meeting> _meetings = [];
   CalendarController calendarController = CalendarController();
   @override
@@ -33,6 +33,7 @@ class CalendarPageState extends State<CalendarPage> {
         _meetings = documents
             .map(
               (doc) => Meeting(
+                  data: (doc['data']?.toDate()),
                   horaInicio: (doc['horaInicio']?.toDate()),
                   horaTermino: (doc['horaTermino']?.toDate()),
                   local: doc['local'],
@@ -80,8 +81,6 @@ class CalendarPageState extends State<CalendarPage> {
             agendaItemHeight: 70,
             agendaViewHeight: 100),
         onTap: calendarTapped,
-        //onLongPress: calendarLongTapped,
-        //onViewChanged: (viewChangedDetails) => calendarTapped,
         appointmentBuilder: (context, calendarAppointmentDetails) {
           final Meeting meeting = calendarAppointmentDetails.appointments.first;
           return Container(
@@ -121,14 +120,4 @@ class CalendarPageState extends State<CalendarPage> {
       );
     }
   }
-
-  // void calendarTapped(CalendarTapDetails details) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       //builder: (context) => const AppointmentForm(),
-  //       builder: (context) => const AppointmentEditor(),
-  //     ),
-  //   );
-  // }
 }

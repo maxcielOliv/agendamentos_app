@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class Meeting {
   Meeting(
-      {required this.horaInicio,
+      {required this.data,
+      required this.horaInicio,
       required this.horaTermino,
       this.background = Colors.green,
       this.isAllDay = false,
@@ -11,6 +12,7 @@ class Meeting {
       this.endTimeZone = '',
       this.motorista = ''});
 
+  final DateTime data;
   final String local;
   final DateTime horaInicio;
   final DateTime horaTermino;

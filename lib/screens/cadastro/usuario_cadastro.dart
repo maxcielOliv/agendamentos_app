@@ -13,9 +13,13 @@ class UsuarioCadastro extends StatefulWidget {
 }
 
 class _UsuarioCadastroState extends State<UsuarioCadastro> {
+  final _nome = TextEditingController();
+  final _email = TextEditingController();
+  final _senha = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final Usuario user = Usuario();
+  late Usuario user = Usuario(nome: _nome.text, email: _email.text, senha: _senha.text);
   final daoPromotoria = PromotoriaDao();
+  bool _showPass = false;
   bool carregando = false;
 
   @override
@@ -49,7 +53,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 height: 10,
               ),
               TextFormField(
-                //controller: nome,
+                controller: _nome,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                     labelText: 'Nome Completo',
@@ -67,13 +71,12 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                   }
                   return null;
                 },
-                onSaved: (nome) => user.nome = nome,
               ),
               const SizedBox(
                 height: 10,
               ),
               TextFormField(
-                //controller: email,
+                controller: _email,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: 'E-mail',
@@ -92,7 +95,6 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                   }
                   return null;
                 },
-                onSaved: (email) => user.email = email,
               ),
               const SizedBox(
                 height: 10,
@@ -133,18 +135,26 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
               ),
               const SizedBox(height: 10),
               TextFormField(
-                //controller: senha,
+                controller: _senha,
                 keyboardType: TextInputType.text,
-                obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Digite a Senha Padrão',
-                  border: OutlineInputBorder(),
-                  labelStyle: TextStyle(
+                  border: const OutlineInputBorder(),
+                  labelStyle: const TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
                       fontSize: 20),
+                  suffixIcon: GestureDetector(
+                    child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
+                    onTap: () {
+                      setState(() {
+                        _showPass = !_showPass;
+                      });
+                    }
+                  )
                 ),
                 style: const TextStyle(fontSize: 20),
+                obscureText: _showPass == false ? true : false,
                 validator: (senha) {
                   if (senha!.isEmpty) {
                     return 'Campo obrigatório';
@@ -153,7 +163,6 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                   }
                   return null;
                 },
-                onSaved: (senha) => user.senha = senha,
               ),
               const SizedBox(height: 30),
               Container(

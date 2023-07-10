@@ -1,3 +1,5 @@
+import 'package:agendamentos_app/screens/calendar/mult_calendarios.dart';
+import 'package:agendamentos_app/screens/view/agendamento_screen.dart';
 import 'package:agendamentos_app/screens/view/configura%C3%A7%C3%B5es_screen.dart';
 import 'package:agendamentos_app/screens/view/promotor_screen.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CalendarPage(),
+                    builder: (context) => const AgendamentoScreen(),
                   ),
                 );
               },
@@ -193,46 +195,11 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CalendarPage(),
+                          builder: (context) => const MultCalendarios(),
                         ),
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
-                  /*InkWell(
-                    child: Card(
-                      color: Colors.red.shade400,
-                      elevation: 50.0,
-                      borderOnForeground: true,
-                      shadowColor: Colors.blue,
-                      child: Container(
-                        height: 100,
-                        width: 200,
-                        padding: const EdgeInsets.all(20),
-                        child: const Column(
-                          children: [
-                            Icon(Icons.settings_rounded,
-                                size: 28, color: Colors.white),
-                            SizedBox(height: 10),
-                            Text(
-                              'Configurações',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ChangePassword(),
-                        ),
-                      );
-                    },
-                  )*/
                 ],
               )
             ],

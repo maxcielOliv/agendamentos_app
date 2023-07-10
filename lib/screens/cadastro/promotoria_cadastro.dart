@@ -14,6 +14,7 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
   late Promotoria promotoria = Promotoria(nome: _nome.text);
   final dao = PromotoriaDao();
   final _formKey = GlobalKey<FormState>();
+  final _focus = FocusNode();
 
   @override
   void dispose() {
@@ -47,7 +48,7 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
                   decoration: const InputDecoration(
                     labelText: 'Nome',
                     border: OutlineInputBorder(),
-                    icon: Icon(Icons.person_rounded),
+                    icon: Icon(Icons.account_balance),
                   ),
                 ),
               ],

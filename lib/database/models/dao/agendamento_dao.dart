@@ -22,7 +22,7 @@ class AgendamentoDao extends Dao<Agendamento> {
   // ignore: override_on_non_overriding_member
   Stream<List<Agendamento>> getAllStream() async* {
     yield* db
-        .collection('promotoria')
+        .collection('agendamento')
         .snapshots()
         .map((e) => e.docs.map((e) => Agendamento.fromFirestore(e)).toList());
   }

@@ -5,8 +5,8 @@ class Veiculo extends Entity {
   final String marca;
   final String placa;
   final String modelo;
-  final String? motorista;
-  
+  String? motorista;
+
   Veiculo(
       {super.id,
       super.criacao,
@@ -30,7 +30,12 @@ class Veiculo extends Entity {
 
   @override
   Map<String, dynamic> toFirestore() {
-    return {'marca': marca, 'placa': placa, 'modelo': modelo, 'motorista': motorista};
+    return {
+      'marca': marca,
+      'placa': placa,
+      'modelo': modelo,
+      'motorista': motorista
+    };
   }
 
   @override

@@ -15,6 +15,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   final _formKeyPass = GlobalKey<FormState>();
   final _formKeyNewPass = GlobalKey<FormState>();
   final _formKeyNewPass2 = GlobalKey<FormState>();
+  bool _showPass = false;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,6 @@ class _ChangePasswordState extends State<ChangePassword> {
               child: TextFormField(
                 controller: _passController,
                 keyboardType: TextInputType.text,
-                obscureText: true,
                 validator: (text) {
                   if (text!.isEmpty || text.length < 6) {
                     return 'Senha inválida';
@@ -62,15 +62,25 @@ class _ChangePasswordState extends State<ChangePassword> {
                     return null;
                   }
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     labelText: 'Senha atual',
                     border: OutlineInputBorder(),
                     labelStyle: TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
                       fontSize: 20,
-                    )),
+                      ),
+                      suffixIcon: GestureDetector(
+                        child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
+                        onTap: () {
+                          setState(() {
+                            _showPass = !_showPass;
+                          });
+                        },
+                      )
+                    ),
                 style: const TextStyle(fontSize: 20),
+                obscureText: _showPass == false ? true : false,
               ),
             ),
             const SizedBox(
@@ -81,7 +91,6 @@ class _ChangePasswordState extends State<ChangePassword> {
               child: TextFormField(
                 controller: _newPassController,
                 keyboardType: TextInputType.text,
-                obscureText: true,
                 validator: (text) {
                   if (text!.isEmpty || text.length < 6) {
                     return 'Senha inválida';
@@ -89,15 +98,25 @@ class _ChangePasswordState extends State<ChangePassword> {
                     return null;
                   }
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     labelText: 'Nova senha',
                     border: OutlineInputBorder(),
                     labelStyle: TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
                       fontSize: 20,
-                    )),
+                    ),
+                    suffixIcon: GestureDetector(
+                      child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
+                      onTap: () {
+                        setState(() {
+                          _showPass = !_showPass;
+                        });
+                      },
+                    ),
+                  ),
                 style: const TextStyle(fontSize: 20),
+                obscureText: _showPass == false ? true : false,
               ),
             ),
             const SizedBox(
@@ -108,7 +127,6 @@ class _ChangePasswordState extends State<ChangePassword> {
               child: TextFormField(
                 controller: _newPass2Controller,
                 keyboardType: TextInputType.text,
-                obscureText: true,
                 validator: (text) {
                   if ((text!.isEmpty || text.length < 6) ||
                       _newPassController.text != _newPass2Controller.text) {
@@ -117,15 +135,25 @@ class _ChangePasswordState extends State<ChangePassword> {
                     return null;
                   }
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     labelText: 'Repita a nova senha',
                     border: OutlineInputBorder(),
                     labelStyle: TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
                       fontSize: 20,
-                    )),
+                    ),
+                    suffixIcon: GestureDetector(
+                      child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
+                      onTap: () {
+                        setState(() {
+                          _showPass = !_showPass;
+                        });
+                      },
+                    )
+                  ),
                 style: const TextStyle(fontSize: 20),
+                obscureText: _showPass == false ? true : false,
               ),
             ),
             const SizedBox(

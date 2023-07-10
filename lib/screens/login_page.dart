@@ -12,6 +12,7 @@ class LoginPage extends StatelessWidget {
     final senha = TextEditingController();
     final formKey = GlobalKey<FormState>();
     final carregando = ValueNotifier<bool>(false);
+    final showPass = ValueNotifier<bool>(false);
     const separador = SizedBox(height: 10);
 
     return Scaffold(
@@ -53,15 +54,26 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     separador,
-                    TextFormField(
-                      controller: senha,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.send,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Senha',
-                        border: OutlineInputBorder(),
-                      ),
+                    AnimatedBuilder(
+                      animation: showPass,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          controller: senha,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.send,
+                          decoration: InputDecoration(
+                            labelText: 'Senha',
+                            border: const OutlineInputBorder(),
+                            suffixIcon: GestureDetector(
+                              child: Icon(showPass.value == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
+                              onTap: () {
+                                showPass.value = !showPass.value;
+                              },
+                            )
+                          ),
+                          obscureText: showPass.value == false ? true : false,
+                        );
+                      },
                     ),
                   ],
                 ),

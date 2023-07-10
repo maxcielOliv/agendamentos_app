@@ -1,9 +1,13 @@
+import 'package:agendamentos_app/database/models/dao/motorista_dao.dart';
 import 'package:agendamentos_app/database/models/dao/veiculo_dao.dart';
+import 'package:agendamentos_app/database/models/motorista.dart';
 import 'package:agendamentos_app/database/models/veiculo.dart';
 import 'package:flutter/material.dart';
 
 class VeiculosCadastro extends StatefulWidget {
-  const VeiculosCadastro({super.key});
+  const VeiculosCadastro({super.key, this.veiculo});
+
+  final Veiculo? veiculo;
 
   @override
   State<VeiculosCadastro> createState() => _VeiculosCadastroState();
@@ -13,13 +17,10 @@ class _VeiculosCadastroState extends State<VeiculosCadastro> {
   final _marca = TextEditingController();
   final _modelo = TextEditingController();
   final _placa = TextEditingController();
-  final _motorista = TextEditingController();
-  late Veiculo veiculo = Veiculo(
-      marca: _marca.text,
-      placa: _placa.text,
-      modelo: _modelo.text,
-      motorista: _motorista.text);
-  final dao = VeiculoDao();
+  late Veiculo veiculo =
+      Veiculo(marca: _marca.text, modelo: _modelo.text, placa: _placa.text);
+  final daoMotorista = MotoristaDao();
+  final daoVeiculo = VeiculoDao();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -48,9 +49,7 @@ class _VeiculosCadastroState extends State<VeiculosCadastro> {
                     decoration: const InputDecoration(
                       labelText: 'Marca/Fabricante',
                       border: OutlineInputBorder(),
-                      icon: Icon(
-                        Icons.car_crash_rounded,
-                      ),
+                      //icon: Icon(Icons.car_crash_rounded),
                     )),
                 const SizedBox(height: 10),
                 TextFormField(
@@ -65,7 +64,7 @@ class _VeiculosCadastroState extends State<VeiculosCadastro> {
                   decoration: const InputDecoration(
                     labelText: 'Modelo',
                     border: OutlineInputBorder(),
-                    icon: Icon(Icons.today),
+                    //icon: Icon(Icons.today),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -81,25 +80,43 @@ class _VeiculosCadastroState extends State<VeiculosCadastro> {
                   decoration: const InputDecoration(
                     labelText: 'Placa',
                     border: OutlineInputBorder(),
-                    icon: Icon(Icons.place),
+                    //icon: Icon(Icons.place),
                   ),
                 ),
                 const SizedBox(height: 10),
-                TextFormField(
-                  controller: _motorista,
-                  keyboardType: TextInputType.name,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Insira um motorista';
+                StreamBuilder<List<Motorista>>(
+                  stream: daoMotorista.getAllStream(),
+                  builder: (context, snapshots) {
+                    List<DropdownMenuItem<String>> motoristaItens = [];
+                    if (!snapshots.hasData) {
+                      const CircularProgressIndicator();
+                    } else {
+                      final motoristas = snapshots.data?.reversed.toList();
+                      for (var motorista in motoristas!) {
+                        motoristaItens.add(
+                          DropdownMenuItem(
+                            value: motorista.nome,
+                            child: Text(motorista.nome.toString()),
+                          ),
+                        );
+                      }
                     }
-                    return null;
+                    return SizedBox(
+                      //width: 380,
+                      child: DropdownButtonFormField<String>(
+                        icon: const Icon(Icons.account_balance),
+                        onSaved: (motorista) => veiculo.motorista = motorista,
+                        isExpanded: true,
+                        decoration: const InputDecoration(
+                            labelText: 'Motorista',
+                            border: OutlineInputBorder()),
+                        hint: const Text('Motorista'),
+                        items: motoristaItens,
+                        onChanged: (usuarioValue) {},
+                      ),
+                    );
                   },
-                  decoration: const InputDecoration(
-                    labelText: 'Motorista',
-                    border: OutlineInputBorder(),
-                    icon: Icon(Icons.airline_seat_recline_normal_rounded),
-                  ),
-                ),
+                )
               ],
             ),
           ),
@@ -108,14 +125,18 @@ class _VeiculosCadastroState extends State<VeiculosCadastro> {
           backgroundColor: Colors.red,
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              dao.salvar(veiculo);
+              _formKey.currentState?.save();
+              daoVeiculo.salvar(veiculo);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Cadastro realizado com sucesso')),
               );
               Navigator.of(context).pop();
             }
           },
-          child: const Icon(Icons.save, color: Colors.blue,),
+          child: const Icon(
+            Icons.save,
+            color: Colors.blue,
+          ),
         ),
       ),
     );

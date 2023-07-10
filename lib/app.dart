@@ -11,8 +11,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Agendamentos App',
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      darkTheme: darkTheme,
+      // theme: lightTheme,
+      // darkTheme: darkTheme,
       home: const LoginPage(),
     );
   }
