@@ -58,7 +58,7 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const DropdownPage(),
+                  builder: (context) => const AgendamentoEditor(),
                 ),
               );
             },

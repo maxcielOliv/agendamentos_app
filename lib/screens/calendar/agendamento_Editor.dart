@@ -10,18 +10,17 @@ import 'package:agendamentos_app/database/models/veiculo.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
 import '../../database/models/promotor.dart';
 
-class DropdownPage extends StatefulWidget {
-  const DropdownPage({super.key});
+class AgendamentoEditor extends StatefulWidget {
+  const AgendamentoEditor({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _DropdownPageState createState() => _DropdownPageState();
+  _AgendamentoEditorState createState() => _AgendamentoEditorState();
 }
 
-class _DropdownPageState extends State<DropdownPage> {
+class _AgendamentoEditorState extends State<AgendamentoEditor> {
   final separador = const SizedBox(height: 10);
   bool policiamento = false;
   final _formKey = GlobalKey<FormState>();
@@ -83,14 +82,25 @@ class _DropdownPageState extends State<DropdownPage> {
               ),
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Cadastro realizado com sucesso'),
-                    ),
-                  );
-                  dao.salvar(agendamento);
+                  if (await dao.salvar(agendamento)) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Cadastro realizado com sucesso'),
+                        ),
+                      );
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Conclua o cadastro'),
+                        ),
+                      );
+                    }
+                  }
                 }
-                Navigator.pop(context);
               },
             ),
           ],
@@ -107,7 +117,7 @@ class _DropdownPageState extends State<DropdownPage> {
                   color: Colors.black87,
                 ),
                 title: TextFormField(
-                  controller: TextEditingController(text: _local.text),
+                  controller: _local,
                   onChanged: (String value) {
                     _local.text = value;
                   },
@@ -148,12 +158,20 @@ class _DropdownPageState extends State<DropdownPage> {
                           firstDate: DateTime(1900),
                           lastDate: DateTime(2100),
                         );
+                        if (date != null) {
+                          setState(
+                            () {
+                              _startDate = date!;
+                            },
+                          );
+                        }
                       },
                     ),
                   ),
                 ),
               ),
               ListTile(
+                contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
                 leading: const Icon(
                   Icons.access_time,
                   color: Colors.black54,
@@ -162,18 +180,26 @@ class _DropdownPageState extends State<DropdownPage> {
                   child: Expanded(
                     flex: 1,
                     child: GestureDetector(
-                      child: const Text('Hora Inicio'),
+                      child: Text('$_startTime'),
                       onTap: () async {
-                        final TimeOfDay? time = await showTimePicker(
+                        final TimeOfDay? horaInicial = await showTimePicker(
                           context: context,
                           initialTime: _startTime,
                         );
+                        if (horaInicial != null) {
+                          setState(
+                            () {
+                              _startTime = horaInicial;
+                            },
+                          );
+                        }
                       },
                     ),
                   ),
                 ),
               ),
               ListTile(
+                contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
                 leading: const Icon(
                   Icons.access_time,
                   color: Colors.black54,
@@ -182,12 +208,19 @@ class _DropdownPageState extends State<DropdownPage> {
                   child: Expanded(
                     flex: 1,
                     child: GestureDetector(
-                      child: const Text('Hora Término'),
+                      child: Text('$_endTime'),
                       onTap: () async {
-                        final TimeOfDay? time = await showTimePicker(
+                        final TimeOfDay? horaFinal = await showTimePicker(
                           context: context,
                           initialTime: _endTime,
                         );
+                        if (horaFinal != null) {
+                          setState(
+                            () {
+                              _endTime = horaFinal;
+                            },
+                          );
+                        }
                       },
                     ),
                   ),

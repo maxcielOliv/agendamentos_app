@@ -22,7 +22,8 @@ class AuthService extends ChangeNotifier {
 
   Future<bool> login(String email, String senha) async {
     try {
-      final UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: senha);
+      final UserCredential result =
+          await _auth.signInWithEmailAndPassword(email: email, password: senha);
       await _loadCurrentUser(firebaseuser: result.user);
 
       result.user!.uid;
@@ -30,7 +31,6 @@ class AuthService extends ChangeNotifier {
       user.saveToken(result.user!.uid);
 
       return true;
-      
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
         throw AuthException('E-mail inválido');
@@ -46,10 +46,9 @@ class AuthService extends ChangeNotifier {
   Future<void> signUp({required Usuario user}) async {
     try {
       final UserCredential result = await _auth.createUserWithEmailAndPassword(
-        email: user.email!, password: user.senha!);
+          email: user.email!, password: user.senha!);
       user.id = result.user?.uid;
       await user.saveData();
-
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
         throw AuthException('Informe E-mail e senha');
@@ -72,7 +71,6 @@ class AuthService extends ChangeNotifier {
       final DocumentSnapshot<Map<String, dynamic>> docUser =
           await _db.collection('usuario').doc(currentUser.uid).get();
       user = Usuario.fromDocument(docUser);
-      print(user.nome);
       notifyListeners();
     }
   }

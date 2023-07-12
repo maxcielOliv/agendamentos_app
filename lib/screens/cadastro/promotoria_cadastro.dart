@@ -14,7 +14,6 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
   late Promotoria promotoria = Promotoria(nome: _nome.text);
   final dao = PromotoriaDao();
   final _formKey = GlobalKey<FormState>();
-  final _focus = FocusNode();
 
   @override
   void dispose() {

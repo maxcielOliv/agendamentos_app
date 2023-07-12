@@ -64,21 +64,24 @@ class _ChangePasswordState extends State<ChangePassword> {
                 },
                 decoration: InputDecoration(
                     labelText: 'Senha atual',
-                    border: OutlineInputBorder(),
-                    labelStyle: TextStyle(
+                    border: const OutlineInputBorder(),
+                    labelStyle: const TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
                       fontSize: 20,
-                      ),
-                      suffixIcon: GestureDetector(
-                        child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
-                        onTap: () {
-                          setState(() {
-                            _showPass = !_showPass;
-                          });
-                        },
-                      )
                     ),
+                    suffixIcon: GestureDetector(
+                      child: Icon(
+                          _showPass == false
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.blue),
+                      onTap: () {
+                        setState(() {
+                          _showPass = !_showPass;
+                        });
+                      },
+                    )),
                 style: const TextStyle(fontSize: 20),
                 obscureText: _showPass == false ? true : false,
               ),
@@ -99,22 +102,26 @@ class _ChangePasswordState extends State<ChangePassword> {
                   }
                 },
                 decoration: InputDecoration(
-                    labelText: 'Nova senha',
-                    border: OutlineInputBorder(),
-                    labelStyle: TextStyle(
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20,
-                    ),
-                    suffixIcon: GestureDetector(
-                      child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
-                      onTap: () {
-                        setState(() {
-                          _showPass = !_showPass;
-                        });
-                      },
-                    ),
+                  labelText: 'Nova senha',
+                  border: const OutlineInputBorder(),
+                  labelStyle: const TextStyle(
+                    color: Colors.black38,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
                   ),
+                  suffixIcon: GestureDetector(
+                    child: Icon(
+                        _showPass == false
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.blue),
+                    onTap: () {
+                      setState(() {
+                        _showPass = !_showPass;
+                      });
+                    },
+                  ),
+                ),
                 style: const TextStyle(fontSize: 20),
                 obscureText: _showPass == false ? true : false,
               ),
@@ -137,21 +144,24 @@ class _ChangePasswordState extends State<ChangePassword> {
                 },
                 decoration: InputDecoration(
                     labelText: 'Repita a nova senha',
-                    border: OutlineInputBorder(),
-                    labelStyle: TextStyle(
+                    border: const OutlineInputBorder(),
+                    labelStyle: const TextStyle(
                       color: Colors.black38,
                       fontWeight: FontWeight.w400,
                       fontSize: 20,
                     ),
                     suffixIcon: GestureDetector(
-                      child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
+                      child: Icon(
+                          _showPass == false
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.blue),
                       onTap: () {
                         setState(() {
                           _showPass = !_showPass;
                         });
                       },
-                    )
-                  ),
+                    )),
                 style: const TextStyle(fontSize: 20),
                 obscureText: _showPass == false ? true : false,
               ),

@@ -11,12 +11,10 @@ class AgendamentoScreen extends StatefulWidget {
 }
 
 class _AgendamentoScreenState extends State<AgendamentoScreen> {
-  final _controller = TextEditingController();
   final dao = AgendamentoDao();
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -49,18 +47,25 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
             return const LinearProgressIndicator();
           }
           final lista = snapshot.data;
-          print(lista);
           if (lista != null) {
             return ListView.separated(
               itemCount: lista.length,
               itemBuilder: (context, index) {
                 final agendamento = lista[index];
                 return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AgendamentoCadastro(),
+                      ),
+                    );
+                  },
                   title: Text(agendamento.local),
-                  subtitle: Text(agendamento.data.toString()),
+                  subtitle: Text('${agendamento.data}'),
                   trailing: IconButton(
-                    onPressed: () async {
-                      await dao.deletar(agendamento);
+                    onPressed: () {
+                      dao.deletar(agendamento);
                     },
                     icon: const Icon(Icons.delete_forever_rounded),
                   ),

@@ -2,7 +2,6 @@ import 'package:agendamentos_app/database/models/dao/veiculo_dao.dart';
 import 'package:agendamentos_app/screens/calendar/agendamento_Editor.dart';
 import 'package:flutter/material.dart';
 import '../../database/models/veiculo.dart';
-import '../view/agendamento_screen.dart';
 
 class MultCalendarios extends StatefulWidget {
   const MultCalendarios({Key? key}) : super(key: key);
@@ -14,9 +13,6 @@ class MultCalendarios extends StatefulWidget {
 final dao = VeiculoDao();
 
 class _MultCalendariosState extends State<MultCalendarios> {
-  @override
-  void initState() {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +55,8 @@ class _MultCalendariosState extends State<MultCalendarios> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const DropdownPage(),
+                                  builder: (context) =>
+                                      const AgendamentoEditor(),
                                 ),
                               );
                             },

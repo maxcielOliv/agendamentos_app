@@ -4,7 +4,6 @@ import 'package:agendamentos_app/screens/view/configura%C3%A7%C3%B5es_screen.dar
 import 'package:agendamentos_app/screens/view/promotor_screen.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'calendar/calendar2.dart';
 import 'login_page.dart';
 import 'view/motoristas_screen.dart';
 import 'view/promotoria_screen.dart';

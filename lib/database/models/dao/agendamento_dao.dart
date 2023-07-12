@@ -1,5 +1,5 @@
-import '../agendamento.dart';
-import 'dao.dart';
+import 'package:agendamentos_app/database/models/agendamento.dart';
+import 'package:agendamentos_app/database/models/dao/dao.dart';
 
 class AgendamentoDao extends Dao<Agendamento> {
   @override
