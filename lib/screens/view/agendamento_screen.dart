@@ -1,6 +1,6 @@
 import 'package:agendamentos_app/database/models/agendamento.dart';
 import 'package:agendamentos_app/database/models/dao/agendamento_dao.dart';
-import 'package:agendamentos_app/screens/calendar/calendar2.dart';
+import 'package:agendamentos_app/screens/calendar/calendario.dart';
 import 'package:flutter/material.dart';
 
 class AgendamentoScreen extends StatefulWidget {
@@ -62,7 +62,7 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                     );
                   },
                   title: Text(agendamento.local),
-                  subtitle: Text('${agendamento.data}'),
+                  subtitle: Text('${agendamento.dataInicial}'),
                   trailing: IconButton(
                     onPressed: () {
                       dao.deletar(agendamento);

@@ -1,9 +1,9 @@
-import 'package:agendamentos_app/database/models/dao/promotoria_dao.dart';
-import 'package:agendamentos_app/database/models/promotoria.dart';
-import 'package:agendamentos_app/services/auth_service.dart';
-import 'package:agendamentos_app/database/models/usuario.dart';
-import 'package:agendamentos_app/helpers/validators.dart';
 import 'package:flutter/material.dart';
+import '../../database/models/dao/promotoria_dao.dart';
+import '../../database/models/promotoria.dart';
+import '../../database/models/usuario.dart';
+import '../../helpers/validators.dart';
+import '../../services/auth_service.dart';
 
 class UsuarioCadastro extends StatefulWidget {
   const UsuarioCadastro({super.key});
@@ -17,7 +17,8 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
   final _email = TextEditingController();
   final _senha = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late Usuario user = Usuario(nome: _nome.text, email: _email.text, senha: _senha.text);
+  late Usuario user =
+      Usuario(nome: _nome.text, email: _email.text, senha: _senha.text);
   final daoPromotoria = PromotoriaDao();
   bool _showPass = false;
   bool carregando = false;
@@ -138,21 +139,23 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 controller: _senha,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  labelText: 'Digite a Senha Padrão',
-                  border: const OutlineInputBorder(),
-                  labelStyle: const TextStyle(
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20),
-                  suffixIcon: GestureDetector(
-                    child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
-                    onTap: () {
-                      setState(() {
-                        _showPass = !_showPass;
-                      });
-                    }
-                  )
-                ),
+                    labelText: 'Digite a Senha Padrão',
+                    border: const OutlineInputBorder(),
+                    labelStyle: const TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                    suffixIcon: GestureDetector(
+                        child: Icon(
+                            _showPass == false
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.blue),
+                        onTap: () {
+                          setState(() {
+                            _showPass = !_showPass;
+                          });
+                        })),
                 style: const TextStyle(fontSize: 20),
                 obscureText: _showPass == false ? true : false,
                 validator: (senha) {

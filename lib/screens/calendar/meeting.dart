@@ -1,24 +1,16 @@
-import 'package:flutter/material.dart';
-
 class Meeting {
   Meeting(
-      {required this.data,
-      required this.horaInicio,
-      required this.horaTermino,
-      this.background = Colors.green,
-      this.isAllDay = false,
-      this.local = '',
-      this.startTimeZone = '',
-      this.endTimeZone = '',
+      {this.local = '',
+      required this.dataInicial,
+      required this.dataFinal,
+      this.horaInicio,
+      this.horaTermino,
       this.motorista = ''});
 
-  final DateTime data;
   final String local;
-  final DateTime horaInicio;
-  final DateTime horaTermino;
-  final Color background;
-  final bool isAllDay;
-  final String startTimeZone;
-  final String endTimeZone;
+  final DateTime dataInicial;
+  final DateTime dataFinal;
+  final DateTime? horaInicio;
+  final DateTime? horaTermino;
   final String motorista;
 }

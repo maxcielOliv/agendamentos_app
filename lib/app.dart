@@ -1,6 +1,6 @@
-import 'package:agendamentos_app/utils/temas/dark_theme.dart';
-import 'package:agendamentos_app/utils/temas/light_theme.dart';
 import 'package:flutter/material.dart';
+//import 'package:flutter_localizations/flutter_localizations.dart';
+import 'screens/calendar/agendamento_editor.dart';
 import 'screens/login_page.dart';
 
 class App extends StatelessWidget {
@@ -8,12 +8,19 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Agendamentos App',
       debugShowCheckedModeBanner: false,
       // theme: lightTheme,
       // darkTheme: darkTheme,
-      home: const LoginPage(),
+      /* localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [Locale('pt', 'BR')],*/
+      home: LoginPage(),
+      //home: AgendamentoEditor(),
     );
   }
 }

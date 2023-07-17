@@ -16,14 +16,9 @@ class _MotoristaCadastroState extends State<MotoristaCadastro> {
   late final TextEditingController _celular;
   final _dao = MotoristaDao();
   final _formKey = GlobalKey<FormState>();
-  late final _nomeO;
-  late final _celularO;
-
   @override
   void initState() {
-    _nomeO = widget.motorista?.nome;
     _nome = TextEditingController(text: widget.motorista?.nome);
-    _celularO = widget.motorista?.fone;
     _celular = TextEditingController(text: widget.motorista?.fone);
     super.initState();
   }
@@ -87,18 +82,16 @@ class _MotoristaCadastroState extends State<MotoristaCadastro> {
                 nome: _nome.text,
                 fone: _celular.text,
               );
-              if (_nomeO != _nome.text) {
-                if (await _dao.salvar(motorista)) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        duration: const Duration(seconds: 3),
-                        content: Text(
-                            'Cadastro ${motorista.id == null ? 'criado' : 'atualizado'} com sucesso'),
-                      ),
-                    );
-                    Navigator.of(context).pop();
-                  }
+              if (await _dao.salvar(motorista)) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: const Duration(seconds: 3),
+                      content: Text(
+                          'Cadastro ${motorista.id == null ? 'criado' : 'atualizado'} com sucesso'),
+                    ),
+                  );
+                  Navigator.of(context).pop();
                 }
               }
             }

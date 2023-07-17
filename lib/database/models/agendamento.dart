@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'entity.dart';
 
 class Agendamento extends Entity {
-  final DateTime? data;
+  final DateTime? dataInicial;
+  final DateTime? dataFinal;
   final String local; //
   late String? motorista; //
   late String? veiculo;
@@ -15,7 +16,8 @@ class Agendamento extends Entity {
   Agendamento(
       {super.id,
       super.criacao,
-      this.data,
+      this.dataInicial,
+      this.dataFinal,
       required this.local,
       this.motorista,
       this.veiculo,
@@ -28,7 +30,8 @@ class Agendamento extends Entity {
   @override
   Map<String, dynamic> toFirestore() {
     return {
-      'data': data,
+      'dataInicial': dataInicial,
+      'dataFinal': dataFinal,
       'local': local,
       'motorista': motorista,
       'veiculo': veiculo,
@@ -48,7 +51,8 @@ class Agendamento extends Entity {
     return Agendamento(
         id: snapshot.id,
         criacao: data?['criacao']?.toDate(),
-        data: data?['data'],
+        dataInicial: data?['dataInicial'],
+        dataFinal: data?['dataFinal'],
         local: data?['local'],
         motorista: data?['motorista'],
         veiculo: data?['veiculo'],
@@ -60,6 +64,6 @@ class Agendamento extends Entity {
   }
   @override
   String toString() {
-    return 'Id: ${id ?? '?'} | Data: $data | Local: $local | Motorista: $motorista | Veiculo: $veiculo';
+    return 'Id: ${id ?? '?'} | DataInicial: $dataInicial | DataFinal: $dataFinal  | Local: $local | Motorista: $motorista | Veiculo: $veiculo';
   }
 }

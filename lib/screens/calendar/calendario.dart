@@ -1,4 +1,4 @@
-import 'package:agendamentos_app/screens/calendar/agendamento_Editor.dart';
+import 'package:agendamentos_app/screens/calendar/agendamento_editor.dart';
 import 'package:agendamentos_app/screens/calendar/meeting.dart';
 import 'package:agendamentos_app/screens/calendar/meeting_datasource.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
   void _getAppointments() async {
     final QuerySnapshot result = await FirebaseFirestore.instance
         .collection('agendamento')
-        .orderBy('data')
+        .orderBy('criacao')
         .get();
 
     final List<DocumentSnapshot> documents = result.docs;
@@ -33,13 +33,13 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
         _meetings = documents
             .map(
               (doc) => Meeting(
-                  data: (doc['data']?.toDate()),
-                  horaInicio: (doc['horaInicio']?.toDate()),
-                  horaTermino: (doc['horaTermino']?.toDate()),
-                  local: doc['local'],
-                  background: const Color(0xFF0F8644),
-                  motorista: doc['motorista'],
-                  isAllDay: false),
+                local: doc['local'],
+                dataInicial: (doc['dataInicial']?.toDate()),
+                dataFinal: (doc['dataFinal']?.toDate()),
+                //horaInicio: (doc['horaInicio']?.toDate()),
+                //horaTermino: (doc['horaTermino']?.toDate()),
+                motorista: doc['motorista'],
+              ),
             )
             .toList();
       },
@@ -84,7 +84,7 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
         appointmentBuilder: (context, calendarAppointmentDetails) {
           final Meeting meeting = calendarAppointmentDetails.appointments.first;
           return Container(
-            color: meeting.background.withOpacity(0.8),
+            color: Colors.blue,
             child: Text(
               meeting.motorista,
               style: const TextStyle(color: Colors.black),

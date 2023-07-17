@@ -1,4 +1,3 @@
-// ignore: file_names
 import 'package:agendamentos_app/screens/view/tema_screen.dart';
 import 'package:flutter/material.dart';
 

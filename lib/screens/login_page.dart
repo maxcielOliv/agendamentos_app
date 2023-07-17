@@ -62,15 +62,18 @@ class LoginPage extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.send,
                           decoration: InputDecoration(
-                            labelText: 'Senha',
-                            border: const OutlineInputBorder(),
-                            suffixIcon: GestureDetector(
-                              child: Icon(showPass.value == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
-                              onTap: () {
-                                showPass.value = !showPass.value;
-                              },
-                            )
-                          ),
+                              labelText: 'Senha',
+                              border: const OutlineInputBorder(),
+                              suffixIcon: GestureDetector(
+                                child: Icon(
+                                    showPass.value == false
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.blue),
+                                onTap: () {
+                                  showPass.value = !showPass.value;
+                                },
+                              )),
                           obscureText: showPass.value == false ? true : false,
                         );
                       },
