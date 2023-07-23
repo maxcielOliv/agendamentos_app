@@ -1,61 +1,108 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class CustomLocalNotification {
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  late AndroidNotificationChannel channel;
+class CustomNotification {
+  final int id;
+  final String title;
+  final String body;
+  final String? payload;
+  final RemoteMessage? remoteMessage;
 
-  CustomLocalNotification() {
-    channel = const AndroidNotificationChannel(
-      'high_importance_channel',
-      'High Importance Notifications',
-      description: 'This channel is used for important notifications.',
+  CustomNotification({
+    required this.id,
+    required this.title,
+    required this.body,
+    this.payload,
+    this.remoteMessage,
+  });
+}
+
+String? playload;
+
+class NotificationService {
+  late FlutterLocalNotificationsPlugin localNotificationsPlugin;
+  late AndroidNotificationDetails androidDetails;
+
+  NotificationService() {
+    localNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    _setupAndroidDetails();
+    _setupNotifications();
+  }
+
+  _setupAndroidDetails() {
+    androidDetails = const AndroidNotificationDetails(
+      'lembretes_notifications_details',
+      'Lembretes',
+      channelDescription: 'Este canal é para lembretes!',
       importance: Importance.max,
-    );
-
-    _configuraAndroid().then(
-      (value) {
-        flutterLocalNotificationsPlugin = value;
-        inicializeNotifications();
-      },
+      priority: Priority.max,
+      enableVibration: true,
     );
   }
 
-  Future<FlutterLocalNotificationsPlugin> _configuraAndroid() async {
-    var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
-
-    return flutterLocalNotificationsPlugin;
+  _setupNotifications() async {
+    await _initializeNotifications();
   }
 
-  inicializeNotifications() {
+  _initializeNotifications() async {
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    flutterLocalNotificationsPlugin.initialize(
-      const InitializationSettings(android: android),
+    // Fazer: macOs, iOS, Linux...
+    await localNotificationsPlugin.initialize(
+      const InitializationSettings(
+        android: android,
+      ),
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) {
+        playload;
+      },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
   }
 
-  androidNotification(
-    RemoteNotification notification,
-    AndroidNotification android,
-  ) {
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
+  void notificationTapBackground(NotificationResponse notificationResponse) {
+    print('notification(${notificationResponse.id}) action tapped: '
+        '${notificationResponse.actionId} with'
+        ' payload: ${notificationResponse.payload}');
+    if (notificationResponse.input?.isNotEmpty ?? false) {
+      print(
+          'notification action tapped with input: ${notificationResponse.input}');
+    }
+  }
+
+  // showNotificationScheduled(
+  //     CustomNotification notification, Duration duration) {
+  //   localNotificationsPlugin.zonedSchedule(
+  //     notification.id,
+  //     notification.title,
+  //     notification.body,
+  //     NotificationDetails(
+  //       android: androidDetails,
+  //     ),
+  //     payload: notification.payload,
+  //     uiLocalNotificationDateInterpretation:
+  //         UILocalNotificationDateInterpretation.absoluteTime,
+  //   );
+  // }
+
+  showLocalNotification(CustomNotification notification) {
+    localNotificationsPlugin.show(
+      notification.id,
       notification.title,
       notification.body,
       NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          channelDescription: channel.description,
-          icon: android.smallIcon,
-        ),
+        android: androidDetails,
       ),
+      payload: notification.payload,
     );
+  }
+
+  checkForNotifications() async {
+    final details =
+        await localNotificationsPlugin.getNotificationAppLaunchDetails();
+    //final initialRoute = Navigator.of().pushNamed('routeName');
+    if (details?.didNotificationLaunchApp ?? false) {
+      playload = details!.notificationResponse?.payload;
+    }
   }
 }

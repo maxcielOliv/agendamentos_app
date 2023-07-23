@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +13,7 @@ import '../../database/models/motorista.dart';
 import '../../database/models/promotor.dart';
 import '../../database/models/promotoria.dart';
 import '../../database/models/veiculo.dart';
-import 'cores.dart';
+import '../../services/auth_service.dart';
 
 class AgendamentoEditor extends StatefulWidget {
   final Agendamento? agendamento;
@@ -43,7 +42,7 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
   final veiculoDao = VeiculoDao();
   final promotoriaDao = PromotoriaDao();
   final promotorDao = PromotorDao();
-  //final _usuario = AuthService().user;
+  final _usuario = AuthService().user;
   late Agendamento agendamento = Agendamento(
     local: _local.text,
     dataInicial: _dataInicial,
@@ -57,6 +56,7 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
     promotor: _promotor.text,
     promotoria: _promotoria.text,
     veiculo: _veiculo.text,
+    usuario: _usuario.nome.toString(),
   );
 
   CalendarController calendarController = CalendarController();
@@ -64,13 +64,8 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
   late DateTime _dataFinal = DateTime.now();
   late TimeOfDay _horaInicio = TimeOfDay.now();
   late TimeOfDay _horaTermino = TimeOfDay.now();
-  DateTimeRange selecionaRange =
-      DateTimeRange(start: DateTime.now(), end: DateTime.now());
   @override
   Widget build(BuildContext context) {
-    List<Color> _colorCollection = <Color>[];
-    List<String> _colorNames = <String>[];
-    int _selectedColorIndex = 0;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novo Agendamento'),
@@ -155,19 +150,16 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                         prefixIcon: IconButton(
                           icon: const Icon(Icons.date_range_rounded),
                           onPressed: () async {
-                            final DateTimeRange? date =
-                                await showDateRangePicker(
+                            final DateTime? date = await showDatePicker(
                               context: context,
-                              initialDateRange: selecionaRange,
+                              initialDate: _dataInicial,
                               firstDate: DateTime(1900),
                               lastDate: DateTime(2100),
                             );
                             if (date != null) {
-                              selecionaRange = date;
-                              _dataInicial = date.start;
+                              _dataInicial = date;
                               _dataInicialControle.text =
-                                  DateFormat('d/M/y').format(date.start);
-                              print(_dataInicialControle);
+                                  DateFormat('d/M/y').format(date);
                             }
                           },
                         ),
@@ -186,7 +178,7 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: TextFormField(
-                      controller: _dataInicialControle,
+                      controller: _dataFinalControle,
                       keyboardType: TextInputType.multiline,
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -196,17 +188,15 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                         prefixIcon: IconButton(
                           icon: const Icon(Icons.date_range_rounded),
                           onPressed: () async {
-                            final DateTimeRange? date =
-                                await showDateRangePicker(
-                                    context: context,
-                                    initialDateRange: selecionaRange,
-                                    firstDate: DateTime(1900),
-                                    lastDate: DateTime(2100));
+                            final DateTime? date = await showDatePicker(
+                                context: context,
+                                initialDate: _dataFinal,
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2100));
                             if (date != null) {
-                              selecionaRange = date;
-                              _dataFinal = date.end;
-                              _dataInicialControle.text =
-                                  DateFormat('d/M/y').format(date.end);
+                              _dataFinal = date;
+                              _dataFinalControle.text =
+                                  DateFormat('d/M/y').format(date);
                             }
                           },
                         ),
@@ -245,10 +235,12 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                               initialTime: _horaInicio,
                             );
                             if (time != null) {
-                              setState(() {
-                                _horaInicio = time;
-                                _inicio.text = time.format(context);
-                              });
+                              setState(
+                                () {
+                                  _horaInicio = time;
+                                  _inicio.text = time.format(context);
+                                },
+                              );
                             }
                           },
                         ),
@@ -452,35 +444,16 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                   Checkbox(
                     value: policiamento,
                     onChanged: (bool? value) {
-                      setState(() {
-                        policiamento = value!;
-                        _policiamento.text = policiamento.toString();
-                      });
+                      setState(
+                        () {
+                          policiamento = value!;
+                          _policiamento.text = policiamento.toString();
+                        },
+                      );
                     },
                   ),
                   const Text('Policiamento')
                 ],
-              ),
-              ListTile(
-                contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                leading: Icon(Icons.lens,
-                    color: _colorCollection[_selectedColorIndex]),
-                title: Text(
-                  _colorNames[_selectedColorIndex],
-                ),
-                onTap: () {
-                  showDialog<Widget>(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (BuildContext context) {
-                      return ColorPicker();
-                    },
-                  ).then(
-                    (dynamic value) => setState(
-                      () {},
-                    ),
-                  );
-                },
               ),
             ],
           ),

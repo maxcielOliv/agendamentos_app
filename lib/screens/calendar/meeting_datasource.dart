@@ -1,4 +1,5 @@
 import 'package:agendamentos_app/screens/calendar/meeting.dart';
+import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class DataSource extends CalendarDataSource {
@@ -17,4 +18,9 @@ class DataSource extends CalendarDataSource {
 
   @override
   String getNotes(int index) => appointments![index].motorista;
+
+  // @override
+  // Color getColor(int index) {
+  //   return appointments![index].cor;
+  // }
 }

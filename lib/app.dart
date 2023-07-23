@@ -1,10 +1,24 @@
+import 'package:agendamentos_app/services/custom_local_notification.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_localizations/flutter_localizations.dart';
-import 'screens/calendar/agendamento_editor.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/login_page.dart';
+import 'services/custom_firebase_messaging.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
+
+  void initState() {
+    checkNotifications;
+    checkFirebaseNotifications();
+  }
+
+  checkNotifications() async {
+    await NotificationService().checkForNotifications();
+  }
+
+  checkFirebaseNotifications() async {
+    FirebaseMessagingService(checkNotifications());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +27,13 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // theme: lightTheme,
       // darkTheme: darkTheme,
-      /* localizationsDelegates: [
+      localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [Locale('pt', 'BR')],*/
+      supportedLocales: [Locale('pt', 'BR')],
       home: LoginPage(),
-      //home: AgendamentoEditor(),
     );
   }
 }

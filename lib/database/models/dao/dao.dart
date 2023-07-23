@@ -2,11 +2,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../entity.dart';
 
-class AuthException implements Exception {
-  String mensagem;
-  AuthException(this.mensagem);
-}
-
 abstract class Dao<T extends Entity> {
   final db = FirebaseFirestore.instance;
 

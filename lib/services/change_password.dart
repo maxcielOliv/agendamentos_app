@@ -197,14 +197,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                         _formKeyNewPass2.currentState!.validate()) {
                       changePassword();
                     }
-
-                    /*if (_formKeyPass.currentState!.validate() && _formKeyNewPass.currentState!.validate() && _formKeyNewPass2.currentState!.validate()) {
-                      User? user = FirebaseAuth.instance.currentUser;
-                      AuthCredential credential = EmailAuthProvider.credential(email: user!.email.toString(), password: _passController.text);
-                      user.reauthenticateWithCredential(credential).then((value) {
-                        user.updatePassword(_newPassController.text).then((value) => print('Senha atualizada')).catchError((e) => print(e.toString()));
-                      }).catchError((e) => print(e.toString()));
-                    }*/
                   },
                 ),
               ),

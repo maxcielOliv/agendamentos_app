@@ -1,11 +1,11 @@
+import 'package:agendamentos_app/screens/calendar/mult_calendarios.dart';
+import 'package:agendamentos_app/screens/view/agendamento_screen.dart';
+import 'package:agendamentos_app/screens/view/promotor_screen.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
-import 'calendar/mult_calendarios.dart';
 import 'login_page.dart';
-import 'view/agendamento_screen.dart';
 import 'view/configuraçoes_screen.dart';
 import 'view/motoristas_screen.dart';
-import 'view/promotor_screen.dart';
 import 'view/promotoria_screen.dart';
 import 'view/usuarios_screen.dart';
 import 'view/veiculos_screen.dart';

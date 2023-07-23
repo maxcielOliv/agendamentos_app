@@ -12,6 +12,7 @@ class Agendamento extends Entity {
   final String? policiamento; //
   final String? promotoria; //
   final String? promotor;
+  final String usuario;
 
   Agendamento(
       {super.id,
@@ -25,7 +26,8 @@ class Agendamento extends Entity {
       this.horaTermino,
       this.policiamento,
       this.promotoria,
-      this.promotor});
+      this.promotor,
+      required this.usuario});
 
   @override
   Map<String, dynamic> toFirestore() {
@@ -39,7 +41,8 @@ class Agendamento extends Entity {
       'horaTermino': horaTermino,
       'policiamento': policiamento,
       'promotoria': promotoria,
-      'promotor': promotor
+      'promotor': promotor,
+      'usuario': usuario
     };
   }
 
@@ -60,10 +63,28 @@ class Agendamento extends Entity {
         horaTermino: data?['horaTermino'],
         policiamento: data?['policiamento'],
         promotoria: data?['promotoria'],
-        promotor: data?['promotor']);
+        promotor: data?['promotor'],
+        usuario: data?['usuario']);
   }
   @override
   String toString() {
-    return 'Id: ${id ?? '?'} | DataInicial: $dataInicial | DataFinal: $dataFinal  | Local: $local | Motorista: $motorista | Veiculo: $veiculo';
+    return 'Id: ${id ?? '?'} | DataInicial: $dataInicial | DataFinal: $dataFinal  | Local: $local | Motorista: $motorista | Veiculo: $veiculo | Usuario: $usuario';
+  }
+
+  Agendamento copywith() {
+    return Agendamento(
+        id: id,
+        criacao: criacao,
+        dataInicial: dataInicial,
+        dataFinal: dataFinal,
+        local: local,
+        motorista: motorista,
+        veiculo: veiculo,
+        horaInicio: horaInicio,
+        horaTermino: horaTermino,
+        policiamento: policiamento,
+        promotoria: promotoria,
+        promotor: promotor,
+        usuario: usuario);
   }
 }

@@ -33,11 +33,10 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
         _meetings = documents
             .map(
               (doc) => Meeting(
+                //cor: doc['cor'],
                 local: doc['local'],
                 dataInicial: (doc['dataInicial']?.toDate()),
                 dataFinal: (doc['dataFinal']?.toDate()),
-                //horaInicio: (doc['horaInicio']?.toDate()),
-                //horaTermino: (doc['horaTermino']?.toDate()),
                 motorista: doc['motorista'],
               ),
             )

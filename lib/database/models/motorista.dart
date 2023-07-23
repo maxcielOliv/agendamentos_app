@@ -36,13 +36,10 @@ class Motorista extends Entity {
     return 'Id: ${id ?? '?'} | Nome: $nome | Celular: $fone';
   }
 
-  Motorista copyWith({
-    String? nome,
-    String? fone,
-  }) {
+  Motorista copyWith(String nome) {
     return Motorista(
-      nome: nome ?? this.nome,
-      fone: fone ?? this.fone,
+      nome: nome,
+      fone: fone,
     );
   }
 
@@ -50,8 +47,7 @@ class Motorista extends Entity {
   bool operator ==(covariant Motorista other) {
     if (identical(this, other)) return true;
 
-    return other.nome == nome &&
-        other.fone == fone;
+    return other.nome == nome && other.fone == fone;
   }
 
   @override

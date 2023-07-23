@@ -7,10 +7,10 @@ class MotoristaScreen extends StatefulWidget {
   const MotoristaScreen({super.key});
 
   @override
-  State<MotoristaScreen> createState() => _PromotoriaScreenState();
+  State<MotoristaScreen> createState() => _MotoristaScreenState();
 }
 
-class _PromotoriaScreenState extends State<MotoristaScreen> {
+class _MotoristaScreenState extends State<MotoristaScreen> {
   final _controller = TextEditingController();
   final dao = MotoristaDao();
 
@@ -48,37 +48,34 @@ class _PromotoriaScreenState extends State<MotoristaScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LinearProgressIndicator();
           }
-          final lista = snapshot.data;
-          if (lista != null) {
-            return ListView.separated(
-              itemCount: lista.length,
-              itemBuilder: (context, index) {
-                final motorista = lista[index];
-                return ListTile(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MotoristaCadastro(),
-                      ),
-                    );
+          final lista = snapshot.data ?? [];
+          return ListView.separated(
+            itemCount: lista.length,
+            itemBuilder: (context, index) {
+              final motorista = lista[index];
+              return ListTile(
+                onTap: () {
+                  final _motorista = Navigator.push<Motorista>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MotoristaCadastro(),
+                    ),
+                  );
+                },
+                title: Text(motorista.nome),
+                subtitle: Text('${motorista.fone}'),
+                trailing: IconButton(
+                  onPressed: () {
+                    dao.deletar(motorista);
                   },
-                  title: Text(motorista.nome),
-                  subtitle: Text('${motorista.fone}'),
-                  trailing: IconButton(
-                    onPressed: () {
-                      dao.deletar(motorista);
-                    },
-                    icon: const Icon(Icons.delete_forever_rounded),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) => const Divider(
-                height: 0,
-              ),
-            );
-          }
-          return const Text('Sem dados');
+                  icon: const Icon(Icons.delete_forever_rounded),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) => const Divider(
+              height: 0,
+            ),
+          );
         },
       ),
     );

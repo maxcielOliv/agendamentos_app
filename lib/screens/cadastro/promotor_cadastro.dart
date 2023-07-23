@@ -15,7 +15,8 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
   final _nome = TextEditingController();
   final _matricula = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late Promotor promotor = Promotor(nome: _nome.text, matricula: _matricula.text);
+  late Promotor promotor =
+      Promotor(nome: _nome.text, matricula: _matricula.text);
   final daoPromotor = PromotorDao();
   final daoPromotoria = PromotoriaDao();
 
@@ -34,6 +35,7 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: promotor.nome,
                   controller: _nome,
                   keyboardType: TextInputType.name,
                   validator: (value) {
@@ -58,11 +60,11 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
                     return null;
                   },
                   decoration: const InputDecoration(
-                    labelText: 'Matrícula',
-                    border: OutlineInputBorder(),
-                    hintText: '999.9999'
-                    //icon: Icon(Icons.contact_phone_rounded),
-                  ),
+                      labelText: 'Matrícula',
+                      border: OutlineInputBorder(),
+                      hintText: '999.9999'
+                      //icon: Icon(Icons.contact_phone_rounded),
+                      ),
                 ),
                 const SizedBox(height: 10),
                 StreamBuilder<List<Promotoria>>(

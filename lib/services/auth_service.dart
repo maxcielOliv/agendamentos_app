@@ -18,8 +18,6 @@ class AuthService extends ChangeNotifier {
 
   late Usuario user;
 
-  //User? get user => _auth.currentUser;
-
   Future<bool> login(String email, String senha) async {
     try {
       final UserCredential result =
@@ -32,14 +30,14 @@ class AuthService extends ChangeNotifier {
 
       return true;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'invalid-email') {
+      if (e.message == 'auth/invalid-email') {
         throw AuthException('E-mail inválido');
-      } else if (e.code == 'user-not-found') {
+      } else if (e.message == 'user-not-found') {
         throw AuthException('E-mail não encontrado. Cadastre-se.');
-      } else if (e.code == 'wrong-password') {
+      } else if (e.message == 'auth/wrong-password') {
         throw AuthException('Senha incorreta');
       }
-      throw AuthException('Erro desconhecido');
+      throw AuthException('Digite e-mail e senha');
     }
   }
 
@@ -73,5 +71,9 @@ class AuthService extends ChangeNotifier {
       user = Usuario.fromDocument(docUser);
       notifyListeners();
     }
+  }
+
+  Future<void> deletar() async {
+    final user = FirebaseAuth.instance.authStateChanges();
   }
 }

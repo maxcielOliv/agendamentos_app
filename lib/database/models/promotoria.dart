@@ -25,4 +25,8 @@ class Promotoria extends Entity {
   String toString() {
     return 'Id: ${id ?? '?'} | Nome: $nome ';
   }
+
+  Promotoria copywith() {
+    return Promotoria(id: id, criacao: criacao, nome: nome);
+  }
 }

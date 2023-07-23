@@ -22,11 +22,4 @@ class MotoristaDao extends Dao<Motorista> {
         .snapshots()
         .map((e) => e.docs.map((e) => Motorista.fromFirestore(e)).toList());
   }
-
-  @override
-  // ignore: override_on_non_overriding_member
-  Stream<List<Motorista>> getNome() async* {
-    yield* db.collection('motorista').snapshots().map(
-        (e) => e.docs.map((e) => Motorista.fromFirestore(e['nome'])).toList());
-  }
 }

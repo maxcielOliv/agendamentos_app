@@ -56,6 +56,14 @@ class _PromotoriaScreenState extends State<PromotoriaScreen> {
               itemBuilder: (context, index) {
                 final promotoria = lista[index];
                 return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PromotoriaCadastro(),
+                      ),
+                    );
+                  },
                   title: Text(promotoria.nome),
                   subtitle: Text('${promotoria.criacao}'),
                   trailing: IconButton(

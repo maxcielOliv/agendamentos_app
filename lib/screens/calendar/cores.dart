@@ -9,12 +9,31 @@ class ColorPicker extends StatefulWidget {
   }
 }
 
+List<Color> _colorCollection = <Color>[];
+List<String> _colorNames = <String>[];
+int _selectedColorIndex = 0;
+
 class _ColorPickerState extends State<ColorPicker> {
   @override
   Widget build(BuildContext context) {
-    List<Color> _colorCollection = <Color>[];
-    List<String> _colorNames = <String>[];
-    int _selectedColorIndex = 0;
+    _colorCollection.add(const Color(0xFF0F8644));
+    _colorCollection.add(const Color(0xFF8B1FA9));
+    _colorCollection.add(const Color(0xFFD20100));
+    _colorCollection.add(const Color(0xFFFC571D));
+    _colorCollection.add(const Color(0xFF85461E));
+    _colorCollection.add(const Color(0xFFFF00FF));
+    _colorCollection.add(const Color(0xFF3D4FB5));
+    //_colorCollection.add(const Color(0xFFE47C73));
+    //.add(const Color(0xFF636363));
+    _colorNames.add('Verde');
+    _colorNames.add('Roxo');
+    _colorNames.add('Vermelho');
+    _colorNames.add('Laranja');
+    _colorNames.add('Marrom');
+    _colorNames.add('Magenta');
+    _colorNames.add('Azul');
+    //_colorNames.add('Peach');
+    //_colorNames.add('Gray');
     return AlertDialog(
       content: Container(
         width: double.maxFinite,
@@ -34,12 +53,9 @@ class _ColorPickerState extends State<ColorPicker> {
                     _selectedColorIndex = index;
                   },
                 );
-
-                // ignore: always_specify_types
                 Future.delayed(
                   const Duration(milliseconds: 200),
                   () {
-                    // When task is over, close the dialog
                     Navigator.pop(context);
                   },
                 );

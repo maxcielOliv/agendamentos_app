@@ -46,37 +46,34 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LinearProgressIndicator();
           }
-          final lista = snapshot.data;
-          if (lista != null) {
-            return ListView.separated(
-              itemCount: lista.length,
-              itemBuilder: (context, index) {
-                final agendamento = lista[index];
-                return ListTile(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AgendamentoCadastro(),
-                      ),
-                    );
+          final lista = snapshot.data ?? [];
+          return ListView.separated(
+            itemCount: lista.length,
+            itemBuilder: (context, index) {
+              final agendamento = lista[index];
+              return ListTile(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AgendamentoCadastro(),
+                    ),
+                  );
+                },
+                title: Text(agendamento.local),
+                subtitle: Text('${agendamento.dataInicial}'),
+                trailing: IconButton(
+                  onPressed: () {
+                    dao.deletar(agendamento);
                   },
-                  title: Text(agendamento.local),
-                  subtitle: Text('${agendamento.dataInicial}'),
-                  trailing: IconButton(
-                    onPressed: () {
-                      dao.deletar(agendamento);
-                    },
-                    icon: const Icon(Icons.delete_forever_rounded),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) => const Divider(
-                height: 0,
-              ),
-            );
-          }
-          return const Text('Sem dados');
+                  icon: const Icon(Icons.delete_forever_rounded),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) => const Divider(
+              height: 0,
+            ),
+          );
         },
       ),
     );

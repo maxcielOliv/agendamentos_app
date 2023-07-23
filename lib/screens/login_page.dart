@@ -120,7 +120,7 @@ class LoginPage extends StatelessWidget {
                               }
                             } on AuthException catch (e) {
                               carregando.value = false;
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              await ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(e.mensagem),
                                   backgroundColor: Colors.red,
