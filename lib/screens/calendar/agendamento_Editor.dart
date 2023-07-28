@@ -1,8 +1,8 @@
+import 'package:agendamentos_app/screens/calendar/cores.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../database/models/agendamento.dart';
 import '../../database/models/dao/agendamento_dao.dart';
 import '../../database/models/dao/motorista_dao.dart';
@@ -15,57 +15,64 @@ import '../../database/models/promotoria.dart';
 import '../../database/models/veiculo.dart';
 import '../../services/auth_service.dart';
 
-class AgendamentoEditor extends StatefulWidget {
-  final Agendamento? agendamento;
-  const AgendamentoEditor({super.key, this.agendamento});
-
-  @override
-  AgendamentoEditorState createState() => AgendamentoEditorState();
-}
-
-class AgendamentoEditorState extends State<AgendamentoEditor> {
+class AgendamentoEditor extends StatelessWidget {
+  final Agendamento? agendamentoValor;
+  const AgendamentoEditor({super.key, this.agendamentoValor});
   final separador = const SizedBox(height: 10);
-  bool policiamento = false;
-  final _formKey = GlobalKey<FormState>();
-  final dao = AgendamentoDao();
-  final _local = TextEditingController();
-  final _dataInicialControle = TextEditingController();
-  final _dataFinalControle = TextEditingController();
-  final _inicio = TextEditingController();
-  final _termino = TextEditingController();
-  final _veiculo = TextEditingController();
-  final _motorista = TextEditingController();
-  final _policiamento = TextEditingController();
-  final _promotoria = TextEditingController();
-  final _promotor = TextEditingController();
-  final motoristaDao = MotoristaDao();
-  final veiculoDao = VeiculoDao();
-  final promotoriaDao = PromotoriaDao();
-  final promotorDao = PromotorDao();
-  final _usuario = AuthService().user;
-  late Agendamento agendamento = Agendamento(
-    local: _local.text,
-    dataInicial: _dataInicial,
-    dataFinal: _dataFinal,
-    horaInicio: DateTime(_dataInicial.year, _dataInicial.month,
-        _dataInicial.day, _horaInicio.hour, _horaInicio.minute),
-    horaTermino: DateTime(_dataFinal.year, _dataFinal.month, _dataFinal.day,
-        _horaTermino.hour, _horaTermino.minute),
-    motorista: _motorista.text,
-    policiamento: _policiamento.text,
-    promotor: _promotor.text,
-    promotoria: _promotoria.text,
-    veiculo: _veiculo.text,
-    usuario: _usuario.nome.toString(),
-  );
 
-  CalendarController calendarController = CalendarController();
-  late DateTime _dataInicial = DateTime.now();
-  late DateTime _dataFinal = DateTime.now();
-  late TimeOfDay _horaInicio = TimeOfDay.now();
-  late TimeOfDay _horaTermino = TimeOfDay.now();
   @override
   Widget build(BuildContext context) {
+    final dataInicial = ValueNotifier<DateTime>(
+        agendamentoValor!.dataInicial ?? DateTime.now());
+    final dataFinal = ValueNotifier<DateTime>(DateTime.now());
+    final horaInicio = ValueNotifier<TimeOfDay>(TimeOfDay.now());
+    final horaTermino = ValueNotifier<TimeOfDay>(TimeOfDay.now());
+
+    final isPoliciamento = ValueNotifier<bool>(false);
+    final formKey = GlobalKey<FormState>();
+    final dao = AgendamentoDao();
+    final local = TextEditingController(text: agendamentoValor?.local);
+    final dataInicialControle = TextEditingController();
+    final dataFinalControle = TextEditingController();
+    final inicio = TextEditingController();
+    final termino = TextEditingController();
+    final veiculoControler =
+        TextEditingController(text: agendamentoValor?.veiculo);
+    final motorista = TextEditingController(text: agendamentoValor?.motorista);
+    final policiamento = TextEditingController();
+    final promotoria =
+        TextEditingController(text: agendamentoValor?.promotoria);
+    final promotor = TextEditingController(text: agendamentoValor?.promotor);
+    final motoristaDao = MotoristaDao();
+    final veiculoDao = VeiculoDao();
+    final promotoriaDao = PromotoriaDao();
+    final promotorDao = PromotorDao();
+    final usuario = AuthService().user;
+    late Agendamento agendamento = Agendamento(
+      id: agendamentoValor?.id,
+      local: local.text,
+      dataInicial: dataInicial.value,
+      dataFinal: dataFinal.value,
+      horaInicio: DateTime(
+          dataInicial.value.year,
+          dataInicial.value.month,
+          dataInicial.value.day,
+          horaInicio.value.hour,
+          horaInicio.value.minute),
+      horaTermino: DateTime(
+          dataFinal.value.year,
+          dataFinal.value.month,
+          dataFinal.value.day,
+          horaTermino.value.hour,
+          horaTermino.value.minute),
+      motorista: motorista.text,
+      policiamento: policiamento.text,
+      promotor: promotor.text,
+      promotoria: promotoria.text,
+      veiculo: veiculoControler.text,
+      usuario: usuario!.nome.toString(),
+    );
+    print(dataInicial);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novo Agendamento'),
@@ -86,18 +93,20 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
               color: Colors.white,
             ),
             onPressed: () async {
-              if (_formKey.currentState!.validate()) {
+              if (formKey.currentState!.validate()) {
                 if (await dao.salvar(agendamento)) {
-                  if (mounted) {
+                  if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Cadastro realizado com sucesso'),
+                      SnackBar(
+                        duration: const Duration(seconds: 3),
+                        content: Text(
+                            'Cadastro ${agendamento.id == null ? 'criado' : 'atualizado'} com sucesso'),
                       ),
                     );
                     Navigator.pop(context);
                   }
                 } else {
-                  if (mounted) {
+                  if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Ocorreu um Erro!'),
@@ -114,12 +123,12 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                controller: _local,
+                controller: local,
                 keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.home),
@@ -139,78 +148,90 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Expanded(
-                    child: TextFormField(
-                      controller: _dataInicialControle,
-                      keyboardType: TextInputType.multiline,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        DataInputFormatter(),
-                      ],
-                      decoration: InputDecoration(
-                        prefixIcon: IconButton(
-                          icon: const Icon(Icons.date_range_rounded),
-                          onPressed: () async {
-                            final DateTime? date = await showDatePicker(
-                              context: context,
-                              initialDate: _dataInicial,
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime(2100),
-                            );
-                            if (date != null) {
-                              _dataInicial = date;
-                              _dataInicialControle.text =
-                                  DateFormat('d/M/y').format(date);
-                            }
-                          },
-                        ),
-                        border: const OutlineInputBorder(),
-                        label: const Text('Data Inicial'),
-                        hintText: 'dd/mm/aaaa',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Informe uma data';
-                        }
-                        return null;
-                      },
-                    ),
+                    child: AnimatedBuilder(
+                        animation: dataInicial,
+                        builder: (context, child) {
+                          return TextFormField(
+                            controller: dataInicialControle,
+                            keyboardType: TextInputType.multiline,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              DataInputFormatter(),
+                            ],
+                            decoration: InputDecoration(
+                              //labelText: 'Data Inicial',
+                              prefixIcon: IconButton(
+                                icon: const Icon(Icons.date_range_rounded),
+                                onPressed: () async {
+                                  final DateTime? date = await showDatePicker(
+                                    context: context,
+                                    initialDate: dataInicial.value,
+                                    firstDate: DateTime(1900),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (date != null) {
+                                    dataInicial.value = date;
+                                    dataInicialControle.text =
+                                        //DateFormat('d/M/y').format(date);
+                                        DateFormat.yMd('pt_BR').format(date);
+                                  }
+                                },
+                              ),
+                              border: const OutlineInputBorder(),
+                              label: const Text('Data Inicial'),
+                              hintText: 'dd/mm/aaaa',
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Informe uma data';
+                              }
+                              return null;
+                            },
+                          );
+                        }),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: TextFormField(
-                      controller: _dataFinalControle,
-                      keyboardType: TextInputType.multiline,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        DataInputFormatter(),
-                      ],
-                      decoration: InputDecoration(
-                        prefixIcon: IconButton(
-                          icon: const Icon(Icons.date_range_rounded),
-                          onPressed: () async {
-                            final DateTime? date = await showDatePicker(
-                                context: context,
-                                initialDate: _dataFinal,
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2100));
-                            if (date != null) {
-                              _dataFinal = date;
-                              _dataFinalControle.text =
-                                  DateFormat('d/M/y').format(date);
-                            }
-                          },
-                        ),
-                        border: const OutlineInputBorder(),
-                        label: const Text('Data Final'),
-                        hintText: 'dd/mm/aaaa',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Informe uma data';
-                        }
-                        return null;
-                      },
-                    ),
+                    child: AnimatedBuilder(
+                        animation: dataFinal,
+                        builder: (context, snapshot) {
+                          return TextFormField(
+                            controller: dataFinalControle,
+                            keyboardType: TextInputType.multiline,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              DataInputFormatter(),
+                            ],
+                            decoration: InputDecoration(
+                              //labelText: 'Data Final',
+                              prefixIcon: IconButton(
+                                icon: const Icon(Icons.date_range_rounded),
+                                onPressed: () async {
+                                  final DateTime? date = await showDatePicker(
+                                      context: context,
+                                      initialDate: dataFinal.value,
+                                      firstDate: DateTime(1900),
+                                      lastDate: DateTime(2100));
+                                  if (date != null) {
+                                    dataFinal.value = date;
+                                    dataFinalControle.text =
+                                        //DateFormat('d/M/y').format(date);
+                                        DateFormat.yMd('pt_BR').format(date);
+                                  }
+                                },
+                              ),
+                              border: const OutlineInputBorder(),
+                              label: const Text('Data Final'),
+                              hintText: 'dd/mm/aaaa',
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Informe uma data';
+                              }
+                              return null;
+                            },
+                          );
+                        }),
                   ),
                 ],
               ),
@@ -219,81 +240,83 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Expanded(
-                    child: TextFormField(
-                      controller: _inicio,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        HoraInputFormatter(),
-                      ],
-                      keyboardType: TextInputType.multiline,
-                      decoration: InputDecoration(
-                        prefixIcon: IconButton(
-                          icon: const Icon(Icons.access_time_rounded),
-                          onPressed: () async {
-                            final TimeOfDay? time = await showTimePicker(
-                              context: context,
-                              initialTime: _horaInicio,
-                            );
-                            if (time != null) {
-                              setState(
-                                () {
-                                  _horaInicio = time;
-                                  _inicio.text = time.format(context);
+                    child: AnimatedBuilder(
+                        animation: horaInicio,
+                        builder: (context, snapshot) {
+                          return TextFormField(
+                            controller: inicio,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              HoraInputFormatter(),
+                            ],
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                              //labelText: 'Hora Inicio',
+                              prefixIcon: IconButton(
+                                icon: const Icon(Icons.access_time_rounded),
+                                onPressed: () async {
+                                  final TimeOfDay? time = await showTimePicker(
+                                    context: context,
+                                    initialTime: horaInicio.value,
+                                  );
+                                  if (time != null) {
+                                    horaInicio.value = time;
+                                    inicio.text = time.format(context);
+                                  }
                                 },
-                              );
-                            }
-                          },
-                        ),
-                        border: const OutlineInputBorder(),
-                        label: const Text('Início'),
-                        hintText: 'hh:mm',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Informe uma hora';
-                        }
-                        return null;
-                      },
-                    ),
+                              ),
+                              border: const OutlineInputBorder(),
+                              label: const Text('Início'),
+                              hintText: 'hh:mm',
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Informe uma hora';
+                              }
+                              return null;
+                            },
+                          );
+                        }),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: TextFormField(
-                      controller: _termino,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        HoraInputFormatter(),
-                      ],
-                      keyboardType: TextInputType.multiline,
-                      decoration: InputDecoration(
-                        prefixIcon: IconButton(
-                          icon: const Icon(Icons.access_time_rounded),
-                          onPressed: () async {
-                            final TimeOfDay? time = await showTimePicker(
-                              context: context,
-                              initialTime: _horaTermino,
-                            );
-                            if (time != null) {
-                              setState(
-                                () {
-                                  _horaTermino = time;
-                                  _termino.text = time.format(context);
+                    child: AnimatedBuilder(
+                        animation: horaTermino,
+                        builder: (context, snapshot) {
+                          return TextFormField(
+                            controller: termino,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              HoraInputFormatter(),
+                            ],
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                              //labelText: 'Hora Término',
+                              prefixIcon: IconButton(
+                                icon: const Icon(Icons.access_time_rounded),
+                                onPressed: () async {
+                                  final TimeOfDay? time = await showTimePicker(
+                                    context: context,
+                                    initialTime: horaTermino.value,
+                                  );
+                                  if (time != null) {
+                                    horaTermino.value = time;
+                                    termino.text = time.format(context);
+                                  }
                                 },
-                              );
-                            }
-                          },
-                        ),
-                        border: const OutlineInputBorder(),
-                        label: const Text('Término'),
-                        hintText: 'hh:mm',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Informe uma hora';
-                        }
-                        return null;
-                      },
-                    ),
+                              ),
+                              border: const OutlineInputBorder(),
+                              label: const Text('Término'),
+                              hintText: 'hh:mm',
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Informe uma hora';
+                              }
+                              return null;
+                            },
+                          );
+                        }),
                   ),
                 ],
               ),
@@ -317,7 +340,8 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                   }
                   return SizedBox(
                     width: 280,
-                    child: DropdownButtonFormField<String>(
+                    child: DropdownButtonFormField(
+                      //value: agendamentoValor?.veiculo,
                       isExpanded: true,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.drive_eta_outlined),
@@ -325,8 +349,8 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                       ),
                       hint: const Text('Veiculo'),
                       items: veiculoItens,
-                      onChanged: (String? motoristaValue) {
-                        _veiculo.text = motoristaValue!;
+                      onChanged: (String? veiculoValue) {
+                        veiculoControler.text = veiculoValue!;
                       },
                     ),
                   );
@@ -353,15 +377,17 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                   return SizedBox(
                     width: 280,
                     child: DropdownButtonFormField(
+                      value: agendamentoValor?.motorista,
                       isExpanded: true,
                       decoration: const InputDecoration(
+                        //labelText: 'Motorista',
                         prefixIcon: Icon(Icons.sports_motorsports_outlined),
                         border: OutlineInputBorder(),
                       ),
                       hint: const Text('Motorista'),
                       items: motoristaItens,
                       onChanged: (String? veiculoValue) {
-                        _motorista.text = veiculoValue!;
+                        motorista.text = veiculoValue!;
                       },
                     ),
                   );
@@ -388,15 +414,17 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                   return SizedBox(
                     width: 280,
                     child: DropdownButtonFormField(
+                      value: agendamentoValor?.promotoria,
                       isExpanded: true,
                       decoration: const InputDecoration(
+                        //labelText: 'Promotoria',
                         prefixIcon: Icon(Icons.home_outlined),
                         border: OutlineInputBorder(),
                       ),
                       hint: const Text('Promotoria'),
                       items: promotoriaItens,
                       onChanged: (String? promotoriaValue) {
-                        _promotoria.text = promotoriaValue!;
+                        promotoria.text = promotoriaValue!;
                       },
                     ),
                   );
@@ -423,15 +451,17 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                   return SizedBox(
                     width: 280,
                     child: DropdownButtonFormField(
+                      value: agendamentoValor?.promotor,
                       isExpanded: true,
                       decoration: const InputDecoration(
+                        //labelText: 'Promotor',
                         prefixIcon: Icon(Icons.person_2_rounded),
                         border: OutlineInputBorder(),
                       ),
                       hint: const Text('Promotor'),
                       items: promotorItens,
                       onChanged: (String? promotorValue) {
-                        _promotor.text = promotorValue!;
+                        promotor.text = promotorValue!;
                       },
                     ),
                   );
@@ -441,19 +471,30 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Checkbox(
-                    value: policiamento,
-                    onChanged: (bool? value) {
-                      setState(
-                        () {
-                          policiamento = value!;
-                          _policiamento.text = policiamento.toString();
-                        },
-                      );
-                    },
-                  ),
+                  AnimatedBuilder(
+                      animation: isPoliciamento,
+                      builder: (context, snapshot) {
+                        return Checkbox(
+                          value: isPoliciamento.value,
+                          onChanged: (bool? value) {
+                            isPoliciamento.value = value!;
+                            policiamento.text = isPoliciamento.toString();
+                          },
+                        );
+                      }),
                   const Text('Policiamento')
                 ],
+              ),
+              separador,
+              ListTile(
+                title: const Text('Prioridade'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const Cores(),
+                    ),
+                  );
+                },
               ),
             ],
           ),

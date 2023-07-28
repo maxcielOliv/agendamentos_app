@@ -96,13 +96,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               height: 60,
               alignment: Alignment.centerLeft,
               decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    stops: [0.3, 1],
-                    colors: [Colors.red, Colors.blue],
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  stops: [0.3, 1],
+                  colors: [Colors.red, Colors.blue],
+                ),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
               child: SizedBox.expand(
                 child: TextButton(
                   child: const Text(

@@ -2,30 +2,17 @@ import 'package:agendamentos_app/database/models/dao/usuario_dao.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
 import 'package:agendamentos_app/screens/cadastro/usuario_cadastro.dart';
 import 'package:agendamentos_app/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UsuarioScreen extends StatefulWidget {
-  const UsuarioScreen({super.key});
-
-  @override
-  State<UsuarioScreen> createState() => _UsuarioScreenState();
-}
-
-class _UsuarioScreenState extends State<UsuarioScreen> {
-  final _controller = TextEditingController();
-  final dao = UsuarioDao();
-  final _auth = AuthService();
-  final user = User;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class UsuarioScreen extends StatelessWidget {
+  final Usuario? usuario;
+  const UsuarioScreen({super.key, this.usuario});
 
   @override
   Widget build(BuildContext context) {
+    final dao = UsuarioDao();
+    final auth = AuthService();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Usuários'),
@@ -68,9 +55,7 @@ class _UsuarioScreenState extends State<UsuarioScreen> {
                     },
                     icon: const Icon(Icons.delete_forever_rounded),
                   ),
-                  onTap: () {
-                    _auth.deletar();
-                  },
+                  onTap: () {},
                 );
               },
               separatorBuilder: (context, index) => const Divider(

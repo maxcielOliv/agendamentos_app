@@ -1,29 +1,26 @@
-import 'package:agendamentos_app/database/models/dao/promotor_dao.dart';
-import 'package:agendamentos_app/database/models/dao/promotoria_dao.dart';
-import 'package:agendamentos_app/database/models/promotor.dart';
-import 'package:agendamentos_app/database/models/promotoria.dart';
 import 'package:flutter/material.dart';
 
-class PromotorCadastro extends StatefulWidget {
-  const PromotorCadastro({super.key});
+import '../../database/models/dao/promotor_dao.dart';
+import '../../database/models/dao/promotoria_dao.dart';
+import '../../database/models/promotor.dart';
+import '../../database/models/promotoria.dart';
 
-  @override
-  State<PromotorCadastro> createState() => _PromotorCadastroState();
-}
-
-class _PromotorCadastroState extends State<PromotorCadastro> {
-  final _nome = TextEditingController();
-  final _matricula = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  late Promotor promotor =
-      Promotor(nome: _nome.text, matricula: _matricula.text);
-  final daoPromotor = PromotorDao();
-  final daoPromotoria = PromotoriaDao();
+class PromotorCadastro extends StatelessWidget {
+  final Promotor? promotorValor;
+  const PromotorCadastro({super.key, this.promotorValor});
 
   @override
   Widget build(BuildContext context) {
+    final nome = TextEditingController(text: promotorValor?.nome);
+    final matricula = TextEditingController(text: promotorValor?.matricula);
+    final formKey = GlobalKey<FormState>();
+    final daoPromotor = PromotorDao();
+    final daoPromotoria = PromotoriaDao();
+    late Promotor promotor =
+        Promotor(nome: nome.text, matricula: matricula.text);
+
     return Form(
-      key: _formKey,
+      key: formKey,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Cadastro de Promotores'),
@@ -35,8 +32,7 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
             child: Column(
               children: [
                 TextFormField(
-                  initialValue: promotor.nome,
-                  controller: _nome,
+                  controller: nome,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -51,7 +47,7 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
-                  controller: _matricula,
+                  controller: matricula,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -62,9 +58,7 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
                   decoration: const InputDecoration(
                       labelText: 'Matrícula',
                       border: OutlineInputBorder(),
-                      hintText: '999.9999'
-                      //icon: Icon(Icons.contact_phone_rounded),
-                      ),
+                      hintText: '999.9999'),
                 ),
                 const SizedBox(height: 10),
                 StreamBuilder<List<Promotoria>>(
@@ -85,13 +79,15 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
                       }
                     }
                     return SizedBox(
-                      //width: 380,
                       child: DropdownButtonFormField<String>(
+                        value: promotorValor?.lotacao,
                         icon: const Icon(Icons.account_balance),
                         onSaved: (lotacao) => promotor.lotacao = lotacao,
                         isExpanded: true,
                         decoration: const InputDecoration(
-                            labelText: 'Lotação', border: OutlineInputBorder()),
+                          labelText: 'Lotação',
+                          border: OutlineInputBorder(),
+                        ),
                         hint: const Text('Lotação'),
                         items: promotoriaItens,
                         onChanged: (usuarioValue) {},
@@ -106,11 +102,15 @@ class _PromotorCadastroState extends State<PromotorCadastro> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.red,
           onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              _formKey.currentState?.save();
+            if (formKey.currentState!.validate()) {
+              formKey.currentState?.save();
               daoPromotor.salvar(promotor);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Cadastro realizado com sucesso')),
+                SnackBar(
+                  duration: const Duration(seconds: 3),
+                  content: Text(
+                      'Cadastro ${promotor.id == null ? 'criado' : 'atualizado'} com sucesso'),
+                ),
               );
               Navigator.of(context).pop();
             }

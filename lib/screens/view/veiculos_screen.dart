@@ -3,25 +3,13 @@ import 'package:agendamentos_app/database/models/veiculo.dart';
 import 'package:agendamentos_app/screens/cadastro/veiculos_cadastro.dart';
 import 'package:flutter/material.dart';
 
-class VeiculoScreen extends StatefulWidget {
-  const VeiculoScreen({super.key});
-
-  @override
-  State<VeiculoScreen> createState() => _VeiculoScreenState();
-}
-
-class _VeiculoScreenState extends State<VeiculoScreen> {
-  final _controller = TextEditingController();
-  final dao = VeiculoDao();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class VeiculoScreen extends StatelessWidget {
+  final Veiculo? veiculo;
+  const VeiculoScreen({super.key, this.veiculo});
 
   @override
   Widget build(BuildContext context) {
+    final dao = VeiculoDao();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Veículos'),
@@ -63,6 +51,16 @@ class _VeiculoScreenState extends State<VeiculoScreen> {
                     },
                     icon: const Icon(Icons.delete_forever_rounded),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VeiculosCadastro(
+                          veiculoValor: veiculo,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
               separatorBuilder: (context, index) => const Divider(

@@ -3,23 +3,15 @@ import 'package:agendamentos_app/database/models/dao/agendamento_dao.dart';
 import 'package:agendamentos_app/screens/calendar/calendario.dart';
 import 'package:flutter/material.dart';
 
-class AgendamentoScreen extends StatefulWidget {
-  const AgendamentoScreen({super.key});
+import '../calendar/agendamento_editor.dart';
 
-  @override
-  State<AgendamentoScreen> createState() => _AgendamentoScreenState();
-}
-
-class _AgendamentoScreenState extends State<AgendamentoScreen> {
-  final dao = AgendamentoDao();
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+class AgendamentoScreen extends StatelessWidget {
+  final AgendamentoScreen? agendamentoScreen;
+  const AgendamentoScreen({super.key, this.agendamentoScreen});
 
   @override
   Widget build(BuildContext context) {
+    final dao = AgendamentoDao();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Agendamentos'),
@@ -56,7 +48,9 @@ class _AgendamentoScreenState extends State<AgendamentoScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const AgendamentoCadastro(),
+                      builder: (context) => AgendamentoEditor(
+                        agendamentoValor: agendamento,
+                      ),
                     ),
                   );
                 },

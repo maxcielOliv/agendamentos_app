@@ -1,30 +1,20 @@
-import 'package:agendamentos_app/database/models/dao/promotoria_dao.dart';
-import 'package:agendamentos_app/database/models/promotoria.dart';
 import 'package:flutter/material.dart';
+import '../../database/models/dao/promotoria_dao.dart';
+import '../../database/models/promotoria.dart';
 
-class PromotoriaCadastro extends StatefulWidget {
-  const PromotoriaCadastro({super.key});
-
-  @override
-  State<PromotoriaCadastro> createState() => _PromotoriaCadastroState();
-}
-
-class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
-  final _nome = TextEditingController();
-  late Promotoria promotoria = Promotoria(nome: _nome.text);
-  final dao = PromotoriaDao();
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _nome.dispose();
-    super.dispose();
-  }
+class PromotoriaCadastro extends StatelessWidget {
+  final Promotoria? promotoriaValor;
+  const PromotoriaCadastro({super.key, this.promotoriaValor});
 
   @override
   Widget build(BuildContext context) {
+    final nome = TextEditingController(text: promotoriaValor?.nome);
+    late Promotoria promotoria =
+        Promotoria(id: promotoriaValor?.id, nome: nome.text);
+    final dao = PromotoriaDao();
+    final formKey = GlobalKey<FormState>();
     return Form(
-      key: _formKey,
+      key: formKey,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Cadastro de Promotoria'),
@@ -36,7 +26,7 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
             child: Column(
               children: [
                 TextFormField(
-                  controller: _nome,
+                  controller: nome,
                   keyboardType: TextInputType.name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -56,10 +46,14 @@ class _PromotoriaCadastroState extends State<PromotoriaCadastro> {
         ),
         floatingActionButton: ElevatedButton(
           onPressed: () {
-            if (_formKey.currentState!.validate()) {
+            if (formKey.currentState!.validate()) {
               dao.salvar(promotoria);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Cadastro realizado com sucesso')),
+                SnackBar(
+                  duration: const Duration(seconds: 3),
+                  content: Text(
+                      'Cadastro ${promotoria.id == null ? 'criado' : 'atualizado'} com sucesso'),
+                ),
               );
               Navigator.of(context).pop();
             }

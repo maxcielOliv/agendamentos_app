@@ -1,7 +1,7 @@
+import 'package:agendamentos_app/screens/view/auth_page.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/reset_password_page.dart';
-import 'home_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -52,6 +52,12 @@ class LoginPage extends StatelessWidget {
                               color: Theme.of(context).colorScheme.secondary),
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Informe um E-mail';
+                        }
+                        return null;
+                      },
                     ),
                     separador,
                     AnimatedBuilder(
@@ -62,26 +68,32 @@ class LoginPage extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.send,
                           decoration: InputDecoration(
-                              labelText: 'Senha',
-                              border: const OutlineInputBorder(),
-                              suffixIcon: GestureDetector(
-                                child: Icon(
-                                    showPass.value == false
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                    color: Colors.blue),
-                                onTap: () {
-                                  showPass.value = !showPass.value;
-                                },
-                              )),
+                            labelText: 'Senha',
+                            border: const OutlineInputBorder(),
+                            suffixIcon: GestureDetector(
+                              child: Icon(
+                                  showPass.value == false
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: Colors.blue),
+                              onTap: () {
+                                showPass.value = !showPass.value;
+                              },
+                            ),
+                          ),
                           obscureText: showPass.value == false ? true : false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Informe uma senha';
+                            }
+                            return null;
+                          },
                         );
                       },
                     ),
                   ],
                 ),
               ),
-              // separador,
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -113,14 +125,14 @@ class LoginPage extends StatelessWidget {
                               if (context.mounted) {
                                 Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
-                                    builder: (context) => const HomePage(),
+                                    builder: (context) => const AuthPage(),
                                   ),
                                   (route) => false,
                                 );
                               }
                             } on AuthException catch (e) {
                               carregando.value = false;
-                              await ScaffoldMessenger.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(e.mensagem),
                                   backgroundColor: Colors.red,

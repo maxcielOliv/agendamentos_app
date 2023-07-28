@@ -3,25 +3,13 @@ import 'package:agendamentos_app/database/models/motorista.dart';
 import 'package:agendamentos_app/screens/cadastro/motorista_cadastro.dart';
 import 'package:flutter/material.dart';
 
-class MotoristaScreen extends StatefulWidget {
-  const MotoristaScreen({super.key});
-
-  @override
-  State<MotoristaScreen> createState() => _MotoristaScreenState();
-}
-
-class _MotoristaScreenState extends State<MotoristaScreen> {
-  final _controller = TextEditingController();
-  final dao = MotoristaDao();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class MotoristaScreen extends StatelessWidget {
+  final Motorista? motorista;
+  const MotoristaScreen({super.key, this.motorista});
 
   @override
   Widget build(BuildContext context) {
+    final dao = MotoristaDao();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Motoristas'),
@@ -55,10 +43,12 @@ class _MotoristaScreenState extends State<MotoristaScreen> {
               final motorista = lista[index];
               return ListTile(
                 onTap: () {
-                  final _motorista = Navigator.push<Motorista>(
+                  Navigator.push<Motorista>(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MotoristaCadastro(),
+                      builder: (context) => MotoristaCadastro(
+                        motoristaValor: motorista,
+                      ),
                     ),
                   );
                 },

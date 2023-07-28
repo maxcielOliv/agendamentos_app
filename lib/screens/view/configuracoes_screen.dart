@@ -1,16 +1,12 @@
+import 'package:agendamentos_app/screens/calendar/cores.dart';
 import 'package:flutter/material.dart';
-
 import '../../services/change_password.dart';
 import 'tema_screen.dart';
 
-class Configuracoes extends StatefulWidget {
-  const Configuracoes({super.key});
+class Configuracoes extends StatelessWidget {
+  final Configuracoes? configuracoes;
+  const Configuracoes({super.key, this.configuracoes});
 
-  @override
-  State<Configuracoes> createState() => _ConfiguracoesState();
-}
-
-class _ConfiguracoesState extends State<Configuracoes> {
   @override
   Widget build(BuildContext context) {
     const separador = SizedBox(height: 10);
@@ -41,6 +37,18 @@ class _ConfiguracoesState extends State<Configuracoes> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const TemaScreen(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.phone_android_rounded),
+            title: const Text('Cores'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Cores(),
                 ),
               );
             },

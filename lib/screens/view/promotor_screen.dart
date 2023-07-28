@@ -3,25 +3,13 @@ import 'package:agendamentos_app/database/models/promotor.dart';
 import 'package:agendamentos_app/screens/cadastro/promotor_cadastro.dart';
 import 'package:flutter/material.dart';
 
-class PromotorScreen extends StatefulWidget {
-  const PromotorScreen({super.key});
-
-  @override
-  State<PromotorScreen> createState() => _PromotorScreenState();
-}
-
-class _PromotorScreenState extends State<PromotorScreen> {
-  final _controller = TextEditingController();
-  final dao = PromotorDao();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class PromotorScreen extends StatelessWidget {
+  final Promotor? promotor;
+  const PromotorScreen({super.key, this.promotor});
 
   @override
   Widget build(BuildContext context) {
+    final dao = PromotorDao();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Promotores de Justiça'),
@@ -63,6 +51,16 @@ class _PromotorScreenState extends State<PromotorScreen> {
                     },
                     icon: const Icon(Icons.delete_forever_rounded),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PromotorCadastro(
+                          promotorValor: promotor,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
               separatorBuilder: (context, index) => const Divider(

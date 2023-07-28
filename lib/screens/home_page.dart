@@ -1,10 +1,10 @@
 import 'package:agendamentos_app/screens/calendar/mult_calendarios.dart';
 import 'package:agendamentos_app/screens/view/agendamento_screen.dart';
+import 'package:agendamentos_app/screens/view/configuracoes_screen.dart';
 import 'package:agendamentos_app/screens/view/promotor_screen.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'login_page.dart';
-import 'view/configuraçoes_screen.dart';
 import 'view/motoristas_screen.dart';
 import 'view/promotoria_screen.dart';
 import 'view/usuarios_screen.dart';
@@ -32,12 +32,33 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.zero,
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text(
-                'Olá, ' '${AuthService().user.nome?.toUpperCase()}',
-                style: TextStyle(
-                    backgroundColor: Theme.of(context).colorScheme.secondary),
+              accountName: AnimatedBuilder(
+                  animation: AuthService(),
+                  builder: (context, child) {
+                    if (AuthService().user != null) {
+                      return Text(
+                        'Olá, ' '${AuthService().user!.nome?.toUpperCase()}',
+                        style: TextStyle(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary),
+                      );
+                    }
+                    return Text(
+                      'nome',
+                      style: TextStyle(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary),
+                    );
+                  }),
+              accountEmail: AnimatedBuilder(
+                animation: AuthService(),
+                builder: (context, child) {
+                  if (AuthService().user != null) {
+                    return Text(AuthService().user!.email!);
+                  }
+                  return const Text('Email');
+                },
               ),
-              accountEmail: Text(AuthService().user.email!),
               currentAccountPicture: const CircleAvatar(
                 child: Icon(Icons.account_circle_rounded, size: 54),
               ),
@@ -151,12 +172,22 @@ class _HomePageState extends State<HomePage> {
             children: [
               Column(
                 children: [
-                  Text(
-                    'Bem-Vindo, '
-                    '${AuthService().user.nome?.toUpperCase()}!',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
+                  AnimatedBuilder(
+                      animation: AuthService(),
+                      builder: (context, child) {
+                        if (AuthService().user != null) {
+                          return Text(
+                            'Bem-Vindo, ${AuthService().user!.nome?.toUpperCase()}!',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          );
+                        }
+                        return const Text(
+                          'Bem-Vindo !',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        );
+                      }),
                   const SizedBox(height: 20),
                   const Text('Escolha uma Tarefa',
                       style:

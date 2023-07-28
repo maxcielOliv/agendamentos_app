@@ -1,7 +1,7 @@
+import 'package:agendamentos_app/screens/view/auth_page.dart';
 import 'package:agendamentos_app/services/custom_local_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'screens/login_page.dart';
 import 'services/custom_firebase_messaging.dart';
 
 class App extends StatelessWidget {
@@ -33,7 +33,7 @@ class App extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [Locale('pt', 'BR')],
-      home: LoginPage(),
+      home: AuthPage(),
     );
   }
 }

@@ -16,28 +16,29 @@ class AuthService extends ChangeNotifier {
   final _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  late Usuario user;
+  Usuario? user;
+
+  //User? get user => _auth.currentUser;
 
   Future<bool> login(String email, String senha) async {
     try {
       final UserCredential result =
           await _auth.signInWithEmailAndPassword(email: email, password: senha);
-      await _loadCurrentUser(firebaseuser: result.user);
-
-      result.user!.uid;
-
-      user.saveToken(result.user!.uid);
-
+      if (await _loadCurrentUser(firebaseuser: result.user)) {
+        user?.saveToken(result.user!.uid);
+      } else {
+        return false;
+      }
       return true;
     } on FirebaseAuthException catch (e) {
-      if (e.message == 'auth/invalid-email') {
+      if (e.code == 'invalid-email') {
         throw AuthException('E-mail inválido');
-      } else if (e.message == 'user-not-found') {
+      } else if (e.code == 'user-not-found') {
         throw AuthException('E-mail não encontrado. Cadastre-se.');
-      } else if (e.message == 'auth/wrong-password') {
+      } else if (e.code == 'wrong-password') {
         throw AuthException('Senha incorreta');
       }
-      throw AuthException('Digite e-mail e senha');
+      throw AuthException('Erro desconhecido');
     }
   }
 
@@ -63,17 +64,15 @@ class AuthService extends ChangeNotifier {
     await _auth.signOut();
   }
 
-  Future<void> _loadCurrentUser({User? firebaseuser}) async {
+  Future<bool> _loadCurrentUser({User? firebaseuser}) async {
     final User? currentUser = firebaseuser ?? _auth.currentUser;
     if (currentUser != null) {
       final DocumentSnapshot<Map<String, dynamic>> docUser =
           await _db.collection('usuario').doc(currentUser.uid).get();
       user = Usuario.fromDocument(docUser);
       notifyListeners();
+      return true;
     }
-  }
-
-  Future<void> deletar() async {
-    final user = FirebaseAuth.instance.authStateChanges();
+    return false;
   }
 }

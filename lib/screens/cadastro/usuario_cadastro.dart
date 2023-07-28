@@ -5,28 +5,23 @@ import '../../database/models/usuario.dart';
 import '../../helpers/validators.dart';
 import '../../services/auth_service.dart';
 
-class UsuarioCadastro extends StatefulWidget {
-  const UsuarioCadastro({super.key});
-
-  @override
-  State<UsuarioCadastro> createState() => _UsuarioCadastroState();
-}
-
-class _UsuarioCadastroState extends State<UsuarioCadastro> {
-  final _nome = TextEditingController();
-  final _email = TextEditingController();
-  final _senha = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  late Usuario user =
-      Usuario(nome: _nome.text, email: _email.text, senha: _senha.text);
-  final daoPromotoria = PromotoriaDao();
-  bool _showPass = false;
-  bool carregando = false;
+class UsuarioCadastro extends StatelessWidget {
+  final Usuario? user;
+  const UsuarioCadastro({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
+    final nome = TextEditingController();
+    final email = TextEditingController();
+    final senha = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    late Usuario user =
+        Usuario(nome: nome.text, email: email.text, senha: senha.text);
+    final daoPromotoria = PromotoriaDao();
+    bool showPass = false;
+    bool carregando = false;
     return Form(
-      key: _formKey,
+      key: formKey,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Cadastro de Usuários'),
@@ -54,7 +49,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 height: 10,
               ),
               TextFormField(
-                controller: _nome,
+                controller: nome,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                     labelText: 'Nome Completo',
@@ -77,7 +72,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 height: 10,
               ),
               TextFormField(
-                controller: _email,
+                controller: email,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: 'E-mail',
@@ -136,28 +131,26 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
               ),
               const SizedBox(height: 10),
               TextFormField(
-                controller: _senha,
+                controller: senha,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                    labelText: 'Digite a Senha Padrão',
-                    border: const OutlineInputBorder(),
-                    labelStyle: const TextStyle(
-                        color: Colors.black38,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20),
-                    suffixIcon: GestureDetector(
-                        child: Icon(
-                            _showPass == false
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.blue),
-                        onTap: () {
-                          setState(() {
-                            _showPass = !_showPass;
-                          });
-                        })),
+                  labelText: 'Digite a Senha Padrão',
+                  border: const OutlineInputBorder(),
+                  labelStyle: const TextStyle(
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20),
+                  suffixIcon: GestureDetector(
+                    child: Icon(
+                        showPass == false
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.blue),
+                    onTap: () {},
+                  ),
+                ),
                 style: const TextStyle(fontSize: 20),
-                obscureText: _showPass == false ? true : false,
+                obscureText: showPass == false ? true : false,
                 validator: (senha) {
                   if (senha!.isEmpty) {
                     return 'Campo obrigatório';
@@ -210,8 +203,8 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                             ],
                     ),
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState?.save();
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState?.save();
                         AuthService().signUp(user: user);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

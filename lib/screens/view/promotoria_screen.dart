@@ -3,25 +3,13 @@ import 'package:agendamentos_app/database/models/promotoria.dart';
 import 'package:agendamentos_app/screens/cadastro/promotoria_cadastro.dart';
 import 'package:flutter/material.dart';
 
-class PromotoriaScreen extends StatefulWidget {
-  const PromotoriaScreen({super.key});
-
-  @override
-  State<PromotoriaScreen> createState() => _PromotoriaScreenState();
-}
-
-class _PromotoriaScreenState extends State<PromotoriaScreen> {
-  final _controller = TextEditingController();
-  final dao = PromotoriaDao();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+class PromotoriaScreen extends StatelessWidget {
+  final Promotoria? promotoria;
+  const PromotoriaScreen({super.key, this.promotoria});
 
   @override
   Widget build(BuildContext context) {
+    final dao = PromotoriaDao();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Promotorias de Justiça / Coordenação'),
@@ -60,7 +48,9 @@ class _PromotoriaScreenState extends State<PromotoriaScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PromotoriaCadastro(),
+                        builder: (context) => PromotoriaCadastro(
+                          promotoriaValor: promotoria,
+                        ),
                       ),
                     );
                   },
