@@ -72,7 +72,7 @@ class AgendamentoEditor extends StatelessWidget {
       veiculo: veiculoControler.text,
       usuario: usuario!.nome.toString(),
     );
-    print(dataInicial);
+    print(usuario!.nome);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novo Agendamento'),

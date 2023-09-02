@@ -1,5 +1,4 @@
 import 'package:agendamentos_app/utils/temas/dark_theme.dart';
-import 'package:agendamentos_app/utils/temas/light_theme.dart';
 import 'package:flutter/material.dart';
 
 class TemaScreen extends StatefulWidget {
@@ -9,11 +8,10 @@ class TemaScreen extends StatefulWidget {
   State<TemaScreen> createState() => _TemaScreenState();
 }
 
-List<ThemeData> temas = [darkTheme, lightTheme];
+List<ThemeData> temas = [temaEscuro, temaEscuro];
 
 class _TemaScreenState extends State<TemaScreen> {
   ThemeData temaSelecionado = temas[0];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

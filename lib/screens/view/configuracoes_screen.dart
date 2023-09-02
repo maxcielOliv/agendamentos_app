@@ -1,4 +1,5 @@
 import 'package:agendamentos_app/screens/calendar/cores.dart';
+import 'package:agendamentos_app/screens/view/teste.dart';
 import 'package:flutter/material.dart';
 import '../../services/change_password.dart';
 import 'tema_screen.dart';
@@ -52,7 +53,19 @@ class Configuracoes extends StatelessWidget {
                 ),
               );
             },
-          )
+          ),
+          ListTile(
+            leading: const Icon(Icons.abc),
+            title: const Text('Cores'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Teste(),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

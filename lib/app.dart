@@ -1,39 +1,31 @@
+import 'package:agendamentos_app/screens/view/agendamento_screen.dart';
 import 'package:agendamentos_app/screens/view/auth_page.dart';
-import 'package:agendamentos_app/services/custom_local_notification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'services/custom_firebase_messaging.dart';
+import 'utils/temas/dark_theme.dart';
+import 'utils/temas/light_theme.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 class App extends StatelessWidget {
   const App({super.key});
 
-  void initState() {
-    checkNotifications;
-    checkFirebaseNotifications();
-  }
-
-  checkNotifications() async {
-    await NotificationService().checkForNotifications();
-  }
-
-  checkFirebaseNotifications() async {
-    FirebaseMessagingService(checkNotifications());
-  }
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Agendamentos App',
       debugShowCheckedModeBanner: false,
-      // theme: lightTheme,
-      // darkTheme: darkTheme,
-      localizationsDelegates: [
+      theme: temaClaro,
+      darkTheme: temaEscuro,
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [Locale('pt', 'BR')],
-      home: AuthPage(),
+      supportedLocales: const [Locale('pt', 'BR')],
+      home: const AuthPage(),
+      navigatorKey: navigatorKey,
+      routes: {'/agendamento_screen': (context) => const AgendamentoScreen()},
     );
   }
 }

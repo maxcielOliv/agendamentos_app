@@ -1,57 +1,31 @@
+import 'package:agendamentos_app/app.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'custom_local_notification.dart';
 
-class FirebaseMessagingService {
-  final NotificationService _notificationService;
+class FirebaseApi {
+  final _firebaseMessaging = FirebaseMessaging.instance;
 
-  FirebaseMessagingService(this._notificationService);
+  Future<void> initNotifications() async {
+    await _firebaseMessaging.requestPermission();
 
-  Future<void> initialize() async {
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      badge: true,
-      sound: true,
-      alert: true,
+    final fCMToken = await _firebaseMessaging.getToken();
+
+    print('Token: $fCMToken');
+
+    initPushNotifications();
+  }
+
+  void handleMessage(RemoteMessage? message) {
+    if (message == null) return;
+
+    navigatorKey.currentState?.pushNamed(
+      '/agendamento_screen',
+      arguments: message,
     );
-    getDeviceFirebaseToken();
-    _onMessage();
-    _onMessageOpenedApp();
   }
 
-  getDeviceFirebaseToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    debugPrint('=======================================');
-    debugPrint('TOKEN: $token');
-    debugPrint('=======================================');
-  }
+  Future initPushNotifications() async {
+    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
 
-  _onMessage() {
-    FirebaseMessaging.onMessage.listen((message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-
-      if (notification != null && android != null) {
-        _notificationService.showLocalNotification(
-          CustomNotification(
-            id: android.hashCode,
-            title: notification.title!,
-            body: notification.body!,
-            payload: message.data['route'] ?? '',
-          ),
-        );
-      }
-    });
-  }
-
-  _onMessageOpenedApp() {
-    FirebaseMessaging.onMessageOpenedApp.listen(_goToPageAfterMessage);
-  }
-
-  _goToPageAfterMessage(message) {
-    final String route = message.data['route'] ?? '';
-    if (route.isNotEmpty) {
-      //Routes.navigatorKey?.currentState?.pushNamed(route);
-    }
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
   }
 }

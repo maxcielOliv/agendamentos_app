@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-ThemeData darkTheme = ThemeData(
+ThemeData temaEscuro = ThemeData(
   brightness: Brightness.dark,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.black,

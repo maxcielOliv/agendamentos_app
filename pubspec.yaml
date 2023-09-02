@@ -12,14 +12,15 @@ dependencies:
 
 
   cloud_firestore: ^4.8.3
-  firebase_core: ^2.15.0
-  firebase_auth: ^4.7.0
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.9.0
   syncfusion_flutter_calendar: ^22.1.38
-  firebase_messaging: ^14.6.5
+  firebase_messaging: ^14.6.7
   intl: ^0.18.0
-  firebase_storage: ^11.2.5
+  firebase_storage: ^11.2.6
   flutter_local_notifications: ^15.1.0+1
-  brasil_fields: ^1.13.1
+  brasil_fields: ^1.14.0
+  syncfusion_flutter_pdfviewer: ^22.2.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

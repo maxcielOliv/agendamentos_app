@@ -1,7 +1,6 @@
 import 'package:agendamentos_app/database/models/dao/usuario_dao.dart';
 import 'package:agendamentos_app/database/models/usuario.dart';
 import 'package:agendamentos_app/screens/cadastro/usuario_cadastro.dart';
-import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class UsuarioScreen extends StatelessWidget {
@@ -11,7 +10,6 @@ class UsuarioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dao = UsuarioDao();
-    final auth = AuthService();
 
     return Scaffold(
       appBar: AppBar(
