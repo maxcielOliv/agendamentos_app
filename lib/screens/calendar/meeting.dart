@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Meeting {
-  Meeting({
-    this.local = '',
-    required this.dataInicial,
-    required this.dataFinal,
-    this.horaInicio,
-    this.horaTermino,
-    this.motorista = '',
-    this.usuario = '',
-    //this.cor
-  });
+  Meeting(
+      {this.local = '',
+      required this.dataInicial,
+      required this.dataFinal,
+      this.horaInicio,
+      this.horaTermino,
+      this.motorista = '',
+      this.usuario = '',
+      //this.cor
+      this.veiculo = ''});
 
   final String local;
   final DateTime dataInicial;
@@ -19,5 +19,6 @@ class Meeting {
   final DateTime? horaTermino;
   final String motorista;
   final String usuario;
+  final String veiculo;
   // final Color? cor;
 }

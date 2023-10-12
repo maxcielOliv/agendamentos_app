@@ -43,20 +43,8 @@ class Configuracoes extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.phone_android_rounded),
-            title: const Text('Cores'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Cores(),
-                ),
-              );
-            },
-          ),
-          ListTile(
             leading: const Icon(Icons.abc),
-            title: const Text('Cores'),
+            title: const Text('PDF'),
             onTap: () {
               Navigator.push(
                 context,

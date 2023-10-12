@@ -27,7 +27,6 @@ class VeiculosCadastro extends StatelessWidget {
         modelo: modelo.text,
         placa: placa.text,
         motorista: motoristaControler.text);
-    print(motoristaControler.text.substring(0, 4));
     return Form(
       key: formKey,
       child: Scaffold(
@@ -110,7 +109,6 @@ class VeiculosCadastro extends StatelessWidget {
                         value: veiculoValor?.motorista,
                         isExpanded: true,
                         decoration: const InputDecoration(
-                          //prefixIcon: Icon(Icons.sports_motorsports_outlined),
                           border: OutlineInputBorder(),
                         ),
                         hint: const Text('Motorista'),

@@ -33,12 +33,13 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
         _meetings = documents
             .map(
               (doc) => Meeting(
-                //cor: doc['cor'],
-                local: doc['local'],
-                dataInicial: (doc['dataInicial']?.toDate()),
-                dataFinal: (doc['dataFinal']?.toDate()),
-                motorista: doc['motorista'],
-              ),
+                  //cor: doc['cor'],
+                  local: doc['local'],
+                  dataInicial: (doc['dataInicial']?.toDate()),
+                  dataFinal: (doc['dataFinal']?.toDate()),
+                  motorista: doc['motorista'],
+                  veiculo: doc['veiculo'],
+                  usuario: doc['usuario']),
             )
             .toList();
       },
@@ -69,8 +70,8 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
         view: CalendarView.month,
         controller: calendarController,
         allowedViews: const [
+          CalendarView.day,
           CalendarView.week,
-          CalendarView.timelineWeek,
           CalendarView.month
         ],
         dataSource: DataSource(_meetings),
@@ -105,7 +106,7 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
           return AlertDialog(
             title: const Text('Detalhes da Missão'),
             content: Text(
-                "Missão: ${meeting.local}\nMotorista: ${meeting.motorista}"),
+                "Missão: ${meeting.local}\nMotorista: ${meeting.motorista} \nVeiculo: ${meeting.veiculo} \nAgendado por: ${meeting.usuario}"),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

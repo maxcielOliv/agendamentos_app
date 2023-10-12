@@ -72,7 +72,6 @@ class AgendamentoEditor extends StatelessWidget {
       veiculo: veiculoControler.text,
       usuario: usuario!.nome.toString(),
     );
-    print(usuario!.nome);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novo Agendamento'),
@@ -159,7 +158,6 @@ class AgendamentoEditor extends StatelessWidget {
                               DataInputFormatter(),
                             ],
                             decoration: InputDecoration(
-                              //labelText: 'Data Inicial',
                               prefixIcon: IconButton(
                                 icon: const Icon(Icons.date_range_rounded),
                                 onPressed: () async {
@@ -172,7 +170,6 @@ class AgendamentoEditor extends StatelessWidget {
                                   if (date != null) {
                                     dataInicial.value = date;
                                     dataInicialControle.text =
-                                        //DateFormat('d/M/y').format(date);
                                         DateFormat.yMd('pt_BR').format(date);
                                   }
                                 },
@@ -193,45 +190,44 @@ class AgendamentoEditor extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: AnimatedBuilder(
-                        animation: dataFinal,
-                        builder: (context, snapshot) {
-                          return TextFormField(
-                            controller: dataFinalControle,
-                            keyboardType: TextInputType.multiline,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              DataInputFormatter(),
-                            ],
-                            decoration: InputDecoration(
-                              //labelText: 'Data Final',
-                              prefixIcon: IconButton(
-                                icon: const Icon(Icons.date_range_rounded),
-                                onPressed: () async {
-                                  final DateTime? date = await showDatePicker(
-                                      context: context,
-                                      initialDate: dataFinal.value,
-                                      firstDate: DateTime(1900),
-                                      lastDate: DateTime(2100));
-                                  if (date != null) {
-                                    dataFinal.value = date;
-                                    dataFinalControle.text =
-                                        //DateFormat('d/M/y').format(date);
-                                        DateFormat.yMd('pt_BR').format(date);
-                                  }
-                                },
-                              ),
-                              border: const OutlineInputBorder(),
-                              label: const Text('Data Final'),
-                              hintText: 'dd/mm/aaaa',
+                      animation: dataFinal,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          controller: dataFinalControle,
+                          keyboardType: TextInputType.multiline,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            DataInputFormatter(),
+                          ],
+                          decoration: InputDecoration(
+                            prefixIcon: IconButton(
+                              icon: const Icon(Icons.date_range_rounded),
+                              onPressed: () async {
+                                final DateTime? date = await showDatePicker(
+                                    context: context,
+                                    initialDate: dataFinal.value,
+                                    firstDate: DateTime(1900),
+                                    lastDate: DateTime(2100));
+                                if (date != null) {
+                                  dataFinal.value = date;
+                                  dataFinalControle.text =
+                                      DateFormat.yMd('pt_BR').format(date);
+                                }
+                              },
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Informe uma data';
-                              }
-                              return null;
-                            },
-                          );
-                        }),
+                            border: const OutlineInputBorder(),
+                            label: const Text('Data Final'),
+                            hintText: 'dd/mm/aaaa',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Informe uma data';
+                            }
+                            return null;
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -241,82 +237,82 @@ class AgendamentoEditor extends StatelessWidget {
                 children: [
                   Expanded(
                     child: AnimatedBuilder(
-                        animation: horaInicio,
-                        builder: (context, snapshot) {
-                          return TextFormField(
-                            controller: inicio,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              HoraInputFormatter(),
-                            ],
-                            keyboardType: TextInputType.multiline,
-                            decoration: InputDecoration(
-                              //labelText: 'Hora Inicio',
-                              prefixIcon: IconButton(
-                                icon: const Icon(Icons.access_time_rounded),
-                                onPressed: () async {
-                                  final TimeOfDay? time = await showTimePicker(
-                                    context: context,
-                                    initialTime: horaInicio.value,
-                                  );
-                                  if (time != null) {
-                                    horaInicio.value = time;
-                                    inicio.text = time.format(context);
-                                  }
-                                },
-                              ),
-                              border: const OutlineInputBorder(),
-                              label: const Text('Início'),
-                              hintText: 'hh:mm',
+                      animation: horaInicio,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          controller: inicio,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            HoraInputFormatter(),
+                          ],
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                            prefixIcon: IconButton(
+                              icon: const Icon(Icons.access_time_rounded),
+                              onPressed: () async {
+                                final TimeOfDay? time = await showTimePicker(
+                                  context: context,
+                                  initialTime: horaInicio.value,
+                                );
+                                if (time != null) {
+                                  horaInicio.value = time;
+                                  inicio.text = time.format(context);
+                                }
+                              },
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Informe uma hora';
-                              }
-                              return null;
-                            },
-                          );
-                        }),
+                            border: const OutlineInputBorder(),
+                            label: const Text('Início'),
+                            hintText: 'hh:mm',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Informe uma hora';
+                            }
+                            return null;
+                          },
+                        );
+                      },
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: AnimatedBuilder(
-                        animation: horaTermino,
-                        builder: (context, snapshot) {
-                          return TextFormField(
-                            controller: termino,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              HoraInputFormatter(),
-                            ],
-                            keyboardType: TextInputType.multiline,
-                            decoration: InputDecoration(
-                              //labelText: 'Hora Término',
-                              prefixIcon: IconButton(
-                                icon: const Icon(Icons.access_time_rounded),
-                                onPressed: () async {
-                                  final TimeOfDay? time = await showTimePicker(
-                                    context: context,
-                                    initialTime: horaTermino.value,
-                                  );
-                                  if (time != null) {
-                                    horaTermino.value = time;
-                                    termino.text = time.format(context);
-                                  }
-                                },
-                              ),
-                              border: const OutlineInputBorder(),
-                              label: const Text('Término'),
-                              hintText: 'hh:mm',
+                      animation: horaTermino,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          controller: termino,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            HoraInputFormatter(),
+                          ],
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                            prefixIcon: IconButton(
+                              icon: const Icon(Icons.access_time_rounded),
+                              onPressed: () async {
+                                final TimeOfDay? time = await showTimePicker(
+                                  context: context,
+                                  initialTime: horaTermino.value,
+                                );
+                                if (time != null) {
+                                  horaTermino.value = time;
+                                  termino.text = time.format(context);
+                                }
+                              },
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Informe uma hora';
-                              }
-                              return null;
-                            },
-                          );
-                        }),
+                            border: const OutlineInputBorder(),
+                            label: const Text('Término'),
+                            hintText: 'hh:mm',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Informe uma hora';
+                            }
+                            return null;
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
