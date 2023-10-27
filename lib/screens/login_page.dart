@@ -12,8 +12,9 @@ class LoginPage extends StatelessWidget {
     final senha = TextEditingController();
     final formKey = GlobalKey<FormState>();
     final carregando = ValueNotifier<bool>(false);
+    final isChecked = ValueNotifier<bool>(false);
     final showPass = ValueNotifier<bool>(false);
-    const separador = SizedBox(height: 10);
+    const separador = SizedBox(height: 20);
 
     return Scaffold(
       body: SafeArea(
@@ -21,17 +22,21 @@ class LoginPage extends StatelessWidget {
           padding: const EdgeInsets.all(26),
           child: ListView(
             children: [
-              Image.asset('assets/imagens/teste2.png', height: 160, width: 160),
-              const SizedBox(height: 60),
+              //Image.asset('assets/imagens/teste2.png', height: 160, width: 160),
+              const Icon(Icons.account_circle_rounded,
+                  size: 120, color: Color.fromARGB(255, 237, 70, 48)),
+              separador,
               const Column(
                 children: [
                   Text(
-                    'PROMOTORIA DE JUSTIÇA DE ALTAMIRA',
+                    'AGENDAMENTO DE VEÍCULOS E MOTORISTAS',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 20),
                   Text(
-                    'Agendamentos de Veículos',
+                    'Bem-vindo(a)!',
                     style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.left,
                   ),
                 ],
               ),
@@ -94,8 +99,9 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
+              separador,
               Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.center,
                 child: TextButton(
                   child: Text(
                     'Esqueceu sua Senha?',
@@ -110,6 +116,32 @@ class LoginPage extends StatelessWidget {
                     );
                   },
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AnimatedBuilder(
+                    animation: isChecked,
+                    builder: (context, snapshot) {
+                      return GestureDetector(
+                        child: Icon(
+                          isChecked.value == false
+                              ? Icons.check_box_outline_blank_rounded
+                              : Icons.check_box_rounded,
+                          color: Colors.blue,
+                        ),
+                        onTap: () {
+                          isChecked.value = !isChecked.value;
+                        },
+                      );
+                    },
+                  ),
+                  Text(
+                    'Manter E-mail salvo',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                ],
               ),
               const SizedBox(height: 40),
               AnimatedBuilder(

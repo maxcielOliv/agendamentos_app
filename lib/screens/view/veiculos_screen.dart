@@ -3,6 +3,8 @@ import 'package:agendamentos_app/database/models/veiculo.dart';
 import 'package:agendamentos_app/screens/cadastro/veiculos_cadastro.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/auth_service.dart';
+
 class VeiculoScreen extends StatelessWidget {
   final Veiculo? veiculo;
   const VeiculoScreen({super.key, this.veiculo});
@@ -17,17 +19,21 @@ class VeiculoScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const VeiculosCadastro(),
-                ),
+          Builder(builder: ((context) {
+            if (AuthService().adminEnabled) {
+              return IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VeiculosCadastro(),
+                      ));
+                },
               );
-            },
-          ),
+            }
+            return Container();
+          }))
         ],
       ),
       body: StreamBuilder<List<Veiculo>>(
@@ -42,25 +48,28 @@ class VeiculoScreen extends StatelessWidget {
               itemCount: lista.length,
               itemBuilder: (context, index) {
                 final veiculo = lista[index];
+                if (AuthService().adminEnabled) {
+                  return ListTile(
+                      title: Text(veiculo.modelo),
+                      subtitle: Text(veiculo.placa),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete_forever_rounded),
+                        onPressed: () {
+                          dao.deletar(veiculo);
+                        },
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VeiculosCadastro(
+                                      veiculoValor: veiculo,
+                                    )));
+                      });
+                }
                 return ListTile(
                   title: Text(veiculo.modelo),
                   subtitle: Text(veiculo.placa),
-                  trailing: IconButton(
-                    onPressed: () {
-                      dao.deletar(veiculo);
-                    },
-                    icon: const Icon(Icons.delete_forever_rounded),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VeiculosCadastro(
-                          veiculoValor: veiculo,
-                        ),
-                      ),
-                    );
-                  },
                 );
               },
               separatorBuilder: (context, index) => const Divider(

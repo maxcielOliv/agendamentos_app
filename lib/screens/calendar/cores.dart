@@ -37,7 +37,6 @@ class Cores extends StatelessWidget {
                     onTap: () {
                       trocar.value = selecionaCor.value;
                       Navigator.of(context).pop();
-                      print(selecionaCor.value);
                     },
                   );
                 },

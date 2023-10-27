@@ -1,6 +1,7 @@
 import 'package:agendamentos_app/database/models/dao/motorista_dao.dart';
 import 'package:agendamentos_app/database/models/motorista.dart';
 import 'package:agendamentos_app/screens/cadastro/motorista_cadastro.dart';
+import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class MotoristaScreen extends StatelessWidget {
@@ -17,17 +18,21 @@ class MotoristaScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MotoristaCadastro(),
-                ),
+          Builder(builder: ((context) {
+            if (AuthService().adminEnabled) {
+              return IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MotoristaCadastro(),
+                      ));
+                },
               );
-            },
-          ),
+            }
+            return Container();
+          }))
         ],
       ),
       body: StreamBuilder<List<Motorista>>(
@@ -41,25 +46,30 @@ class MotoristaScreen extends StatelessWidget {
             itemCount: lista.length,
             itemBuilder: (context, index) {
               final motorista = lista[index];
+              if (AuthService().adminEnabled) {
+                return ListTile(
+                    onTap: () {
+                      Navigator.push<Motorista>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MotoristaCadastro(
+                            motoristaValor: motorista,
+                          ),
+                        ),
+                      );
+                    },
+                    title: Text(motorista.nome),
+                    subtitle: Text('${motorista.fone}'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete_forever_rounded),
+                      onPressed: () {
+                        dao.deletar(motorista);
+                      },
+                    ));
+              }
               return ListTile(
-                onTap: () {
-                  Navigator.push<Motorista>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MotoristaCadastro(
-                        motoristaValor: motorista,
-                      ),
-                    ),
-                  );
-                },
                 title: Text(motorista.nome),
                 subtitle: Text('${motorista.fone}'),
-                trailing: IconButton(
-                  onPressed: () {
-                    dao.deletar(motorista);
-                  },
-                  icon: const Icon(Icons.delete_forever_rounded),
-                ),
               );
             },
             separatorBuilder: (context, index) => const Divider(

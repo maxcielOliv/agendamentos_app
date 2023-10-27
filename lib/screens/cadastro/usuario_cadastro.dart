@@ -1,27 +1,35 @@
+import 'package:agendamentos_app/database/models/dao/promotoria_dao.dart';
+import 'package:agendamentos_app/database/models/promotoria.dart';
+import 'package:agendamentos_app/services/auth_service.dart';
+import 'package:agendamentos_app/database/models/usuario.dart';
+import 'package:agendamentos_app/helpers/validators.dart';
 import 'package:flutter/material.dart';
-import '../../database/models/dao/promotoria_dao.dart';
-import '../../database/models/promotoria.dart';
-import '../../database/models/usuario.dart';
-import '../../helpers/validators.dart';
-import '../../services/auth_service.dart';
 
-class UsuarioCadastro extends StatelessWidget {
-  final Usuario? user;
-  const UsuarioCadastro({super.key, this.user});
+class UsuarioCadastro extends StatefulWidget {
+  const UsuarioCadastro({super.key});
+
+  @override
+  State<UsuarioCadastro> createState() => _UsuarioCadastroState();
+}
+
+class _UsuarioCadastroState extends State<UsuarioCadastro> {
+  final _nome = TextEditingController();
+  final _email = TextEditingController();
+  final _senha = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  late Usuario user =
+      Usuario(nome: _nome.text, email: _email.text, senha: _senha.text);
+  final daoPromotoria = PromotoriaDao();
+  bool _showPass = false;
+  bool carregando = false;
+
+  List<String> itens = ['Administrador', 'Agendador', 'Comum'];
+  String? selectedItem = 'Administrador';
 
   @override
   Widget build(BuildContext context) {
-    final nome = TextEditingController();
-    final email = TextEditingController();
-    final senha = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-    late Usuario user =
-        Usuario(nome: nome.text, email: email.text, senha: senha.text);
-    final daoPromotoria = PromotoriaDao();
-    bool showPass = false;
-    bool carregando = false;
     return Form(
-      key: formKey,
+      key: _formKey,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Cadastro de Usuários'),
@@ -49,7 +57,7 @@ class UsuarioCadastro extends StatelessWidget {
                 height: 10,
               ),
               TextFormField(
-                controller: nome,
+                controller: _nome,
                 keyboardType: TextInputType.text,
                 decoration: const InputDecoration(
                     labelText: 'Nome Completo',
@@ -72,7 +80,7 @@ class UsuarioCadastro extends StatelessWidget {
                 height: 10,
               ),
               TextFormField(
-                controller: email,
+                controller: _email,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: 'E-mail',
@@ -131,26 +139,28 @@ class UsuarioCadastro extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               TextFormField(
-                controller: senha,
+                controller: _senha,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  labelText: 'Digite a Senha Padrão',
-                  border: const OutlineInputBorder(),
-                  labelStyle: const TextStyle(
-                      color: Colors.black38,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20),
-                  suffixIcon: GestureDetector(
-                    child: Icon(
-                        showPass == false
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Colors.blue),
-                    onTap: () {},
-                  ),
-                ),
+                    labelText: 'Digite a Senha Padrão',
+                    border: const OutlineInputBorder(),
+                    labelStyle: const TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                    suffixIcon: GestureDetector(
+                        child: Icon(
+                            _showPass == false
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.blue),
+                        onTap: () {
+                          setState(() {
+                            _showPass = !_showPass;
+                          });
+                        })),
                 style: const TextStyle(fontSize: 20),
-                obscureText: showPass == false ? true : false,
+                obscureText: _showPass == false ? true : false,
                 validator: (senha) {
                   if (senha!.isEmpty) {
                     return 'Campo obrigatório';
@@ -159,6 +169,27 @@ class UsuarioCadastro extends StatelessWidget {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                child: DropdownButtonFormField<String>(
+                  icon: const Icon(Icons.person_2_rounded),
+                  isExpanded: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Nível', border: OutlineInputBorder()),
+                  hint: const Text('Nível'),
+                  onSaved: (nivel) => user.nivel = nivel,
+                  value: selectedItem,
+                  items: itens
+                      .map((itens) => DropdownMenuItem<String>(
+                            value: itens,
+                            child: Text(itens),
+                          ))
+                      .toList(),
+                  onChanged: (itens) => setState(() {
+                    selectedItem = itens;
+                  }),
+                ),
               ),
               const SizedBox(height: 30),
               Container(
@@ -203,9 +234,18 @@ class UsuarioCadastro extends StatelessWidget {
                             ],
                     ),
                     onPressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        formKey.currentState?.save();
-                        AuthService().signUp(user: user);
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState?.save();
+                        await AuthService().signUp(user: user);
+                        final nivel = user.nivel;
+                        final userId = user.id;
+                        user.saveNivel(userId!, user.nome!, nivel!);
+
+                        /*if (user.nivel == 'Agendador') {
+                          final userId = user.id;
+                          user.saveNivelAgend(userId!, user.nome!);
+                          print('Agendador | Id: $userId');
+                        }*/
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                               content: Text('Cadastro realizado com sucesso')),

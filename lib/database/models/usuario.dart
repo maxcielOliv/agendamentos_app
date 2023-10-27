@@ -8,6 +8,10 @@ class Usuario extends Entity {
   String? senha;
   String? email;
   String? lotacao;
+  String? nivel;
+
+  bool admin = false;
+  bool agendador = false;
 
   Usuario(
       {super.criacao,
@@ -15,11 +19,18 @@ class Usuario extends Entity {
       this.nome,
       this.senha,
       this.email,
-      this.lotacao});
+      this.lotacao,
+      this.nivel});
 
   @override
   Map<String, dynamic> toFirestore() {
-    return {'nome': nome, 'senha': senha, 'email': email, 'lotacao': lotacao};
+    return {
+      'nome': nome,
+      'senha': senha,
+      'email': email,
+      'lotacao': lotacao,
+      'nivel': nivel
+    };
   }
 
   Usuario.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
@@ -29,6 +40,7 @@ class Usuario extends Entity {
     email = data?['email'];
     senha = data?['senha'];
     lotacao = data?['lotacao'];
+    nivel = data?['nivel'];
   }
 
   factory Usuario.fromFirestore(
@@ -41,7 +53,8 @@ class Usuario extends Entity {
         nome: data?['nome'],
         senha: data?['senha'],
         email: data?['email'],
-        lotacao: data?['lotacao']);
+        lotacao: data?['lotacao'],
+        nivel: data?['nivel']);
   }
   @override
   String toString() {
@@ -61,6 +74,7 @@ class Usuario extends Entity {
       'nome': nome,
       'email': email,
       'lotacao': lotacao,
+      'nivel': nivel
     };
   }
 
@@ -68,12 +82,52 @@ class Usuario extends Entity {
     final token = await FirebaseMessaging.instance.getToken();
     final dbReference = FirebaseFirestore.instance.doc('usuario/$id');
     final tokenReference = dbReference.collection('tokens');
-    tokenReference.doc(token).set(
-      {
-        'token': token,
+    tokenReference.doc(token).set({
+      'token': token,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'platform': Platform.operatingSystem,
+    });
+  }
+
+  /*Future<void> saveNivelAdmin(String id, String nome) async {
+    final dbReference = FirebaseFirestore.instance.doc('niveis/admin');
+    final tokenReference = dbReference.collection('admin');
+    tokenReference.doc(id).set({
+      'nome': nome,
+      'userId': id,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }*/
+
+  /*Future<void> saveNivelAgend(String id, String nome) async {
+    final dbReference = FirebaseFirestore.instance.doc('niveis/outros');
+    final tokenReference = dbReference.collection('agendador');
+    tokenReference.doc(id).set({
+      'nome': nome,
+      'userId': id,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }*/
+
+  Future<void> saveNivel(String id, String nome, String nivel) async {
+    if (nivel == 'Administrador') {
+      final dbReference = FirebaseFirestore.instance.doc('niveis/admin');
+      final nivelReference = dbReference.collection('admin');
+      nivelReference.doc(id).set({
+        'nome': nome,
+        'userId': id,
         'updatedAt': FieldValue.serverTimestamp(),
-        'platform': Platform.operatingSystem,
-      },
-    );
+      });
+    }
+
+    if (nivel == 'Agendador') {
+      final dbReference = FirebaseFirestore.instance.doc('niveis/outros');
+      final nivelReference = dbReference.collection('agendador');
+      nivelReference.doc(id).set({
+        'nome': nome,
+        'userId': id,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    }
   }
 }

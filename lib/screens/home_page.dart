@@ -26,6 +26,21 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: const Text('App Agendamentos'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout_rounded),
+            onPressed: () async {
+              await AuthService().logout();
+              if (context.mounted) {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                    (route) => false);
+              }
+            },
+          )
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -75,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
-            ListTile(
+            /*ListTile(
               leading: const Icon(Icons.drive_eta),
               title: const Text('Veículos'),
               onTap: () {
@@ -86,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-            ),
+            ),*/
             ListTile(
               leading: const Icon(Icons.sports_motorsports_outlined),
               title: const Text('Motoristas'),
@@ -99,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
-            ListTile(
+            /*ListTile(
               leading: const Icon(Icons.home_outlined),
               title: const Text('Promotorias'),
               onTap: () {
@@ -122,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-            ),
+            ),*/
             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text('Configurações'),
@@ -135,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
-            ListTile(
+            /*ListTile(
               leading: const Icon(Icons.man_rounded),
               title: const Text('Usuários'),
               onTap: () {
@@ -146,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
-            ),
+            ),*/
             ListTile(
               leading: const Icon(Icons.logout_rounded),
               title: const Text('Sair'),
@@ -162,6 +177,65 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
+            Builder(
+              builder: (context) {
+                if (AuthService().adminEnabled) {
+                  return Column(
+                    children: [
+                      const Divider(height: 10.0, color: Colors.blue,),
+                      ListTile(
+                        leading: const Icon(Icons.drive_eta),
+                        title: const Text('Veículos'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const VeiculoScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.man_rounded),
+                        title: const Text('Usuários'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const UsuarioScreen(),
+                              ));
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.home_outlined),
+                        title: const Text('Promotorias'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PromotoriaScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.person_2_rounded),
+                        title: const Text('Promotores de Justiça'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PromotorScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                }
+                return Container();
+              },
+            )
           ],
         ),
       ),

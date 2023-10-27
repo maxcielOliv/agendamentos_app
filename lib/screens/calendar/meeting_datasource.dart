@@ -19,10 +19,8 @@ class DataSource extends CalendarDataSource {
   @override
   String getNotes(int index) => appointments![index].motorista;
 
-  @override
   String getTeste(int index) => appointments![index].veiculo;
 
-  @override
   String getUsuario(int index) => appointments![index].usuario;
 
   // @override

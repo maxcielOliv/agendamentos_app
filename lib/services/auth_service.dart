@@ -24,11 +24,12 @@ class AuthService extends ChangeNotifier {
     try {
       final UserCredential result =
           await _auth.signInWithEmailAndPassword(email: email, password: senha);
-      if (await _loadCurrentUser(firebaseuser: result.user)) {
-        user?.saveToken(result.user!.uid);
-      } else {
-        return false;
-      }
+      await _loadCurrentUser(firebaseuser: result.user);
+
+      result.user!.uid;
+
+      user?.saveToken(result.user!.uid);
+
       return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email') {
@@ -64,15 +65,38 @@ class AuthService extends ChangeNotifier {
     await _auth.signOut();
   }
 
-  Future<bool> _loadCurrentUser({User? firebaseuser}) async {
+  Future<void> _loadCurrentUser({User? firebaseuser}) async {
     final User? currentUser = firebaseuser ?? _auth.currentUser;
     if (currentUser != null) {
       final DocumentSnapshot<Map<String, dynamic>> docUser =
           await _db.collection('usuario').doc(currentUser.uid).get();
       user = Usuario.fromDocument(docUser);
+
+      final docAdmin = await _db
+          .collection('niveis')
+          .doc('admin')
+          .collection('admin')
+          .doc(user?.id)
+          .get();
+      if (docAdmin.exists) {
+        user?.admin = true;
+      }
+
+      final docAgander = await _db
+          .collection('niveis')
+          .doc('outros')
+          .collection('agendador')
+          .doc(user?.id)
+          .get();
+      if (docAgander.exists) {
+        user?.agendador = true;
+        print('agendador: ${user?.agendador}');
+      }
+
       notifyListeners();
-      return true;
     }
-    return false;
   }
+
+  bool get adminEnabled => user!.admin;
+  bool get agendEnabled => user!.agendador;
 }

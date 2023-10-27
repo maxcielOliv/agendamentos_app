@@ -11,7 +11,7 @@ class PromotoriaCadastro extends StatelessWidget {
     final nome = TextEditingController(text: promotoriaValor?.nome);
     late Promotoria promotoria =
         Promotoria(id: promotoriaValor?.id, nome: nome.text);
-    final DaoPromotoria = PromotoriaDao();
+    final daoPromotoria = PromotoriaDao();
     final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
@@ -47,7 +47,7 @@ class PromotoriaCadastro extends StatelessWidget {
         floatingActionButton: ElevatedButton(
           onPressed: () {
             if (formKey.currentState!.validate()) {
-              DaoPromotoria.salvar(promotoria);
+              daoPromotoria.salvar(promotoria);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   duration: const Duration(seconds: 3),

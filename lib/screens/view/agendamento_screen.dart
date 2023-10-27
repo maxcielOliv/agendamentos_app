@@ -1,6 +1,7 @@
 import 'package:agendamentos_app/database/models/agendamento.dart';
 import 'package:agendamentos_app/database/models/dao/agendamento_dao.dart';
 import 'package:agendamentos_app/screens/calendar/calendario.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 
 import '../calendar/agendamento_editor.dart';
@@ -48,14 +49,14 @@ class AgendamentoScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AgendamentoEditor(
-                        agendamentoValor: agendamento,
-                      ),
+                      builder: (context) => const AgendamentoEditor(
+                          //agendamentoValor: agendamento,
+                          ),
                     ),
                   );
                 },
-                title: Text(agendamento.local),
-                subtitle: Text('${agendamento.dataInicial}'),
+                title: Text('Local: ${agendamento.local}'),
+                subtitle: Text('Data: ${agendamento.dataInicial.toString()}'),
                 trailing: IconButton(
                   onPressed: () {
                     dao.deletar(agendamento);
