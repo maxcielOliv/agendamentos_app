@@ -21,6 +21,8 @@ dependencies:
   flutter_local_notifications: ^15.1.0+1
   brasil_fields: ^1.14.0
   syncfusion_flutter_pdfviewer: ^22.2.5
+  hive: ^2.2.3
+  hive_flutter:
 dev_dependencies:
   flutter_test:
     sdk: flutter

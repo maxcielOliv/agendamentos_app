@@ -4,6 +4,7 @@ import 'package:agendamentos_app/screens/view/configuracoes_screen.dart';
 import 'package:agendamentos_app/screens/view/promotor_screen.dart';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'calendar/calendario.dart';
 import 'login_page.dart';
 import 'view/motoristas_screen.dart';
 import 'view/promotoria_screen.dart';
@@ -280,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                         child: const Column(
                           children: [
                             Icon(
-                              Icons.calendar_month_outlined,
+                              Icons.car_rental_rounded,
                               size: 28,
                               color: Colors.white,
                             ),
@@ -300,6 +301,44 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => const MultCalendarios(),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  InkWell(
+                    child: Card(
+                      color: Colors.red.shade400,
+                      elevation: 50.0,
+                      borderOnForeground: true,
+                      shadowColor: Colors.blue,
+                      child: Container(
+                        height: 100,
+                        width: 200,
+                        padding: const EdgeInsets.all(20),
+                        child: const Column(
+                          children: [
+                            Icon(
+                              Icons.calendar_month_outlined,
+                              size: 28,
+                              color: Colors.white,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Visualizar Calendário',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AgendamentoCadastro(),
                         ),
                       );
                     },

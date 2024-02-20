@@ -51,7 +51,6 @@ class VeiculosCadastro extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Marca/Fabricante',
                     border: OutlineInputBorder(),
-                    icon: Icon(Icons.car_crash_rounded),
                   ),
                 ),
                 separador,
@@ -67,7 +66,6 @@ class VeiculosCadastro extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Modelo',
                     border: OutlineInputBorder(),
-                    icon: Icon(Icons.today),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -83,7 +81,6 @@ class VeiculosCadastro extends StatelessWidget {
                   decoration: const InputDecoration(
                     labelText: 'Placa',
                     border: OutlineInputBorder(),
-                    icon: Icon(Icons.place),
                   ),
                 ),
                 separador,

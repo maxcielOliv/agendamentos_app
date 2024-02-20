@@ -17,8 +17,7 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
   final _email = TextEditingController();
   final _senha = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late Usuario user =
-      Usuario(nome: _nome.text, email: _email.text, senha: _senha.text);
+  late Usuario user = Usuario(nome: _nome.text, email: _email.text, senha: _senha.text);
   final daoPromotoria = PromotoriaDao();
   bool _showPass = false;
   bool carregando = false;
@@ -142,23 +141,21 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                 controller: _senha,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                    labelText: 'Digite a Senha Padrão',
-                    border: const OutlineInputBorder(),
-                    labelStyle: const TextStyle(
-                        color: Colors.black38,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20),
-                    suffixIcon: GestureDetector(
-                        child: Icon(
-                            _showPass == false
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.blue),
-                        onTap: () {
-                          setState(() {
-                            _showPass = !_showPass;
-                          });
-                        })),
+                  labelText: 'Digite a Senha Padrão',
+                  border: const OutlineInputBorder(),
+                  labelStyle: const TextStyle(
+                      color: Colors.black38,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20),
+                  suffixIcon: GestureDetector(
+                    child: Icon(_showPass == false ? Icons.visibility : Icons.visibility_off, color: Colors.blue),
+                    onTap: () {
+                      setState(() {
+                        _showPass = !_showPass;
+                      });
+                    }
+                  )
+                ),
                 style: const TextStyle(fontSize: 20),
                 obscureText: _showPass == false ? true : false,
                 validator: (senha) {
@@ -176,15 +173,17 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                   icon: const Icon(Icons.person_2_rounded),
                   isExpanded: true,
                   decoration: const InputDecoration(
-                      labelText: 'Nível', border: OutlineInputBorder()),
+                    labelText: 'Nível',
+                    border: OutlineInputBorder()
+                  ),
                   hint: const Text('Nível'),
                   onSaved: (nivel) => user.nivel = nivel,
                   value: selectedItem,
                   items: itens
                       .map((itens) => DropdownMenuItem<String>(
-                            value: itens,
-                            child: Text(itens),
-                          ))
+                        value: itens,
+                        child: Text(itens),
+                      ))
                       .toList(),
                   onChanged: (itens) => setState(() {
                     selectedItem = itens;
@@ -237,9 +236,10 @@ class _UsuarioCadastroState extends State<UsuarioCadastro> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState?.save();
                         await AuthService().signUp(user: user);
-                        final nivel = user.nivel;
-                        final userId = user.id;
-                        user.saveNivel(userId!, user.nome!, nivel!);
+                          final nivel = user.nivel;
+                          final userId = user.id;
+                          user.saveNivel(userId!, user.nome!, nivel!);
+                          print('$nivel | Id: $userId');
 
                         /*if (user.nivel == 'Agendador') {
                           final userId = user.id;

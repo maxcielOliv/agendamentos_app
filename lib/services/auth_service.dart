@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+//Classe de autenticação
+//Reponsável por fazer a verificação das informações de login do usuário ao logar no sistema
+//Antes de chegar a tela inicial do programa, todas as informações passarão por essa classe
 class AuthException implements Exception {
   String mensagem;
   AuthException(this.mensagem);
@@ -71,6 +74,7 @@ class AuthService extends ChangeNotifier {
       final DocumentSnapshot<Map<String, dynamic>> docUser =
           await _db.collection('usuario').doc(currentUser.uid).get();
       user = Usuario.fromDocument(docUser);
+      //print(user?.nome);
 
       final docAdmin = await _db
           .collection('niveis')
@@ -80,6 +84,7 @@ class AuthService extends ChangeNotifier {
           .get();
       if (docAdmin.exists) {
         user?.admin = true;
+        //print('administrador: ${user?.admin}');
       }
 
       final docAgander = await _db

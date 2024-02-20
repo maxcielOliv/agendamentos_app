@@ -1,9 +1,9 @@
 import 'package:agendamentos_app/database/models/agendamento.dart';
 import 'package:agendamentos_app/database/models/dao/agendamento_dao.dart';
-import 'package:agendamentos_app/screens/calendar/calendario.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/auth_service.dart';
 import '../calendar/agendamento_editor.dart';
 
 class AgendamentoScreen extends StatelessWidget {
@@ -20,17 +20,18 @@ class AgendamentoScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AgendamentoCadastro(),
-                ),
-              );
-            },
-          ),
+          AuthService().adminEnabled || AuthService().agendEnabled
+              ? IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AgendamentoEditor(),
+                        ));
+                  },
+                )
+              : const SizedBox()
         ],
       ),
       body: StreamBuilder<List<Agendamento>>(
@@ -55,14 +56,28 @@ class AgendamentoScreen extends StatelessWidget {
                     ),
                   );
                 },
-                title: Text('Local: ${agendamento.local}'),
-                subtitle: Text('Data: ${agendamento.dataInicial.toString()}'),
-                trailing: IconButton(
-                  onPressed: () {
-                    dao.deletar(agendamento);
-                  },
-                  icon: const Icon(Icons.delete_forever_rounded),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${agendamento.veiculo?.toUpperCase()}'),
+                    Text('${agendamento.promotoria}'),
+                  ],
                 ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Missão: ${agendamento.local .toString()}', style: const TextStyle(fontWeight: FontWeight.bold),),
+                    Text('Data: ${agendamento.dataInicial.toString()}'),
+                  ],
+                ),
+                trailing: AuthService().adminEnabled
+                        ? IconButton(
+                          icon: const Icon(Icons.delete_forever_rounded),
+                          onPressed: () {
+                            dao.deletar(agendamento);
+                          },
+                        )
+                        : const SizedBox()
               );
             },
             separatorBuilder: (context, index) => const Divider(
@@ -71,6 +86,12 @@ class AgendamentoScreen extends StatelessWidget {
           );
         },
       ),
+      /*floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: AuthService().adminEnabled 
+                ? () => print('admin ok')
+                : () => print('vc não é admin')
+      ),*/
     );
   }
 }

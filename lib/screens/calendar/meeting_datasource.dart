@@ -1,5 +1,4 @@
 import 'package:agendamentos_app/screens/calendar/meeting.dart';
-import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class DataSource extends CalendarDataSource {

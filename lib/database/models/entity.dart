@@ -1,3 +1,5 @@
+//Class Entity - Entidade
+//Criada para recuperar o ID das tabelas, data de criação e atualização dos dados
 abstract class Entity {
   String? id;
   final DateTime? criacao;

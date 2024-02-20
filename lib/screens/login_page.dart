@@ -1,5 +1,6 @@
 import 'package:agendamentos_app/screens/view/auth_page.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../services/auth_service.dart';
 import '../services/reset_password_page.dart';
 
@@ -16,6 +17,27 @@ class LoginPage extends StatelessWidget {
     final showPass = ValueNotifier<bool>(false);
     const separador = SizedBox(height: 20);
 
+    final emailBox = Hive.box('email');
+
+    void saveEmail() {
+      if (isChecked.value) {
+        emailBox.put('email', email.text);
+      } else {
+        emailBox.put('email', '');
+        isChecked.value = false;
+      }
+    }
+
+    void getData() {
+      if (emailBox.get('email') != null) {
+        email.text = emailBox.get('email');
+        isChecked.value = true;
+        //print(emailBox.values);
+      }
+    }
+
+    getData();
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -29,7 +51,7 @@ class LoginPage extends StatelessWidget {
               const Column(
                 children: [
                   Text(
-                    'AGENDAMENTO DE VEÍCULOS E MOTORISTAS',
+                    'PromotoCar Agendamentos',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 20),
@@ -132,6 +154,7 @@ class LoginPage extends StatelessWidget {
                         ),
                         onTap: () {
                           isChecked.value = !isChecked.value;
+                          //print(isChecked.value);
                         },
                       );
                     },
@@ -161,6 +184,8 @@ class LoginPage extends StatelessWidget {
                                   ),
                                   (route) => false,
                                 );
+                                saveEmail();
+                                //getData();
                               }
                             } on AuthException catch (e) {
                               carregando.value = false;

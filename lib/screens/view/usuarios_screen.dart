@@ -3,6 +3,8 @@ import 'package:agendamentos_app/database/models/usuario.dart';
 import 'package:agendamentos_app/screens/cadastro/usuario_cadastro.dart';
 import 'package:flutter/material.dart';
 
+import '../cadastro/usuario_editor.dart';
+
 class UsuarioScreen extends StatelessWidget {
   final Usuario? usuario;
   const UsuarioScreen({super.key, this.usuario});
@@ -53,7 +55,16 @@ class UsuarioScreen extends StatelessWidget {
                     },
                     icon: const Icon(Icons.delete_forever_rounded),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UsuarioEditor(
+                          usuarioValor: usuario,
+                        )
+                      )
+                    );
+                  },
                 );
               },
               separatorBuilder: (context, index) => const Divider(

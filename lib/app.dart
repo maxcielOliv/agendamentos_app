@@ -1,8 +1,6 @@
 import 'package:agendamentos_app/screens/view/agendamento_screen.dart';
 import 'package:agendamentos_app/screens/view/auth_page.dart';
 import 'package:flutter/material.dart';
-// import 'utils/temas/dark_theme.dart';
-// import 'utils/temas/light_theme.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 

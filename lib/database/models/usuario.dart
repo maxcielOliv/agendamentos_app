@@ -13,24 +13,11 @@ class Usuario extends Entity {
   bool admin = false;
   bool agendador = false;
 
-  Usuario(
-      {super.criacao,
-      super.id,
-      this.nome,
-      this.senha,
-      this.email,
-      this.lotacao,
-      this.nivel});
+  Usuario({super.criacao, super.id, this.nome, this.senha, this.email, this.lotacao, this.nivel});
 
   @override
   Map<String, dynamic> toFirestore() {
-    return {
-      'nome': nome,
-      'senha': senha,
-      'email': email,
-      'lotacao': lotacao,
-      'nivel': nivel
-    };
+    return {'nome': nome, 'senha': senha, 'email': email, 'lotacao': lotacao, 'nivel': nivel};
   }
 
   Usuario.fromDocument(DocumentSnapshot<Map<String, dynamic>> document) {
@@ -48,13 +35,14 @@ class Usuario extends Entity {
   ) {
     final data = snapshot.data();
     return Usuario(
-        id: snapshot.id,
-        criacao: data?['criacao']?.toDate(),
-        nome: data?['nome'],
-        senha: data?['senha'],
-        email: data?['email'],
-        lotacao: data?['lotacao'],
-        nivel: data?['nivel']);
+      id: snapshot.id,
+      criacao: data?['criacao']?.toDate(),
+      nome: data?['nome'],
+      senha: data?['senha'],
+      email: data?['email'],
+      lotacao: data?['lotacao'],
+      nivel: data?['nivel']
+    );
   }
   @override
   String toString() {
@@ -82,6 +70,7 @@ class Usuario extends Entity {
     final token = await FirebaseMessaging.instance.getToken();
     final dbReference = FirebaseFirestore.instance.doc('usuario/$id');
     final tokenReference = dbReference.collection('tokens');
+    //print('token $token');
     tokenReference.doc(token).set({
       'token': token,
       'updatedAt': FieldValue.serverTimestamp(),

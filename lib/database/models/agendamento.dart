@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'entity.dart';
 
+//Classe de Agendamento
+//Onde ficarão salvas as informações relacionadas ao agendamento
+//Essa classe extende outra classe, entity-entidade onde estão as informações do ID, Criação e atualização
 class Agendamento extends Entity {
   final DateTime? dataInicial;
   final DateTime? dataFinal;

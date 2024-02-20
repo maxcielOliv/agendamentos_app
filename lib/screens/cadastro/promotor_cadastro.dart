@@ -17,7 +17,7 @@ class PromotorCadastro extends StatelessWidget {
     final daoPromotor = PromotorDao();
     final daoPromotoria = PromotoriaDao();
     late Promotor promotor =
-        Promotor(nome: nome.text, matricula: matricula.text);
+        Promotor(id: promotorValor?.id, nome: nome.text, matricula: matricula.text);
 
     return Form(
       key: formKey,

@@ -1,6 +1,7 @@
 import 'package:agendamentos_app/screens/calendar/agendamento_editor.dart';
 import 'package:agendamentos_app/screens/calendar/meeting.dart';
 import 'package:agendamentos_app/screens/calendar/meeting_datasource.dart';
+import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,20 +51,25 @@ class AgendamentoCadastroState extends State<AgendamentoCadastro> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agendamentos'),
+        title: const Text('Calendário de Agendamentos'),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AgendamentoEditor(),
-                ),
+          Builder(builder: ((context) {
+            if (AuthService().adminEnabled || AuthService().agendEnabled) {
+              return IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AgendamentoEditor(),
+                    )
+                  );
+                },
               );
-            },
-            icon: const Icon(Icons.add),
-          )
+            }
+            return Container();
+          }))
         ],
       ),
       body: SfCalendar(

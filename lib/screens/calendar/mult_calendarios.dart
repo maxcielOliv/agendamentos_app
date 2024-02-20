@@ -1,5 +1,6 @@
 import 'package:agendamentos_app/database/models/dao/veiculo_dao.dart';
 import 'package:agendamentos_app/screens/calendar/agendamento_editor.dart';
+import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../../database/models/veiculo.dart';
 
@@ -48,20 +49,20 @@ class _MultCalendariosState extends State<MultCalendarios> {
                         ),
                         ListTile(
                           title: const Text('MOTORISTA'),
-                          subtitle:
-                              Text(veiculo.motorista.toString().toUpperCase()),
-                          trailing: IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AgendamentoEditor(),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.add),
-                          ),
+                          subtitle: Text(veiculo.motorista.toString().toUpperCase()),
+                          trailing: AuthService().adminEnabled || AuthService().agendEnabled
+                                  ? IconButton(
+                                    icon: const Icon(Icons.add),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const AgendamentoEditor(),
+                                        )
+                                      );
+                                    },
+                                  )
+                                : SizedBox() 
                         ),
                       ],
                     ),

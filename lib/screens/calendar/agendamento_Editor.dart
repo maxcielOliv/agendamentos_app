@@ -73,6 +73,7 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novo Agendamento'),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(
             Icons.close,
@@ -128,12 +129,12 @@ class AgendamentoEditorState extends State<AgendamentoEditor> {
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.home),
                   border: OutlineInputBorder(),
-                  label: Text('Local'),
-                  hintText: 'Local do agendamento',
+                  label: Text('Missão/Local'),
+                  hintText: 'Missão e/ou Local da diligência',
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Informe um local';
+                    return 'Informe um local ou uma missão';
                   }
                   return null;
                 },

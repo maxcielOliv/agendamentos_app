@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../entity.dart';
 
+//Classe Abstrata que será herdada pelas outras classes
+//Nessa classe foram criados os metodos de pegar, salvar e deletar
 abstract class Dao<T extends Entity> {
   final db = FirebaseFirestore.instance;
 
