@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
 
+//Tela de Veiculos
+//Mostra todos os veiculos cadastrados
 class VeiculoScreen extends StatelessWidget {
   final Veiculo? veiculo;
   const VeiculoScreen({super.key, this.veiculo});

@@ -4,6 +4,7 @@ import 'package:agendamentos_app/screens/cadastro/motorista_cadastro.dart';
 import 'package:agendamentos_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
+//Tela de motorista, mostra todos os motoristas cadastrados
 class MotoristaScreen extends StatelessWidget {
   final Motorista? motorista;
   const MotoristaScreen({super.key, this.motorista});

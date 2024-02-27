@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../services/auth_service.dart';
 import '../services/reset_password_page.dart';
 
+//página de login do aplicativo
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 

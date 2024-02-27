@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+//Classe reponsável pela alteração de senha do usuário
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
 

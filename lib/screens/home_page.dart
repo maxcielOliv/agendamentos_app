@@ -11,6 +11,7 @@ import 'view/promotoria_screen.dart';
 import 'view/usuarios_screen.dart';
 import 'view/veiculos_screen.dart';
 
+//Página principal do aplicativo
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -183,7 +184,10 @@ class _HomePageState extends State<HomePage> {
                 if (AuthService().adminEnabled) {
                   return Column(
                     children: [
-                      const Divider(height: 10.0, color: Colors.blue,),
+                      const Divider(
+                        height: 10.0,
+                        color: Colors.blue,
+                      ),
                       ListTile(
                         leading: const Icon(Icons.drive_eta),
                         title: const Text('Veículos'),

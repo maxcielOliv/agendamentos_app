@@ -3,6 +3,9 @@ import 'package:agendamentos_app/database/models/promotoria.dart';
 import 'package:agendamentos_app/screens/cadastro/promotoria_cadastro.dart';
 import 'package:flutter/material.dart';
 
+//Página de promotoria
+//Mostra todas as promotorias cadastradas
+
 class PromotoriaScreen extends StatelessWidget {
   final Promotoria? promotoria;
   const PromotoriaScreen({super.key, this.promotoria});
