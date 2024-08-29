@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../services/auth_service.dart';
 import '../services/reset_password_page.dart';
+import '../env.dart';
 
 //página de login do aplicativo
 class LoginPage extends StatelessWidget {
@@ -190,6 +191,7 @@ class LoginPage extends StatelessWidget {
                               }
                             } on AuthException catch (e) {
                               carregando.value = false;
+                              // ignore: use_build_context_synchronously
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(e.mensagem),
@@ -225,7 +227,7 @@ class LoginPage extends StatelessWidget {
                     ),
                   );
                 },
-              )
+              ),
             ],
           ),
         ),
