@@ -44,40 +44,42 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAMR64H1Kg0KgL6T_bT9ZzTdJoU5_4KLpg',
-    appId: '1:295588700886:web:0263c37d4c6993ae2d1f77',
+    apiKey: String.fromEnvironment('apiKeyWeb'),
+    appId: String.fromEnvironment('appIdWeb'),
     messagingSenderId: '295588700886',
-    projectId: 'agendamento-de-veiculos-51810',
+    projectId: String.fromEnvironment('projectId'),
     authDomain: 'agendamento-de-veiculos-51810.firebaseapp.com',
     storageBucket: 'agendamento-de-veiculos-51810.appspot.com',
     measurementId: 'G-8CFJVNMTE9',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBv9lBhK7OFW8DpxYliU5bPSg3KMjzCuzY',
-    appId: '1:295588700886:android:3a309c41631a3a362d1f77',
+    apiKey: String.fromEnvironment("apiKeyAndroid"),
+    appId: String.fromEnvironment("appIdAndroid"),
     messagingSenderId: '295588700886',
-    projectId: 'agendamento-de-veiculos-51810',
+    projectId: String.fromEnvironment('projectId'),
     storageBucket: 'agendamento-de-veiculos-51810.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA0qwJHxhub_AcJQkdMgKkTnmOBsgrP-Rs',
-    appId: '1:295588700886:ios:046f033e5033241a2d1f77',
+    apiKey: String.fromEnvironment("apiKeyIos"),
+    appId: String.fromEnvironment("appIdIos"),
     messagingSenderId: '295588700886',
-    projectId: 'agendamento-de-veiculos-51810',
+    projectId: String.fromEnvironment('projectId'),
     storageBucket: 'agendamento-de-veiculos-51810.appspot.com',
-    iosClientId: '295588700886-a7b4l3p8ks0317fi24in6g1m1q5qsrp8.apps.googleusercontent.com',
+    iosClientId:
+        '295588700886-a7b4l3p8ks0317fi24in6g1m1q5qsrp8.apps.googleusercontent.com',
     iosBundleId: 'com.example.agendamentosApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyA0qwJHxhub_AcJQkdMgKkTnmOBsgrP-Rs',
-    appId: '1:295588700886:ios:046f033e5033241a2d1f77',
+    apiKey: String.fromEnvironment("apiKeyMac"),
+    appId: String.fromEnvironment("appIdMac"),
     messagingSenderId: '295588700886',
-    projectId: 'agendamento-de-veiculos-51810',
+    projectId: String.fromEnvironment('projectId'),
     storageBucket: 'agendamento-de-veiculos-51810.appspot.com',
-    iosClientId: '295588700886-a7b4l3p8ks0317fi24in6g1m1q5qsrp8.apps.googleusercontent.com',
+    iosClientId:
+        '295588700886-a7b4l3p8ks0317fi24in6g1m1q5qsrp8.apps.googleusercontent.com',
     iosBundleId: 'com.example.agendamentosApp',
   );
 }
