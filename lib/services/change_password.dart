@@ -219,7 +219,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       user.updatePassword(_newPassController.text).then((value) {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Senha atualizada com sucesso!')));
-      }).catchError((e) => e.toString());
+      }).catchError((e) => e);
     }).catchError((e) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Senha atual não confere!')));

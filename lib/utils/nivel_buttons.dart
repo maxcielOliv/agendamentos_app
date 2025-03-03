@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../screens/cadastro/motorista_cadastro.dart';
-import '../services/auth_service.dart';
-
+import '../ui/screens/cadastro/motorista_cadastro.dart';
+import '../services/auth/auth_service.dart';
 
 class NivelButton extends StatelessWidget {
   const NivelButton({super.key});
